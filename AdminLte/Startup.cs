@@ -40,7 +40,7 @@ namespace AdminLte
             services.AddDbContext<PostgreDbContext>(options =>
                 options.UseNpgsql(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<PostgreDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();

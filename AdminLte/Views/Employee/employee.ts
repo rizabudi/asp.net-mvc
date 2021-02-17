@@ -1,10 +1,10 @@
 ﻿class Employees {
-    private urlGetData = "/employee/table-data-view";
-    private urlAddEmployee = '/employee/add';
-    private urlSaveEmployee = '/employee/save';
-    private urlDeleteEmployee = '/employee/delete';
-    private urlEditEmployee = '/employee/edit';
-    private urlSearchEmployee = '/employee/search';
+    private urlGetData = "/adminlte/employee/table-data-view";
+    private urlAddEmployee = '/adminlte/employee/add';
+    private urlSaveEmployee = '/adminlte/employee/save';
+    private urlDeleteEmployee = '/adminlte/employee/delete';
+    private urlEditEmployee = '/adminlte/employee/edit';
+    private urlSearchEmployee = '/adminlte/employee/search';
 
     constructor() {
         this.init();

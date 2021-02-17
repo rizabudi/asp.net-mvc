@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace AdminLte.Models
 {
-    public enum Department
-    {
-        Software, Finance, Admin, Marketing, Research, HR
-    }
+    //public enum Department
+    //{
+    //    Software, Finance, Admin, Marketing, Research, HR
+    //}
 
     public class EmployeeGroup
     {

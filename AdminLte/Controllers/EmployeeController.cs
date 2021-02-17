@@ -76,6 +76,7 @@ namespace AdminLte.Controllers
                     employee.Group = group;
                     _db.Employees.Add(employee);
                     _db.SaveChanges();
+
                     return Json(new { success = true, message = "Created Successfully" });
                 }
                 else

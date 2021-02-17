@@ -1,11 +1,11 @@
 var Employees = /** @class */ (function () {
     function Employees() {
-        this.urlGetData = "/employee/table-data-view";
-        this.urlAddEmployee = '/employee/add';
-        this.urlSaveEmployee = '/employee/save';
-        this.urlDeleteEmployee = '/employee/delete';
-        this.urlEditEmployee = '/employee/edit';
-        this.urlSearchEmployee = '/employee/search';
+        this.urlGetData = "/adminlte/employee/table-data-view";
+        this.urlAddEmployee = '/adminlte/employee/add';
+        this.urlSaveEmployee = '/adminlte/employee/save';
+        this.urlDeleteEmployee = '/adminlte/employee/delete';
+        this.urlEditEmployee = '/adminlte/employee/edit';
+        this.urlSearchEmployee = '/adminlte/employee/search';
         this.init();
     }
     Employees.prototype.init = function () {
