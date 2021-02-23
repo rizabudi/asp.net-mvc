@@ -1,0 +1,43 @@
+﻿@{
+    List<RowModel> RowModels = (List<RowModel>)ViewData["Rows"];
+    int Page = (int)ViewData["Page"];
+}
+
+@if (RowModels.Count > 0)
+{
+    var i = 1;
+    foreach (var row in RowModels)
+    {
+        <tr class="employees-row" style="width: 20%; text-align:center;">
+            <td>
+                @{
+                    var no = (Page - 1) * 10 + i++;
+                }
+                @no
+            </td>
+            <td nowrap="" style="">
+                <button type="button" class="btn btn-sm btn-dark btn-edit" data-id="@row.ID">
+                    <i class="fa fa-edit"></i>
+                </button>&nbsp;
+                <butto type="button" class="btn btn-sm btn-danger btn-delete" data-id="@row.ID">
+                    <i class="fa fa-trash"></i>
+                </butto>&nbsp;
+            </td>
+            @foreach (string value in row.Value)
+            {
+                <td style="text-align:left">@value</td>
+            }
+            <td></td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="15" style="text-align: center">
+            <div>
+                No Records
+            </div>
+        </td>
+    </tr>
+}

@@ -1,0 +1,78 @@
+﻿@{
+    List<FormModel> FormModels = (List<FormModel>)ViewData["Forms"];
+}
+
+<form class="form-horizontal">
+    <div class="card-body">
+        @foreach (FormModel FormModel in FormModels)
+        {
+            var display = FormModel.InputType == AdminLte.Models.InputType.HIDDEN ? "none" : "";
+            <div class="form-group row" style="display: @display">
+                @{ 
+                    var offset = "";
+                }
+                @if(FormModel.InputType != AdminLte.Models.InputType.YESNO)
+                {
+                    offset = "";
+                    <label for="@FormModel.Name" class="col-sm-3 col-form-label">@FormModel.Label</label>
+                }else
+                {
+                    offset = "offset-sm-3";
+                }
+                <div class="@offset col-sm-9">
+                    @if (FormModel.InputType == AdminLte.Models.InputType.TEXT)
+                    {
+                        <input type="text" class="form-control" id="@FormModel.Name" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
+                    }
+                    else @if (FormModel.InputType == AdminLte.Models.InputType.TEXTAREA)
+                    {
+                        <textarea id="@FormModel.Name" name="@FormModel.Name" class="form-control" rows="3" placeholder="@FormModel.Label">@FormModel.Value</textarea>
+                    }
+                    else @if (FormModel.InputType == AdminLte.Models.InputType.HIDDEN)
+                    {
+                        <input type="hidden" class="form-control" id="@FormModel.Name" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
+                    }
+                    else @if (FormModel.InputType == AdminLte.Models.InputType.NUMBER)
+                    {
+                        <input type="number" class="form-control" id="@FormModel.Name" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
+                    }
+                    else @if (FormModel.InputType == AdminLte.Models.InputType.YESNO)
+                    {
+                        <div class="form-check">
+                            @if(FormModel.Value.Equals("1"))
+                            {
+                                <input checked type="checkbox" class="form-check-input" id="@FormModel.Name">
+                            }
+                            else
+                            {
+                                <input type="checkbox" class="form-check-input" id="@FormModel.Name">
+                            }
+                            <label class="form-check-label" for="@FormModel.Name">@FormModel.Label</label>
+                        </div>
+                    }
+                    else @if(FormModel.InputType == AdminLte.Models.InputType.DROPDOWN)
+                    {
+                        <select id="@FormModel.Name" name="@FormModel.Name" class="form-control">
+                            <option value="-1">Pilih</option>
+                            @if(FormModel.Options != null)
+                            {
+                                @foreach(string key in FormModel.Options.Keys)
+                                {
+                                    if(key.Equals(FormModel.Value))
+                                    {
+                                        <option selected value="@key">@FormModel.Options[key]</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@key">@FormModel.Options[key]</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    <!-- /.card-body -->
+</form>

@@ -1,0 +1,59 @@
+﻿@{
+    int Total = (int)ViewData["Total"];
+    int Page = (int)ViewData["Page"];
+
+    int Start = (Page - 1) * 10 + 1;
+    int End = (Start + 10) > Total ? Total : (Start - 1 + 10);
+
+    var Pages = new List<int>();
+    var MaxPage = Math.Ceiling(Total / 10.0);
+    if (Page % 10 == 0 && Page > 0)
+    {
+        Page = Page - 1;
+    }
+    for (var i = (Page - (Page % 10) + 1); i <= MaxPage && i <= (Page - (Page % 10) + 10); i++)
+    {
+        Pages.Add(i);
+    }
+    if (Pages.Count == 0)
+    {
+        Pages.Add(1);
+    }
+
+    var DisablePrevious = "";
+    if(Page <= 10)
+    {
+        DisablePrevious = "disabled";
+    }
+
+    var DisableNext = "";
+    if ((Total - (Pages.Last() * 10)) < 10 || (Total - (Pages.Last() * 10)) % 10 != 0)
+    {
+        DisableNext = "disabled";
+    }
+}
+
+<div class="col-sm-12 col-md-5">
+    <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
+        Showing @Start to @End of @Total entries
+    </div>
+</div>
+<div class="col-sm-12 col-md-7">
+    <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+        <ul class="pagination">
+            <li class="paginate_button page-item previous @DisablePrevious" id="example2_previous">
+                <a href="#" aria-controls="example2" data-dt-idx="@Pages.Last()-1" tabindex="0" class="page-link">Previous</a>
+            </li>
+            @foreach (int temp in Pages)
+            {
+                var active = temp == Page ? "active" : "";
+                <li class="paginate_button page-item @active">
+                    <a href="#" aria-controls="example2" data-dt-idx="@temp" tabindex="0" class="page-link">@temp</a>
+                </li>
+            }
+            <li class="paginate_button page-item next @DisableNext" id="example2_next">
+                <a href="#" aria-controls="example2" data-dt-idx="@Pages.Last()+1" tabindex="0" class="page-link">Next</a>
+            </li>
+        </ul>
+    </div>
+</div>

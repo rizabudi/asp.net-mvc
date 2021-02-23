@@ -10,8 +10,18 @@
     <Compile Remove="Data\Migrations\PostgreMigrations\20210212090319_InitialCreate.Designer.cs" />
     <Compile Remove="Data\Migrations\PostgreMigrations\20210212105549_AddingEmployeesModelToDb.cs" />
     <Compile Remove="Data\Migrations\PostgreMigrations\20210212105549_AddingEmployeesModelToDb.Designer.cs" />
+    <Compile Remove="Data\Migrations\PostgreMigrations\20210212112804_AddingEmployeesModelToDb.cs" />
+    <Compile Remove="Data\Migrations\PostgreMigrations\20210212112804_AddingEmployeesModelToDb.Designer.cs" />
+    <Compile Remove="Data\Migrations\PostgreMigrations\20210212124328_AddingEmployeesModelToDb1.cs" />
+    <Compile Remove="Data\Migrations\PostgreMigrations\20210212124328_AddingEmployeesModelToDb1.Designer.cs" />
     <Compile Remove="Data\Migrations\PostgreMigrations\20210212124531_AddingEmployeeGroupModelToDb.cs" />
     <Compile Remove="Data\Migrations\PostgreMigrations\20210212124531_AddingEmployeeGroupModelToDb.Designer.cs" />
+    <Compile Remove="Data\Migrations\PostgreMigrations\20210212125215_AddingEmployeeGroupModelToDb.cs" />
+    <Compile Remove="Data\Migrations\PostgreMigrations\20210212125215_AddingEmployeeGroupModelToDb.Designer.cs" />
+    <Compile Remove="Data\Migrations\PostgreMigrations\20210222071624_AssesmentDB.cs" />
+    <Compile Remove="Data\Migrations\PostgreMigrations\20210222071624_AssesmentDB.Designer.cs" />
+    <Compile Remove="Data\Migrations\PostgreMigrations\20210222071950_AssesmentDB.cs" />
+    <Compile Remove="Data\Migrations\PostgreMigrations\20210222071950_AssesmentDB.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

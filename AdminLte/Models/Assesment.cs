@@ -13,6 +13,8 @@ namespace AdminLte.Models
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
+        public virtual ICollection<Schedule> Schedules { get; set; }
+        public virtual ICollection<Section> Sections { get; set; }
     }
 
     public class Period
@@ -25,6 +27,9 @@ namespace AdminLte.Models
         public DateTime Start { get; set; }
         [Required]
         public DateTime End { get; set; }
+        public virtual ICollection<SubPeriod> SubPeriods { get; set; }
+        public virtual ICollection<Schedule> Schedules { get; set; }
+        public virtual ICollection<QuestionPackagePeriod> QuestionPackagePeriods { get; set; }
     }
 
     public class SubPeriod
@@ -48,6 +53,7 @@ namespace AdminLte.Models
         [Required]
         public string Name { get; set; }
         public Period Period { get; set; }
+        public SubPeriod SubPeriod { get; set; }
         public Entity Entity { get; set; }
         public Assesment Assesment { get; set; }
         [Required]

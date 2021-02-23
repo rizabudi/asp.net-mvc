@@ -1,0 +1,78 @@
+﻿
+@{
+    Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
+    List<ColumnModel> ColumnModels = (List<ColumnModel>)ViewData["Columns"];
+}
+
+@section scripts {
+    <script src="~/Views/TypeScripts/@ViewData["Script"]"></script>
+}
+
+<div class="module form-modal">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Daftar Data</h3>
+            <div class="card-tools">
+                <button id="add" type="button" class="btn btn-sm btn-primary">
+                    <i class="fas fa-plus"></i> Tambah
+                </button>
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                    </div>
+                    <div class="col-sm-12 col-md-6"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="table_list" class="table table-striped table-scrollable table-bordered table-hover table-checkable order-column">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%; min-width: 20px">No.&nbsp;</th>
+                                    <th style="width: 5%; min-width: 80px">Action</th>
+                                    @foreach (ColumnModel ColumnModel in ColumnModels)
+                                    {
+                                        <th style="@ColumnModel.Style"><a class="sortTable" data-sort="Nama" data-order="" data-uri="" href="#" style="color: #000; cursor:pointer;padding-right: 20px;background: url('') no-repeat center right;">@ColumnModel.Label</a></th>
+                                    }
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row" id="table_paging">
+
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Tambah Data</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button id="close_form" type="button" class="btn btn-default">Close</button>
+                    <button id="save_form" type="button" class="btn btn-primary">Simpan</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+</div>

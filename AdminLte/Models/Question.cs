@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,12 +18,17 @@ namespace AdminLte.Models
     {
         [Key]
         public int ID { get; set; }
+        [Required]
         public Assesment Assesment { get; set; }
+        [Required]
         public string Name { get; set; }
         public string Description { get; set; }
         public int Sequence { get; set; }
         public bool IsRandom { get; set; }
         public Construct Construct { get; set; }
+        public virtual ICollection<Question> Questions { get; set; }
+        public virtual ICollection<HorizontalDimention> HorizontalDimentions { get; set; }
+        public virtual ICollection<VerticalDimention> VerticalDimentions { get; set; }
     }
 
     public enum QuestionType
@@ -42,7 +48,6 @@ namespace AdminLte.Models
     {
         [Key]
         public int ID { get; set; }
-        public Assesment Assesment { get; set; }
         public Section Section { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -52,7 +57,9 @@ namespace AdminLte.Models
         public MatrixSubType MatrixSubType { get; set; }
         public bool IsMandatory { get; set; }
         public bool IsRandomAnswer { get; set; }
-        public Construct Construct { get; set; }
+        public virtual ICollection<QuestionPackageLine> QuestionPackageLines { get; set; }
+        public virtual ICollection<QuestionAnswer> QuestionAnswers { get; set; }
+        public virtual ICollection<QuestionAnswer> QuestionAnswerMatrixs { get; set; }
     }
 
     public enum ValueDriverDimention
@@ -68,6 +75,7 @@ namespace AdminLte.Models
         KARIR_DAN_PENGEMBANGAN_DIRI,
         PEKERJAAN,
         KEBUTUHAN_DASAR,
+        HUBUNGAN_SOSIAL,
         LEARNING,
         GROWING,
         CONTRIBUTING
@@ -81,6 +89,7 @@ namespace AdminLte.Models
         public int Sequence { get; set; }
         public ValueDriverDimention ValueDriverDimention { get; set; }
         public Section Section { get; set; }
+        public virtual ICollection<SubVerticalDimention> SubVerticalDimentions { get; set; }
     }
 
     public class SubVerticalDimention
@@ -116,6 +125,7 @@ namespace AdminLte.Models
 
     public enum MatrixValueType
     {
+        SUGGESTION,
         CHAR_BOX,
         FREE_TEXT,
         NUMERICAL_BOX
@@ -125,7 +135,9 @@ namespace AdminLte.Models
     {
         [Key]
         public int ID { get; set; }
+        [InverseProperty("QuestionAnswers")]
         public Question Question { get; set; }
+        [InverseProperty("QuestionAnswerMatrixs")]
         public Question MatrixQuestion { get; set; }
         public MatrixValueType MatrixValue { get; set; }
         public int Sequence { get; set; }
@@ -136,7 +148,6 @@ namespace AdminLte.Models
         public VerticalDimention VerticalDimention { get; set; }
         public SubVerticalDimention SubVerticalDimention { get; set; }
         public HorizontalDimention HorizontalDimention { get; set; }
-        public Section Section { get; set; }
     }
 
     public class QuestionPackage
@@ -145,6 +156,8 @@ namespace AdminLte.Models
         public int ID { get; set; }
         public Assesment Assesment { get; set; }
         public string Name { get; set; }
+        public virtual ICollection<QuestionPackagePeriod> QuestionPackagePeriods { get; set; }
+        public virtual ICollection<QuestionPackageLine> QuestionPackageLines { get; set; }
     }
 
     public class QuestionPackageLine

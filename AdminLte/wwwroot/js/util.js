@@ -23,6 +23,18 @@
         $.notify(msg);
     }
 
+    scope.info = function (msg) {
+        toastr.info(msg)
+    }
+
+    scope.error = function (msg) {
+        toastr.error(msg)
+    }
+
+    scope.success = function (msg) {
+        toastr.success(msg)
+    }
+
     function processResponse(successCallback, failureCallback) {
         return {
             200: successCallback,
@@ -37,7 +49,7 @@
         location.reload();
     }
     function handleForbiddenError() {
-        $.notify('No permission to access.');
+        toastr.error('No permission to access.');
     }
 
     return scope;
