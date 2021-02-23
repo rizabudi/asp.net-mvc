@@ -77,31 +77,21 @@ namespace AdminLte.Controllers
                 }
 
                 var sections = await _db.Sections.OrderBy(x=>x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
-                var drivens = new Dictionary<string, string>();
-
-                /*
-                 * 
-                 * REPUTASI_ORGANISASI,
-                    KEPEMIMPINAN,
-                    KARIR_DAN_PENGEMBANGAN_DIRI,
-                    PEKERJAAN,
-                    KEBUTUHAN_DASAR,
-                    LEARNING,
-                    GROWING,
-                    CONTRIBUTING
-                 */
-                drivens.Add(((int)ValueDriverDimention.AMANAH).ToString(), ValueDriverDimention.AMANAH.ToString());
-                drivens.Add(((int)ValueDriverDimention.KOMPETEN).ToString(), ValueDriverDimention.KOMPETEN.ToString());
-                drivens.Add(((int)ValueDriverDimention.HARMONIS).ToString(), ValueDriverDimention.HARMONIS.ToString());
-                drivens.Add(((int)ValueDriverDimention.LOYAL).ToString(), ValueDriverDimention.LOYAL.ToString());
-                drivens.Add(((int)ValueDriverDimention.ADAPTIF).ToString(), ValueDriverDimention.ADAPTIF.ToString());
-                drivens.Add(((int)ValueDriverDimention.KOLABORATIF).ToString(), ValueDriverDimention.KOLABORATIF.ToString());
-                drivens.Add(((int)ValueDriverDimention.REPUTASI_ORGANISASI).ToString(), ValueDriverDimention.REPUTASI_ORGANISASI.ToString());
-                drivens.Add(((int)ValueDriverDimention.KEPEMIMPINAN).ToString(), ValueDriverDimention.KEPEMIMPINAN.ToString());
-                drivens.Add(((int)ValueDriverDimention.KARIR_DAN_PENGEMBANGAN_DIRI).ToString(), ValueDriverDimention.KARIR_DAN_PENGEMBANGAN_DIRI.ToString());
-                drivens.Add(((int)ValueDriverDimention.PEKERJAAN).ToString(), ValueDriverDimention.PEKERJAAN.ToString());
-                drivens.Add(((int)ValueDriverDimention.KEBUTUHAN_DASAR).ToString(), ValueDriverDimention.KEBUTUHAN_DASAR.ToString());
-                drivens.Add(((int)ValueDriverDimention.HUBUNGAN_SOSIAL).ToString(), ValueDriverDimention.HUBUNGAN_SOSIAL.ToString());
+                var drivens = new Dictionary<string, string>()
+                {
+                    {((int)ValueDriverDimention.AMANAH).ToString(), ValueDriverDimention.AMANAH.ToString()},
+                    {((int)ValueDriverDimention.KOMPETEN).ToString(), ValueDriverDimention.KOMPETEN.ToString()},
+                    {((int)ValueDriverDimention.HARMONIS).ToString(), ValueDriverDimention.HARMONIS.ToString()},
+                    {((int)ValueDriverDimention.LOYAL).ToString(), ValueDriverDimention.LOYAL.ToString()},
+                    {((int)ValueDriverDimention.ADAPTIF).ToString(), ValueDriverDimention.ADAPTIF.ToString()},
+                    {((int)ValueDriverDimention.KOLABORATIF).ToString(), ValueDriverDimention.KOLABORATIF.ToString()},
+                    {((int)ValueDriverDimention.REPUTASI_ORGANISASI).ToString(), ValueDriverDimention.REPUTASI_ORGANISASI.ToString()},
+                    {((int)ValueDriverDimention.KEPEMIMPINAN).ToString(), ValueDriverDimention.KEPEMIMPINAN.ToString()},
+                    {((int)ValueDriverDimention.KARIR_DAN_PENGEMBANGAN_DIRI).ToString(), ValueDriverDimention.KARIR_DAN_PENGEMBANGAN_DIRI.ToString()},
+                    {((int)ValueDriverDimention.PEKERJAAN).ToString(), ValueDriverDimention.PEKERJAAN.ToString()},
+                    {((int)ValueDriverDimention.KEBUTUHAN_DASAR).ToString(), ValueDriverDimention.KEBUTUHAN_DASAR.ToString()},
+                    {((int)ValueDriverDimention.HUBUNGAN_SOSIAL).ToString(), ValueDriverDimention.HUBUNGAN_SOSIAL.ToString()},
+                };
 
                 List<FormModel> FormModels = new List<FormModel>();
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = verticalDimentionFromDb == null ? "0" : verticalDimentionFromDb.ID.ToString() });

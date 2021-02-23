@@ -25,7 +25,15 @@
             </td>
             @foreach (string value in row.Value)
             {
-                <td style="text-align:left">@value</td>
+                if(value != null && value.Contains("HTML:"))
+                {
+                    var html = value.Replace("HTML:", "");
+                    <td style="text-align:left">@Html.Raw(html)</td>
+                }
+                else
+                {
+                    <td style="text-align:left">@value</td>
+                }
             }
             <td></td>
         </tr>

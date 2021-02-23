@@ -1,6 +1,7 @@
 ﻿using AdminLte.Data;
 using AdminLte.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -35,6 +36,17 @@ namespace AdminLte.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpGet("home/errors")]
+        [Route("home/errors/{statusCode:int}")]
+        public IActionResult Errors(int statusCode)
+        {
+            if (statusCode == 404)
+            {
+                return View("~/Views/Shared/_404.cshtml");
+            }
+            return View(statusCode);
         }
     }
 }

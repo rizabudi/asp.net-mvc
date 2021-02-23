@@ -77,10 +77,12 @@ namespace AdminLte.Controllers
                 }
 
                 var assesments = await _db.Assesments.OrderBy(x=>x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
-                var constructs = new Dictionary<string, string>();
-                constructs.Add(((int)Construct.CULTURE).ToString(), Construct.CULTURE.ToString());
-                constructs.Add(((int)Construct.PERFORMANCE).ToString(), Construct.PERFORMANCE.ToString());
-                constructs.Add(((int)Construct.ENGAGEMENT).ToString(), Construct.ENGAGEMENT.ToString());
+                var constructs = new Dictionary<string, string>()
+                {
+                    {((int)Construct.CULTURE).ToString(), Construct.CULTURE.ToString() },
+                    {((int)Construct.PERFORMANCE).ToString(), Construct.PERFORMANCE.ToString() },
+                    {((int)Construct.ENGAGEMENT).ToString(), Construct.ENGAGEMENT.ToString() },
+                };
 
                 List<FormModel> FormModels = new List<FormModel>();
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = sectionFromDb == null ? "0" : sectionFromDb.ID.ToString() });

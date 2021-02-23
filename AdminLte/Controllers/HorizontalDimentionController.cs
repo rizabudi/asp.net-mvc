@@ -77,13 +77,15 @@ namespace AdminLte.Controllers
                 }
 
                 var sections = await _db.Sections.OrderBy(x=>x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
-                var situations = new Dictionary<string, string>();
-                situations.Add(((int)SituationEvpDimention.URUTAN).ToString(), SituationEvpDimention.URUTAN.ToString());
-                situations.Add(((int)SituationEvpDimention.NILAI).ToString(), SituationEvpDimention.NILAI.ToString());
-                situations.Add(((int)SituationEvpDimention.SAY).ToString(), SituationEvpDimention.SAY.ToString());
-                situations.Add(((int)SituationEvpDimention.STAY_LEARNING).ToString(), SituationEvpDimention.STAY_LEARNING.ToString());
-                situations.Add(((int)SituationEvpDimention.STAY_GROWING).ToString(), SituationEvpDimention.STAY_GROWING.ToString());
-                situations.Add(((int)SituationEvpDimention.STRIVE_CONTRIBUTING).ToString(), SituationEvpDimention.STRIVE_CONTRIBUTING.ToString());
+                var situations = new Dictionary<string, string>()
+                {
+                    { ((int)SituationEvpDimention.URUTAN).ToString(), SituationEvpDimention.URUTAN.ToString() },
+                    { ((int)SituationEvpDimention.NILAI).ToString(), SituationEvpDimention.NILAI.ToString() },
+                    { ((int)SituationEvpDimention.SAY).ToString(), SituationEvpDimention.SAY.ToString() },
+                    { ((int)SituationEvpDimention.STAY_LEARNING).ToString(), SituationEvpDimention.STAY_LEARNING.ToString() },
+                    { ((int)SituationEvpDimention.STAY_GROWING).ToString(), SituationEvpDimention.STAY_GROWING.ToString() },
+                    { ((int)SituationEvpDimention.STRIVE_CONTRIBUTING).ToString(), SituationEvpDimention.STRIVE_CONTRIBUTING.ToString() },
+                };
 
                 List<FormModel> FormModels = new List<FormModel>();
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = horizontalDimentionFromDb == null ? "0" : horizontalDimentionFromDb.ID.ToString() });

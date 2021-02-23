@@ -2,6 +2,7 @@
 @{
     Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
     List<ColumnModel> ColumnModels = (List<ColumnModel>)ViewData["Columns"];
+    Dictionary<string, string> Values = (Dictionary<string, string>)ViewData["Values"];
 }
 
 @section scripts {
@@ -75,4 +76,12 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+
+    @if(Values != null)
+    {
+        foreach(string key in Values.Keys)
+        {
+            <input type="hidden" id="@key" name="@key" class="hidden-values" value="@Values[key]"/>
+        }
+    }
 </div>

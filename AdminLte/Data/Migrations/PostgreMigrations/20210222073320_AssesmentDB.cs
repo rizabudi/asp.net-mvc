@@ -136,7 +136,7 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Periods",
+                name: "SubPeriods",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
@@ -388,7 +388,7 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     table.ForeignKey(
                         name: "FK_SubPeriods_Periods_PeriodID",
                         column: x => x.PeriodID,
-                        principalTable: "Periods",
+                        principalTable: "SubPeriods",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -466,7 +466,7 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     table.ForeignKey(
                         name: "FK_QuestionPackagePeriods_Periods_PeriodID",
                         column: x => x.PeriodID,
-                        principalTable: "Periods",
+                        principalTable: "SubPeriods",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -582,7 +582,7 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     table.ForeignKey(
                         name: "FK_Schedules_Periods_PeriodID",
                         column: x => x.PeriodID,
-                        principalTable: "Periods",
+                        principalTable: "SubPeriods",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -1541,7 +1541,7 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                 name: "SubPeriods");
 
             migrationBuilder.DropTable(
-                name: "Periods");
+                name: "SubPeriods");
         }
     }
 }

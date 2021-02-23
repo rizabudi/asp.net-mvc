@@ -93,6 +93,17 @@ namespace AdminLte
                     {".css", "text/css" }
                 })
             });
+
+            app.UseStatusCodePagesWithRedirects("/home/errors/{0}");
+            app.Use(async (context, next) =>
+            {
+                await next();
+                if (context.Response.StatusCode == 404)
+                {
+                    context.Request.Path = "/home/errors/404";
+                    await next();
+                }
+            });
         }
     }
 }
