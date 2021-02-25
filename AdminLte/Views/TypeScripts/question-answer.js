@@ -36,6 +36,22 @@ var QuestionAnswer = /** @class */ (function () {
                 var data = { id: id };
                 _this.edit(data);
             });
+            $(document).on("change", "#Type", function (e) {
+                var id = $(e.currentTarget).val();
+                if (id == "1") {
+                    $("#VerticalDimention").val("-1");
+                    $("#SubVerticalDimention").val("-1");
+                    $("#VerticalDimention").attr('disabled', 'disabled');
+                    $("#SubVerticalDimention").attr('disabled', 'disabled');
+                    $("#HorizontalDimention").removeAttr('disabled');
+                }
+                else {
+                    $("#HorizontalDimention").val("-1");
+                    $("#VerticalDimention").removeAttr('disabled');
+                    $("#SubVerticalDimention").removeAttr('disabled');
+                    $("#HorizontalDimention").attr('disabled', 'disabled');
+                }
+            });
             this.initForm();
         }
         catch (e) {
@@ -187,6 +203,19 @@ var QuestionAnswer = /** @class */ (function () {
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
+                if ($("#Type").val() == "1") {
+                    $("#VerticalDimention").val("-1");
+                    $("#SubVerticalDimention").val("-1");
+                    $("#VerticalDimention").attr('disabled', 'disabled');
+                    $("#SubVerticalDimention").attr('disabled', 'disabled');
+                    $("#HorizontalDimention").remove('disabled');
+                }
+                else {
+                    $("#HorizontalDimention").val("-1");
+                    $("#VerticalDimention").remove('disabled');
+                    $("#SubVerticalDimention").remove('disabled');
+                    $("#HorizontalDimention").attr('disabled', 'disabled');
+                }
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
