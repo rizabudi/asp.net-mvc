@@ -26,6 +26,9 @@ namespace AdminLte.Controllers
                 var data = await _db.QuestionAnswer
                     .Include("Question")
                     .Include("MatrixQuestion")
+                    .Include("VerticalDimention")
+                    .Include("SubVerticalDimention")
+                    .Include("HorizontalDimention")
                     .Where(x=> x.Question.ID == questionID || x.MatrixQuestion.ID == questionID)
                     .OrderBy(x=> x.MatrixQuestion == null ? 1 : 2)
                     .ThenBy(x=>x.Sequence)
@@ -44,6 +47,9 @@ namespace AdminLte.Controllers
                             row.Question == null ? "Baris" : "Kolom",
                             row.Weight.ToString(),
                             row.AnswerScore.ToString(),
+                            row.VerticalDimention != null ? row.VerticalDimention.Name : "",
+                            row.SubVerticalDimention != null ? row.SubVerticalDimention.Name : "",
+                            row.HorizontalDimention != null ? row.HorizontalDimention.Name : ""
                         } 
                     });
                 }
@@ -98,15 +104,23 @@ namespace AdminLte.Controllers
                     {"1", "Kolom"},
                     {"2", "Baris"},
                 };
-               
+
+                var verticalDimentions = await _db.VerticalDimentions.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+                var subVerticalDimentions = await _db.SubVerticalDimentions.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+                var horizontalDimentions = await _db.HorizontalDimentions.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = questionAnswerFromDb == null ? "0" : questionAnswerFromDb.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = questionAnswerFromDb == null ? "" : questionAnswerFromDb.AnswerScore.ToString() });
+                FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = questionAnswerFromDb == null ? "" : questionAnswerFromDb.Sequence.ToString() });
                 FormModels.Add(new FormModel { Label = "Jawaban", Name = "Value", InputType = InputType.TEXTAREA, Value = questionAnswerFromDb == null ? "" : questionAnswerFromDb.Value });
                 FormModels.Add(new FormModel { Label = "Tampilan Matrix", Name = "Type", InputType = InputType.DROPDOWN, Options = answerTypes, Value = questionAnswerFromDb == null ? "" : questionAnswerFromDb.Question != null ? "1" : "2" });
                 FormModels.Add(new FormModel { Label = "Bobot", Name = "Weight", InputType = InputType.NUMBER, Value = questionAnswerFromDb == null ? "" : questionAnswerFromDb.Weight.ToString() });
                 FormModels.Add(new FormModel { Label = "Nilai", Name = "AnswerScore", InputType = InputType.NUMBER, Value = questionAnswerFromDb == null ? "" : questionAnswerFromDb.AnswerScore.ToString() });
+                FormModels.Add(new FormModel { Label = "Dimensi Vertical", Name = "VerticalDimention", InputType = InputType.DROPDOWN, Options = verticalDimentions, Value = questionAnswerFromDb == null || questionAnswerFromDb.VerticalDimention == null ? "" : ((int)questionAnswerFromDb.VerticalDimention.ID).ToString(), FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Sub Dimensi Vertical", Name = "SubVerticalDimention", InputType = InputType.DROPDOWN, Options = subVerticalDimentions, Value = questionAnswerFromDb == null || questionAnswerFromDb.SubVerticalDimention == null ? "" : ((int)questionAnswerFromDb.SubVerticalDimention.ID).ToString(), FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Dimensi Horizontal", Name = "HorizontalDimention", InputType = InputType.DROPDOWN, Options = horizontalDimentions, Value = questionAnswerFromDb == null || questionAnswerFromDb.HorizontalDimention == null ? "" : ((int)questionAnswerFromDb.HorizontalDimention.ID).ToString(), FormPosition = FormPosition.RIGHT });
 
                 ViewData["Forms"] = FormModels;
+                ViewData["ColumnNumber"] = 2;
 
                 return PartialView("~/Views/Shared/_FormView.cshtml");
             }
@@ -135,6 +149,9 @@ namespace AdminLte.Controllers
             ColumnModels.Add(new ColumnModel { Label = "Tampilan Matrix", Name = "TypeAnswer" });
             ColumnModels.Add(new ColumnModel { Label = "Bobot", Name = "Weight" });
             ColumnModels.Add(new ColumnModel { Label = "Nilai", Name = "AnswerScore" });
+            ColumnModels.Add(new ColumnModel { Label = "Dimensi Vertikal", Name = "VerticalDimention" });
+            ColumnModels.Add(new ColumnModel { Label = "Sub Dimensi Vertikal", Name = "SubVerticalDimention" });
+            ColumnModels.Add(new ColumnModel { Label = "Dimensi Horizontal", Name = "HorizontalDimention" });
 
             ViewData["Columns"] = ColumnModels;
             ViewData["Script"] = "question-answer.js";
@@ -146,6 +163,7 @@ namespace AdminLte.Controllers
             {
                 {"Question", questionID.ToString()}
             };
+            ViewData["ModalStye"] = "modal-xl";
 
             return View("~/Views/Shared/_Index.cshtml");
         }
@@ -155,12 +173,21 @@ namespace AdminLte.Controllers
         {
             try
             {
-                QuestionAnswer questionAnswerFromDb = await _db.QuestionAnswer.FirstOrDefaultAsync(e => e.ID == questionAnswer.ID);
+                QuestionAnswer questionAnswerFromDb = await _db.QuestionAnswer
+                    .Include("VerticalDimention")
+                    .Include("SubVerticalDimention")
+                    .Include("HorizontalDimention")
+                    .Include("Question")
+                    .Include("MatrixQuestion")
+                    .FirstOrDefaultAsync(e => e.ID == questionAnswer.ID);
 
                 if (questionAnswerFromDb == null)
                 {
                     questionAnswer.Question = await _db.Questions.FirstOrDefaultAsync(e => e.ID == questionAnswer.Question.ID);
                     questionAnswer.MatrixQuestion = await _db.Questions.FirstOrDefaultAsync(e => e.ID == questionAnswer.MatrixQuestion.ID);
+                    questionAnswer.VerticalDimention = await _db.VerticalDimentions.FirstOrDefaultAsync(e => e.ID == questionAnswer.VerticalDimention.ID);
+                    questionAnswer.SubVerticalDimention = await _db.SubVerticalDimentions.FirstOrDefaultAsync(e => e.ID == questionAnswer.SubVerticalDimention.ID);
+                    questionAnswer.HorizontalDimention = await _db.HorizontalDimentions.FirstOrDefaultAsync(e => e.ID == questionAnswer.HorizontalDimention.ID);
 
                     _db.QuestionAnswer.Add(questionAnswer);
                     _db.SaveChanges();
@@ -169,13 +196,17 @@ namespace AdminLte.Controllers
                 }
                 else
                 {
-                    questionAnswer.Question = await _db.Questions.FirstOrDefaultAsync(e => e.ID == questionAnswer.Question.ID);
-                    questionAnswer.MatrixQuestion = await _db.Questions.FirstOrDefaultAsync(e => e.ID == questionAnswer.MatrixQuestion.ID);
+                    questionAnswerFromDb.Question = await _db.Questions.FirstOrDefaultAsync(e => e.ID == questionAnswer.Question.ID);
+                    questionAnswerFromDb.MatrixQuestion = await _db.Questions.FirstOrDefaultAsync(e => e.ID == questionAnswer.MatrixQuestion.ID);
+                    questionAnswerFromDb.VerticalDimention = await _db.VerticalDimentions.FirstOrDefaultAsync(e => e.ID == questionAnswer.VerticalDimention.ID);
+                    questionAnswerFromDb.SubVerticalDimention = await _db.SubVerticalDimentions.FirstOrDefaultAsync(e => e.ID == questionAnswer.SubVerticalDimention.ID);
+                    questionAnswerFromDb.HorizontalDimention = await _db.HorizontalDimentions.FirstOrDefaultAsync(e => e.ID == questionAnswer.HorizontalDimention.ID);
 
                     questionAnswerFromDb.Sequence = questionAnswer.Sequence;
                     questionAnswerFromDb.Value = questionAnswer.Value;
                     questionAnswerFromDb.Weight = questionAnswer.Weight;
                     questionAnswerFromDb.AnswerScore = questionAnswer.AnswerScore;
+
                     _db.QuestionAnswer.Update(questionAnswerFromDb);
                     _db.SaveChanges();
                     return Json(new { success = true, message = "Data berhasil diperbarui" });

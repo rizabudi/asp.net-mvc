@@ -157,7 +157,9 @@ namespace AdminLte.Controllers
         {
             try
             {
-                Question questionFromDb = await _db.Questions.FirstOrDefaultAsync(e => e.ID == question.ID);
+                Question questionFromDb = await _db.Questions
+                    .Include("Section")
+                    .FirstOrDefaultAsync(e => e.ID == question.ID);
 
                 if (questionFromDb == null)
                 {

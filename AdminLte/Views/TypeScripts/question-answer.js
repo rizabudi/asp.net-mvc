@@ -140,6 +140,15 @@ var QuestionAnswer = /** @class */ (function () {
                 },
                 MatrixQuestion: {
                     ID: type == "2" ? question : 0
+                },
+                VerticalDimention: {
+                    ID: $('#VerticalDimention').val()
+                },
+                SubVerticalDimention: {
+                    ID: $('#SubVerticalDimention').val()
+                },
+                HorizontalDimention: {
+                    ID: $('#HorizontalDimention').val()
                 }
             };
             return data;

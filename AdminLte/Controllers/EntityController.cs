@@ -116,7 +116,9 @@ namespace AdminLte.Controllers
         {
             try
             {
-                Entity entityFromDb = await _db.Entities.FirstOrDefaultAsync(e => e.ID == entity.ID);
+                Entity entityFromDb = await _db.Entities
+                    .Include("ParentEntity")
+                    .FirstOrDefaultAsync(e => e.ID == entity.ID);
 
                 if (entityFromDb == null)
                 {
@@ -132,9 +134,12 @@ namespace AdminLte.Controllers
                 }
                 else
                 {
-                    if (entity.ParentEntity != null && entity.ParentEntity != null)
+                    if (entity.ParentEntity != null && entity.ParentEntity.ID != -1)
                     {
-                        entity.ParentEntity = await _db.Entities.FirstOrDefaultAsync(e => e.ID == entity.ParentEntity.ID);
+                        entityFromDb.ParentEntity = await _db.Entities.FirstOrDefaultAsync(e => e.ID == entity.ParentEntity.ID);
+                    }else
+                    {
+                        entityFromDb.ParentEntity = null;
                     }
 
                     entityFromDb.Name = entity.Name;

@@ -147,7 +147,9 @@ namespace AdminLte.Controllers
         {
             try
             {
-                SubVerticalDimention subVerticalFromDb = await _db.SubVerticalDimentions.FirstOrDefaultAsync(e => e.ID == subVerticalDimention.ID);
+                SubVerticalDimention subVerticalFromDb = await _db.SubVerticalDimentions
+                    .Include("Section")
+                    .FirstOrDefaultAsync(e => e.ID == subVerticalDimention.ID);
 
                 if (subVerticalFromDb == null)
                 {

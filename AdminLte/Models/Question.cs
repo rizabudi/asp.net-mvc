@@ -142,6 +142,7 @@ namespace AdminLte.Models
         public Question MatrixQuestion { get; set; }
         public MatrixValueType MatrixValue { get; set; }
         public int Sequence { get; set; }
+        [Required]
         public string Value { get; set; }
         public float Weight { get; set; }
         public float AnswerScore { get; set; }

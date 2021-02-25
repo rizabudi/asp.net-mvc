@@ -127,7 +127,9 @@ namespace AdminLte.Controllers
         {
             try
             {
-                Section sectionFromDb = await _db.Sections.FirstOrDefaultAsync(e => e.ID == section.ID);
+                Section sectionFromDb = await _db.Sections
+                    .Include("Assesment")
+                    .FirstOrDefaultAsync(e => e.ID == section.ID);
 
                 if (sectionFromDb == null)
                 {

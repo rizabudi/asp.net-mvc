@@ -128,7 +128,9 @@ namespace AdminLte.Controllers
         {
             try
             {
-                HorizontalDimention horizontalDimentionFromDb = await _db.HorizontalDimentions.FirstOrDefaultAsync(e => e.ID == horizontalDimention.ID);
+                HorizontalDimention horizontalDimentionFromDb = await _db.HorizontalDimentions
+                    .Include("Section")
+                    .FirstOrDefaultAsync(e => e.ID == horizontalDimention.ID);
 
                 if (horizontalDimentionFromDb == null)
                 {
