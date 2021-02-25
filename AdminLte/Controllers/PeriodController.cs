@@ -87,7 +87,7 @@ namespace AdminLte.Controllers
                 List<FormModel> FormModels = new List<FormModel>();
                
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = periodFromDb == null ? "0" : periodFromDb.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = periodFromDb == null ? "" : periodFromDb.Name });
+                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = periodFromDb == null ? "" : periodFromDb.Name, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Date", Name = "Date", InputType = InputType.TEXT, Value = periodFromDb == null ? "" : periodFromDb.Start.ToString("yyyy-MM-dd") + " s/d " + periodFromDb.End.ToString("yyyy-MM-dd") });
 
                 ViewData["Forms"] = FormModels;

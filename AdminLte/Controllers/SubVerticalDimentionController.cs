@@ -94,9 +94,9 @@ namespace AdminLte.Controllers
                 };
 
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = subVerticalFromDb == null ? "0" : subVerticalFromDb.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = subVerticalFromDb == null ? "" : subVerticalFromDb.Name });
+                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = subVerticalFromDb == null ? "" : subVerticalFromDb.Name, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Keterangan", Name = "Description", InputType = InputType.TEXTAREA, Value = subVerticalFromDb == null ? "" : subVerticalFromDb.Description });
-                FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = subVerticalFromDb == null ? "0" : subVerticalFromDb.Sequence.ToString() });
+                FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = subVerticalFromDb == null ? "0" : subVerticalFromDb.Sequence.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Nilai", Name = "ValueDriverDimention", InputType = InputType.DROPDOWN, Options = drivens, Value = subVerticalFromDb == null ? "" : ((int)subVerticalFromDb.ValueDriverDimention).ToString() });
 
                 ViewData["Forms"] = FormModels;

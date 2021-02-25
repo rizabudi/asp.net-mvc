@@ -97,6 +97,9 @@
     }
     private save() {
         try {
+            if (!Util.formCheck()) {
+                return;
+            }
             const data = this.create();
             Util.request(this.urlSave, 'post', 'json', (response) => {
                 if (response != null) {

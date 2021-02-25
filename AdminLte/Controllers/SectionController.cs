@@ -86,8 +86,8 @@ namespace AdminLte.Controllers
 
                 List<FormModel> FormModels = new List<FormModel>();
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = sectionFromDb == null ? "0" : sectionFromDb.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Jenis Survei", Name = "Assesment", InputType = InputType.DROPDOWN, Options = assesments, Value = sectionFromDb == null ? "" : sectionFromDb.Assesment.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = sectionFromDb == null ? "" : sectionFromDb.Name });
+                FormModels.Add(new FormModel { Label = "Jenis Survei", Name = "Assesment", InputType = InputType.DROPDOWN, Options = assesments, Value = sectionFromDb == null ? "" : sectionFromDb.Assesment.ID.ToString(), IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = sectionFromDb == null ? "" : sectionFromDb.Name, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Keterangan", Name = "Description", InputType = InputType.TEXTAREA, Value = sectionFromDb == null ? "" : sectionFromDb.Description });
                 FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = sectionFromDb == null ? "0" : sectionFromDb.Sequence.ToString() });
                 FormModels.Add(new FormModel { Label = "Soal Acak", Name = "IsRandom", InputType = InputType.YESNO, Value = sectionFromDb == null ? "0" : sectionFromDb.IsRandom ? "1" : "0" });

@@ -81,7 +81,7 @@ namespace AdminLte.Controllers
                     .ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
 
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = entityFromDb == null ? "0" : entityFromDb.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = entityFromDb == null ? "" : entityFromDb.Name });
+                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = entityFromDb == null ? "" : entityFromDb.Name, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Level", Name = "Level", InputType = InputType.NUMBER, Value = entityFromDb == null ? "0" : entityFromDb.Level.ToString() });
                 FormModels.Add(new FormModel { Label = "Entitas Induk", Name = "ParentEntity", InputType = InputType.DROPDOWN, Options = entities, Value = entityFromDb == null || entityFromDb.ParentEntity == null ? "" : entityFromDb.ParentEntity.ID.ToString() });
 

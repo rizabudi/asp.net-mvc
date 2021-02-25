@@ -77,7 +77,7 @@ namespace AdminLte.Controllers
                 List<FormModel> FormModels = new List<FormModel>();
                
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = divitionFromDb == null ? "0" : divitionFromDb.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = divitionFromDb == null ? "" : divitionFromDb.Name });
+                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = divitionFromDb == null ? "" : divitionFromDb.Name, IsRequired = true });
 
                 ViewData["Forms"] = FormModels;
 

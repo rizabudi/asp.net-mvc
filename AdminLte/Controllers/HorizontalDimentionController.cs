@@ -89,10 +89,10 @@ namespace AdminLte.Controllers
 
                 List<FormModel> FormModels = new List<FormModel>();
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = horizontalDimentionFromDb == null ? "0" : horizontalDimentionFromDb.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Konstruk", Name = "Section", InputType = InputType.DROPDOWN, Options = sections, Value = horizontalDimentionFromDb == null ? "" : horizontalDimentionFromDb.Section.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = horizontalDimentionFromDb == null ? "" : horizontalDimentionFromDb.Name });
+                FormModels.Add(new FormModel { Label = "Konstruk", Name = "Section", InputType = InputType.DROPDOWN, Options = sections, Value = horizontalDimentionFromDb == null ? "" : horizontalDimentionFromDb.Section.ID.ToString(), IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = horizontalDimentionFromDb == null ? "" : horizontalDimentionFromDb.Name, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Keterangan", Name = "Description", InputType = InputType.TEXTAREA, Value = horizontalDimentionFromDb == null ? "" : horizontalDimentionFromDb.Description });
-                FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = horizontalDimentionFromDb == null ? "0" : horizontalDimentionFromDb.Sequence.ToString() });
+                FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = horizontalDimentionFromDb == null ? "0" : horizontalDimentionFromDb.Sequence.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Dimensi", Name = "SituationEvpDimention", InputType = InputType.DROPDOWN, Options = situations, Value = horizontalDimentionFromDb == null ? "" : ((int)horizontalDimentionFromDb.SituationEvpDimention).ToString() });
 
                 ViewData["Forms"] = FormModels;

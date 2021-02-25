@@ -7,6 +7,16 @@
         @{
             var offset = "";
             var offset1 = "col-md-9";
+            var isRequired = FormModel.IsRequired;
+            var textRequired = "";
+            var numberRequired = "";
+            var selectRequired = "";
+            if(isRequired)
+            {
+                textRequired = "text-required";
+                numberRequired = "number-required";
+                selectRequired = "select-required";
+            }
         }
         @if(FormModel.InputType == AdminLte.Models.InputType.WYSIWYG || FormModel.FormPosition == FormPosition.FULL)
         {
@@ -25,19 +35,19 @@
         <div class="@offset @offset1">
             @if (FormModel.InputType == AdminLte.Models.InputType.TEXT)
             {
-                <input type="text" class="form-control" id="@FormModel.Name" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
+                <input type="text" class="form-control @textRequired" data-label="@FormModel.Label" id="@FormModel.Name" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
             }
             else @if (FormModel.InputType == AdminLte.Models.InputType.TEXTAREA)
             {
-                <textarea id="@FormModel.Name" name="@FormModel.Name" class="form-control" rows="3" placeholder="@FormModel.Label">@FormModel.Value</textarea>
+                <textarea id="@FormModel.Name" name="@FormModel.Name" data-label="@FormModel.Label" class="form-control @textRequired" rows="3" placeholder="@FormModel.Label">@FormModel.Value</textarea>
             }
             else @if (FormModel.InputType == AdminLte.Models.InputType.HIDDEN)
             {
-                <input type="hidden" class="form-control" id="@FormModel.Name" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
+                <input type="hidden" class="form-control" id="@FormModel.Name" data-label="@FormModel.Label" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
             }
             else @if (FormModel.InputType == AdminLte.Models.InputType.NUMBER)
             {
-                <input type="number" class="form-control" id="@FormModel.Name" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
+                <input type="number" class="form-control @numberRequired" id="@FormModel.Name" data-label="@FormModel.Label" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
             }
             else @if (FormModel.InputType == AdminLte.Models.InputType.YESNO)
             {
@@ -55,7 +65,7 @@
             }
             else @if (FormModel.InputType == AdminLte.Models.InputType.DROPDOWN)
             {
-                <select id="@FormModel.Name" name="@FormModel.Name" class="form-control">
+                <select id="@FormModel.Name" name="@FormModel.Name" data-label="@FormModel.Label" class="form-control @selectRequired">
                     <option value="-1">Pilih</option>
                     @if (FormModel.Options != null)
                     {

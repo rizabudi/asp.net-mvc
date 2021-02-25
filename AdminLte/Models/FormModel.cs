@@ -31,5 +31,6 @@ namespace AdminLte.Models
         public InputType InputType { get; set; }
         public Dictionary<string, string> Options { get; set; }
         public FormPosition FormPosition { get; set; } = FormPosition.LEFT;
+        public bool IsRequired { get; set; }
     }
 }

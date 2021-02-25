@@ -107,10 +107,10 @@ namespace AdminLte.Controllers
 
                 List<FormModel> FormModels = new List<FormModel>();
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = verticalDimentionFromDb == null ? "0" : verticalDimentionFromDb.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Konstruk", Name = "Section", InputType = InputType.DROPDOWN, Options = sections, Value = verticalDimentionFromDb == null ? "" : verticalDimentionFromDb.Section.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = verticalDimentionFromDb == null ? "" : verticalDimentionFromDb.Name });
+                FormModels.Add(new FormModel { Label = "Konstruk", Name = "Section", InputType = InputType.DROPDOWN, Options = sections, Value = verticalDimentionFromDb == null ? "" : verticalDimentionFromDb.Section.ID.ToString(), IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = verticalDimentionFromDb == null ? "" : verticalDimentionFromDb.Name, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Keterangan", Name = "Description", InputType = InputType.TEXTAREA, Value = verticalDimentionFromDb == null ? "" : verticalDimentionFromDb.Description });
-                FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = verticalDimentionFromDb == null ? "0" : verticalDimentionFromDb.Sequence.ToString() });
+                FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = verticalDimentionFromDb == null ? "0" : verticalDimentionFromDb.Sequence.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Nilai", Name = "ValueDriverDimention", InputType = InputType.DROPDOWN, Options = drivens, Value = verticalDimentionFromDb == null ? "" : ((int)verticalDimentionFromDb.ValueDriverDimention).ToString() });
 
                 ViewData["Forms"] = FormModels;

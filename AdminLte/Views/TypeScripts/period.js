@@ -106,6 +106,9 @@ var Period = /** @class */ (function () {
     Period.prototype.save = function () {
         var _this = this;
         try {
+            if (!Util.formCheck()) {
+                return;
+            }
             var data = this.create();
             Util.request(this.urlSave, 'post', 'json', function (response) {
                 if (response != null) {

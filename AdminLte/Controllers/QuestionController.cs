@@ -111,13 +111,13 @@ namespace AdminLte.Controllers
                 };
 
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = questionFromDb == null ? "0" : questionFromDb.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Konstruk", Name = "Section", InputType = InputType.DROPDOWN, Options = sections, Value = questionFromDb == null ? "" : questionFromDb.Section.ID.ToString(), FormPosition = FormPosition.LEFT });
-                FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = questionFromDb == null ? "" : questionFromDb.Sequence.ToString(), FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Konstruk", Name = "Section", InputType = InputType.DROPDOWN, Options = sections, Value = questionFromDb == null ? "" : questionFromDb.Section.ID.ToString(), FormPosition = FormPosition.LEFT, IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = questionFromDb == null ? "0" : questionFromDb.Sequence.ToString(), FormPosition = FormPosition.RIGHT, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Tipe Soal", Name = "QuestionType", InputType = InputType.DROPDOWN, Options = questionTypes, Value = questionFromDb == null ? "" : ((int)questionFromDb.QuestionType).ToString() });
                 FormModels.Add(new FormModel { Label = "Tipe Soal Matrix", Name = "MatrixSubtype", InputType = InputType.DROPDOWN, Options = matrixSubTypes, Value = questionFromDb == null ? "" : ((int)questionFromDb.MatrixSubType).ToString() });
                 FormModels.Add(new FormModel { Label = "Harus Diisi", Name = "IsMandatory", InputType = InputType.YESNO, Value = questionFromDb == null ? "" : questionFromDb.IsMandatory ? "1" : "0", FormPosition = FormPosition.RIGHT });
                 FormModels.Add(new FormModel { Label = "Jawaban Acak", Name = "IsRandomAnswer", InputType = InputType.YESNO, Value = questionFromDb == null ? "" : questionFromDb.IsRandomAnswer ? "1" : "0", FormPosition = FormPosition.RIGHT });
-                FormModels.Add(new FormModel { Label = "Judul Soal", Name = "Title", InputType = InputType.TEXTAREA, Value = questionFromDb == null ? "" : questionFromDb.Title, FormPosition = FormPosition.FULL });
+                FormModels.Add(new FormModel { Label = "Judul Soal", Name = "Title", InputType = InputType.TEXTAREA, Value = questionFromDb == null ? "" : questionFromDb.Title, FormPosition = FormPosition.FULL, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Isi Soal", Name = "Description", InputType = InputType.WYSIWYG, Value = questionFromDb == null ? "" : questionFromDb.Description, FormPosition = FormPosition.FULL });
 
                 ViewData["Forms"] = FormModels;

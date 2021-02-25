@@ -35,6 +35,34 @@
         toastr.success(msg)
     }
 
+    scope.formCheck = function () {
+        var isValid = true;
+        var msg = "";
+        $(".text-required").each(function() {
+            if ($(this).val() == "") {
+                msg += $(this).data('label') + " harus diisi" + "<br/>";
+            }
+        })
+
+        $(".number-required").each(function () {
+            if ($(this).val() == "" || $(this).val() == "0") {
+                msg += $(this).data('label') + " harus diisi" + "<br/>";
+            }
+        })
+
+        $(".select-required").each(function () {
+            if ($(this).val() == "" || $(this).val() == "-1") {
+                msg += $(this).data('label') + " harus diisi" + "<br/>";
+            }
+        })
+
+        if (msg != "") {
+            Util.error(msg)
+        }
+
+        return msg == ""
+    }
+
     function processResponse(successCallback, failureCallback) {
         return {
             200: successCallback,
