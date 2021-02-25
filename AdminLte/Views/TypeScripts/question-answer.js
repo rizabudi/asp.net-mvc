@@ -1,16 +1,16 @@
-var Question = /** @class */ (function () {
-    function Question() {
-        this.urlGetData = "/question/table-data-view";
-        this.urlGetPaging = "/question/table-paging-view";
-        this.urlGetForm = "/question/form-view";
-        this.urlSave = '/question/save';
-        this.urlDelete = '/question/delete';
-        this.urlEdit = '/question/edit';
-        this.urlSearch = '/question/search';
+var QuestionAnswer = /** @class */ (function () {
+    function QuestionAnswer() {
+        this.urlGetData = "/question-answer/table-data-view";
+        this.urlGetPaging = "/question-answer/table-paging-view";
+        this.urlGetForm = "/question-answer/form-view";
+        this.urlSave = '/question-answer/save';
+        this.urlDelete = '/question-answer/delete';
+        this.urlEdit = '/question-answer/edit';
+        this.urlSearch = '/question-answer/search';
         this.currentPage = 1;
         this.init();
     }
-    Question.prototype.init = function () {
+    QuestionAnswer.prototype.init = function () {
         var _this = this;
         try {
             this.initTable(this.currentPage);
@@ -43,16 +43,16 @@ var Question = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Question.prototype.initTable = function (page) {
+    QuestionAnswer.prototype.initTable = function (page) {
         try {
-            Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', function (response) {
+            Util.request(this.urlGetData + "?page=" + page + "&questionID=" + $("#Question").val(), 'GET', 'html', function (response) {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
                 console.error('Failed to get data. Please try again');
                 Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page, 'GET', 'html', function (response) {
+            Util.request(this.urlGetPaging + "?page=" + page + "&questionID=" + $("#Question").val(), 'GET', 'html', function (response) {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
@@ -65,7 +65,7 @@ var Question = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Question.prototype.add = function () {
+    QuestionAnswer.prototype.add = function () {
         try {
             Util.request(this.urlGetForm, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Tambah Data");
@@ -76,10 +76,9 @@ var Question = /** @class */ (function () {
                     locale: {
                         format: 'YYYY-MM-DD',
                         separator: ' s/d '
-                    }
-                });
-                $('#Description').summernote({
-                    height: "150"
+                    },
+                    minDate: $("#PeriodStart").val(),
+                    maxDate: $("#PeriodEnd").val(),
                 });
             }, function () {
                 Util.error('Failed to get data. Please try again');
@@ -90,7 +89,7 @@ var Question = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Question.prototype.initForm = function () {
+    QuestionAnswer.prototype.initForm = function () {
         var _this = this;
         try {
             $('#save_form').click(function () {
@@ -106,7 +105,7 @@ var Question = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Question.prototype.save = function () {
+    QuestionAnswer.prototype.save = function () {
         var _this = this;
         try {
             var data = this.create();
@@ -133,20 +132,23 @@ var Question = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Question.prototype.create = function () {
+    QuestionAnswer.prototype.create = function () {
         try {
+            var type = $("#Type").val();
+            var question = $("#Question").val();
             var data = {
                 ID: $('#ID').val(),
-                Section: {
-                    ID: $('#Section').val()
-                },
                 Sequence: $('#Sequence').val(),
-                QuestionType: $('#QuestionType').val(),
-                MatrixSubtype: $('#MatrixSubtype').val(),
-                IsMandatory: $('#IsMandatory').val(),
-                IsRandom: $('#IsRandomAnswer').val(),
-                Title: $('#Title').val(),
-                Description: $('#Description').summernote('code'),
+                Value: $('#Value').val(),
+                Type: $('#Type').val(),
+                Weight: $('#Weight').val(),
+                AnswerScore: $('#AnswerScore').val(),
+                Question: {
+                    ID: type == "1" ? question : 0
+                },
+                MatrixQuestion: {
+                    ID: type == "2" ? question : 0
+                }
             };
             return data;
         }
@@ -155,7 +157,7 @@ var Question = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Question.prototype.delete = function (data) {
+    QuestionAnswer.prototype.delete = function (data) {
         var _this = this;
         try {
             if (confirm("Apa anda yaking menghapus data ini ?") == true) {
@@ -177,7 +179,7 @@ var Question = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Question.prototype.edit = function (data) {
+    QuestionAnswer.prototype.edit = function (data) {
         try {
             Util.request(this.urlGetForm + "?id=" + data.id, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Ubah Data");
@@ -188,10 +190,9 @@ var Question = /** @class */ (function () {
                     locale: {
                         format: 'YYYY-MM-DD',
                         separator: ' s/d '
-                    }
-                });
-                $('#Description').summernote({
-                    height: "150"
+                    },
+                    minDate: $("#PeriodStart").val(),
+                    maxDate: $("#PeriodEnd").val(),
                 });
             }, function () {
                 Util.error('Failed to get data. Please try again');
@@ -201,7 +202,7 @@ var Question = /** @class */ (function () {
             console.error(e);
         }
     };
-    Question.prototype.search = function (keyword) {
+    QuestionAnswer.prototype.search = function (keyword) {
         try {
             var data = { keyword: keyword };
             Util.request(this.urlSearch, 'GET', 'html', function (response) {
@@ -219,9 +220,9 @@ var Question = /** @class */ (function () {
             console.error(e);
         }
     };
-    return Question;
+    return QuestionAnswer;
 }());
 $(document).ready(function () {
-    new Question();
+    new QuestionAnswer();
 });
-//# sourceMappingURL=question.js.map
+//# sourceMappingURL=question-answer.js.map

@@ -9,10 +9,18 @@ namespace AdminLte.Models
     {
         TEXT,
         TEXTAREA,
+        WYSIWYG,
         NUMBER,
         HIDDEN,
         DROPDOWN,
         YESNO
+    }
+
+    public enum FormPosition
+    {
+        LEFT,
+        RIGHT,
+        FULL
     }
 
     public class FormModel
@@ -22,5 +30,6 @@ namespace AdminLte.Models
         public string Value { get; set; }
         public InputType InputType { get; set; }
         public Dictionary<string, string> Options { get; set; }
+        public FormPosition FormPosition { get; set; } = FormPosition.LEFT;
     }
 }

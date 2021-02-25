@@ -1,16 +1,16 @@
-var Question = /** @class */ (function () {
-    function Question() {
-        this.urlGetData = "/question/table-data-view";
-        this.urlGetPaging = "/question/table-paging-view";
-        this.urlGetForm = "/question/form-view";
-        this.urlSave = '/question/save';
-        this.urlDelete = '/question/delete';
-        this.urlEdit = '/question/edit';
-        this.urlSearch = '/question/search';
+var SubPeriod = /** @class */ (function () {
+    function SubPeriod() {
+        this.urlGetData = "/sub-period/table-data-view";
+        this.urlGetPaging = "/sub-period/table-paging-view";
+        this.urlGetForm = "/sub-period/form-view";
+        this.urlSave = '/sub-period/save';
+        this.urlDelete = '/sub-period/delete';
+        this.urlEdit = '/sub-period/edit';
+        this.urlSearch = '/sub-period/search';
         this.currentPage = 1;
         this.init();
     }
-    Question.prototype.init = function () {
+    SubPeriod.prototype.init = function () {
         var _this = this;
         try {
             this.initTable(this.currentPage);
@@ -43,16 +43,16 @@ var Question = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Question.prototype.initTable = function (page) {
+    SubPeriod.prototype.initTable = function (page) {
         try {
-            Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', function (response) {
+            Util.request(this.urlGetData + "?page=" + page + "&periodID=" + $("#Period").val(), 'GET', 'html', function (response) {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
                 console.error('Failed to get data. Please try again');
                 Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page, 'GET', 'html', function (response) {
+            Util.request(this.urlGetPaging + "?page=" + page + "&periodID=" + $("#Period").val(), 'GET', 'html', function (response) {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
@@ -65,7 +65,7 @@ var Question = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Question.prototype.add = function () {
+    SubPeriod.prototype.add = function () {
         try {
             Util.request(this.urlGetForm, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Tambah Data");
@@ -76,10 +76,9 @@ var Question = /** @class */ (function () {
                     locale: {
                         format: 'YYYY-MM-DD',
                         separator: ' s/d '
-                    }
-                });
-                $('#Description').summernote({
-                    height: "150"
+                    },
+                    minDate: $("#PeriodStart").val(),
+                    maxDate: $("#PeriodEnd").val(),
                 });
             }, function () {
                 Util.error('Failed to get data. Please try again');
@@ -90,7 +89,7 @@ var Question = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Question.prototype.initForm = function () {
+    SubPeriod.prototype.initForm = function () {
         var _this = this;
         try {
             $('#save_form').click(function () {
@@ -106,7 +105,7 @@ var Question = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Question.prototype.save = function () {
+    SubPeriod.prototype.save = function () {
         var _this = this;
         try {
             var data = this.create();
@@ -133,20 +132,18 @@ var Question = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Question.prototype.create = function () {
+    SubPeriod.prototype.create = function () {
         try {
+            var Date = $('#Date').val().toString();
+            var Dates = Date.split(" s/d ");
             var data = {
                 ID: $('#ID').val(),
-                Section: {
-                    ID: $('#Section').val()
-                },
-                Sequence: $('#Sequence').val(),
-                QuestionType: $('#QuestionType').val(),
-                MatrixSubtype: $('#MatrixSubtype').val(),
-                IsMandatory: $('#IsMandatory').val(),
-                IsRandom: $('#IsRandomAnswer').val(),
-                Title: $('#Title').val(),
-                Description: $('#Description').summernote('code'),
+                Name: $('#Name').val(),
+                Start: Dates[0],
+                End: Dates[1],
+                Period: {
+                    ID: $("#Period").val()
+                }
             };
             return data;
         }
@@ -155,7 +152,7 @@ var Question = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Question.prototype.delete = function (data) {
+    SubPeriod.prototype.delete = function (data) {
         var _this = this;
         try {
             if (confirm("Apa anda yaking menghapus data ini ?") == true) {
@@ -177,7 +174,7 @@ var Question = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Question.prototype.edit = function (data) {
+    SubPeriod.prototype.edit = function (data) {
         try {
             Util.request(this.urlGetForm + "?id=" + data.id, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Ubah Data");
@@ -188,10 +185,9 @@ var Question = /** @class */ (function () {
                     locale: {
                         format: 'YYYY-MM-DD',
                         separator: ' s/d '
-                    }
-                });
-                $('#Description').summernote({
-                    height: "150"
+                    },
+                    minDate: $("#PeriodStart").val(),
+                    maxDate: $("#PeriodEnd").val(),
                 });
             }, function () {
                 Util.error('Failed to get data. Please try again');
@@ -201,7 +197,7 @@ var Question = /** @class */ (function () {
             console.error(e);
         }
     };
-    Question.prototype.search = function (keyword) {
+    SubPeriod.prototype.search = function (keyword) {
         try {
             var data = { keyword: keyword };
             Util.request(this.urlSearch, 'GET', 'html', function (response) {
@@ -219,9 +215,9 @@ var Question = /** @class */ (function () {
             console.error(e);
         }
     };
-    return Question;
+    return SubPeriod;
 }());
 $(document).ready(function () {
-    new Question();
+    new SubPeriod();
 });
-//# sourceMappingURL=question.js.map
+//# sourceMappingURL=sub-period.js.map

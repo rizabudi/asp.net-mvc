@@ -3,6 +3,12 @@
     Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
     List<ColumnModel> ColumnModels = (List<ColumnModel>)ViewData["Columns"];
     Dictionary<string, string> Values = (Dictionary<string, string>)ViewData["Values"];
+
+    var ModalStye = "";
+    if(ViewData["ModalStye"] != null)
+    {
+        ModalStye = ViewData["ModalStye"].ToString();
+    }
 }
 
 @section scripts {
@@ -55,7 +61,7 @@
     </div>
 
     <div class="modal fade" id="modal-default">
-        <div class="modal-dialog">
+        <div class="modal-dialog @ModalStye">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Tambah Data</h4>

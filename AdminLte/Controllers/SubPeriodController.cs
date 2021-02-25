@@ -78,16 +78,16 @@ namespace AdminLte.Controllers
         {
             try
             {
-                SubPeriod periodFromDb = null;
+                SubPeriod subPeriodFromDb = null;
                 if(id != 0)
                 {
-                    periodFromDb = await _db.SubPeriods.FirstOrDefaultAsync(e => e.ID == id);
+                    subPeriodFromDb = await _db.SubPeriods.FirstOrDefaultAsync(e => e.ID == id);
                 }
                 List<FormModel> FormModels = new List<FormModel>();
                
-                FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = periodFromDb == null ? "0" : periodFromDb.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = periodFromDb == null ? "" : periodFromDb.Name });
-                FormModels.Add(new FormModel { Label = "Date", Name = "Date", InputType = InputType.TEXT, Value = periodFromDb == null ? "" : periodFromDb.Start.ToString("yyyy-MM-dd") + " s/d " + periodFromDb.End.ToString("yyyy-MM-dd") });
+                FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = subPeriodFromDb == null ? "0" : subPeriodFromDb.ID.ToString() });
+                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = subPeriodFromDb == null ? "" : subPeriodFromDb.Name });
+                FormModels.Add(new FormModel { Label = "Date", Name = "Date", InputType = InputType.TEXT, Value = subPeriodFromDb == null ? "" : subPeriodFromDb.Start.ToString("yyyy-MM-dd") + " s/d " + subPeriodFromDb.End.ToString("yyyy-MM-dd") });
 
                 ViewData["Forms"] = FormModels;
 
@@ -137,9 +137,9 @@ namespace AdminLte.Controllers
         {
             try
             {
-                SubPeriod periodFromDb = await _db.SubPeriods.FirstOrDefaultAsync(e => e.ID == subPeriod.ID);
+                SubPeriod subPeriodFromDb = await _db.SubPeriods.FirstOrDefaultAsync(e => e.ID == subPeriod.ID);
 
-                if (periodFromDb == null)
+                if (subPeriodFromDb == null)
                 {
                     subPeriod.Period = await _db.Periods.FirstOrDefaultAsync(e => e.ID == subPeriod.Period.ID);
 
@@ -152,10 +152,10 @@ namespace AdminLte.Controllers
                 {
                     subPeriod.Period = await _db.Periods.FirstOrDefaultAsync(e => e.ID == subPeriod.Period.ID);
 
-                    periodFromDb.Name = subPeriod.Name;
-                    periodFromDb.Start = subPeriod.Start;
-                    periodFromDb.End = subPeriod.End;
-                    _db.SubPeriods.Update(periodFromDb);
+                    subPeriodFromDb.Name = subPeriod.Name;
+                    subPeriodFromDb.Start = subPeriod.Start;
+                    subPeriodFromDb.End = subPeriod.End;
+                    _db.SubPeriods.Update(subPeriodFromDb);
                     _db.SaveChanges();
                     return Json(new { success = true, message = "Data berhasil diperbarui" });
                 }
@@ -172,14 +172,14 @@ namespace AdminLte.Controllers
         {
             try
             {
-                var periodFromDb = await _db.SubPeriods.FirstOrDefaultAsync(e => e.ID == id);
+                var subPeriodFromDb = await _db.SubPeriods.FirstOrDefaultAsync(e => e.ID == id);
 
-                if (periodFromDb == null)
+                if (subPeriodFromDb == null)
                 {
                     return Json(new { success = false, message = "Data tidak ditemukan" });
                 }
 
-                _db.SubPeriods.Remove(periodFromDb);
+                _db.SubPeriods.Remove(subPeriodFromDb);
                 await _db.SaveChangesAsync();
                 return Json(new { success = true, message = "Data berhasil dihapus" });
             }

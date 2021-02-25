@@ -48,4 +48,13 @@
     <TypeScriptCompile Include="Views\Employee\employee.ts" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Views\TypeScripts\sub-period - Copy.js">
+      <DependentUpon>sub-period.js</DependentUpon>
+    </None>
+    <None Update="Views\TypeScripts\sub-period - Copy.js.map">
+      <DependentUpon>sub-period.js.map</DependentUpon>
+    </None>
+  </ItemGroup>
+
 </Project>

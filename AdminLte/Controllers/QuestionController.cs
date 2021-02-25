@@ -25,6 +25,7 @@ namespace AdminLte.Controllers
             {
                 var data = await _db.Questions
                     .Include("Section")
+                    .Include("Section.Assesment")
                     .Include("QuestionAnswers")
                     .Include("QuestionAnswerMatrixs")
                     .OrderBy(x=>x.Section.Sequence)
@@ -40,8 +41,13 @@ namespace AdminLte.Controllers
                     rows.Add(new RowModel { 
                         ID = row.ID, 
                         Value = new string[] { 
-                            row.Sequence.ToString(), 
-                            "HTML:<a href='/sub-question/" + row.ID + "'>" + answer + " Jawaban</a>"
+                            row.Section.Name + " - " + row.Section.Assesment.Name,
+                            row.Sequence.ToString(),
+                            row.Title.ToString(),
+                            row.QuestionType.ToString() + " - " + row.MatrixSubType.ToString(),
+                            row.IsMandatory ? "Iya" : "Tidak",
+                            row.IsRandomAnswer ? "Iya" : "Tidak",
+                            "HTML:<a href='/question-answer/" + row.ID + "'>" + answer + " Jawaban</a>"
                         } 
                     });
                 }
@@ -87,14 +93,35 @@ namespace AdminLte.Controllers
                     questionFromDb = await _db.Questions.FirstOrDefaultAsync(e => e.ID == id);
                 }
                 List<FormModel> FormModels = new List<FormModel>();
-               
+
+                var sections = await _db.Sections
+                    .Include("Assesment")
+                    .OrderBy(x => x.Assesment.Name + " - " + x.Name)
+                    .ToDictionaryAsync(x => x.ID.ToString(), y => y.Assesment.Name + " - " + y.Name);
+                var questionTypes = new Dictionary<string, string>()
+                {
+                    {((int)QuestionType.MATRIX).ToString(), QuestionType.MATRIX.ToString()},
+                    {((int)QuestionType.SIMPLE_CHOICE).ToString(), QuestionType.SIMPLE_CHOICE.ToString()}
+                };
+                var matrixSubTypes = new Dictionary<string, string>()
+                {
+                    {((int)MatrixSubType.SIMPLE).ToString(), MatrixSubType.SIMPLE.ToString()},
+                    {((int)MatrixSubType.MULTIPLE).ToString(), MatrixSubType.MULTIPLE.ToString()},
+                    {((int)MatrixSubType.CUSTOM).ToString(), MatrixSubType.CUSTOM.ToString()}
+                };
+
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = questionFromDb == null ? "0" : questionFromDb.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Konstruk", Name = "Section", InputType = InputType.TEXT, Value = questionFromDb == null ? "" : questionFromDb.Section.Name + " - " + questionFromDb.Section.Assesment.Name });
-                FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = questionFromDb == null ? "" : questionFromDb.Sequence.ToString() });
-                FormModels.Add(new FormModel { Label = "Soal", Name = "Title", InputType = InputType.TEXTAREA, Value = questionFromDb == null ? "" : questionFromDb.Title });
-                FormModels.Add(new FormModel { Label = "Tipe Soal", Name = "QuestionType", InputType = InputType.TEXT, Value = questionFromDb == null ? "" : questionFromDb.QuestionType.ToString() });
+                FormModels.Add(new FormModel { Label = "Konstruk", Name = "Section", InputType = InputType.DROPDOWN, Options = sections, Value = questionFromDb == null ? "" : questionFromDb.Section.Name + " - " + questionFromDb.Section.Assesment.Name, FormPosition = FormPosition.LEFT });
+                FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = questionFromDb == null ? "" : questionFromDb.Sequence.ToString(), FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Tipe Soal", Name = "QuestionType", InputType = InputType.DROPDOWN, Options = questionTypes, Value = questionFromDb == null ? "" : questionFromDb.QuestionType.ToString() });
+                FormModels.Add(new FormModel { Label = "Tipe Soal Matrix", Name = "MatrixSubtype", InputType = InputType.DROPDOWN, Options = matrixSubTypes, Value = questionFromDb == null ? "" : questionFromDb.MatrixSubType.ToString() });
+                FormModels.Add(new FormModel { Label = "Harus Diisi", Name = "IsMandatory", InputType = InputType.YESNO, Value = questionFromDb == null ? "" : questionFromDb.IsMandatory ? "1" : "0", FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Jawaban Acak", Name = "IsRandomAnswer", InputType = InputType.YESNO, Value = questionFromDb == null ? "" : questionFromDb.IsRandomAnswer ? "1" : "0", FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Judul Soal", Name = "Title", InputType = InputType.TEXTAREA, Value = questionFromDb == null ? "" : questionFromDb.Title, FormPosition = FormPosition.FULL });
+                FormModels.Add(new FormModel { Label = "Isi Soal", Name = "Description", InputType = InputType.WYSIWYG, Value = questionFromDb == null ? "" : questionFromDb.Description, FormPosition = FormPosition.FULL });
 
                 ViewData["Forms"] = FormModels;
+                ViewData["ColumnNumber"] = 2;
 
                 return PartialView("~/Views/Shared/_FormView.cshtml");
             }
@@ -116,9 +143,11 @@ namespace AdminLte.Controllers
             ColumnModels.Add(new ColumnModel { Label = "Tipe Soal", Name = "QuestionType" });
             ColumnModels.Add(new ColumnModel { Label = "Harus Diisi", Name = "IsMandatory" });
             ColumnModels.Add(new ColumnModel { Label = "Jawaban Acak", Name = "IsRandomAnswer" });
+            ColumnModels.Add(new ColumnModel { Label = "Daftar Jawaban", Name = "QuestionAnswer" });
 
             ViewData["Columns"] = ColumnModels;
             ViewData["Script"] = "question.js";
+            ViewData["ModalStye"] = "modal-xl";
 
             return View("~/Views/Shared/_Index.cshtml");
         }
@@ -132,6 +161,8 @@ namespace AdminLte.Controllers
 
                 if (questionFromDb == null)
                 {
+                    question.Section = await _db.Sections.FirstOrDefaultAsync(e => e.ID == question.Section.ID);
+
                     _db.Questions.Add(question);
                     _db.SaveChanges();
 
@@ -139,6 +170,13 @@ namespace AdminLte.Controllers
                 }
                 else
                 {
+                    question.Section = await _db.Sections.FirstOrDefaultAsync(e => e.ID == question.Section.ID);
+
+                    questionFromDb.Sequence = question.Sequence;
+                    questionFromDb.QuestionType = question.QuestionType;
+                    questionFromDb.MatrixSubType = question.MatrixSubType;
+                    questionFromDb.IsMandatory = question.IsMandatory;
+                    questionFromDb.IsRandomAnswer = question.IsRandomAnswer;
                     questionFromDb.Title = question.Title;
                     questionFromDb.Description = question.Description;
                     _db.Questions.Update(questionFromDb);

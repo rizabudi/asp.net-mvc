@@ -1,11 +1,11 @@
-﻿class Question {
-    private urlGetData = "/question/table-data-view";
-    private urlGetPaging = "/question/table-paging-view";
-    private urlGetForm = "/question/form-view";
-    private urlSave = '/question/save';
-    private urlDelete = '/question/delete';
-    private urlEdit = '/question/edit';
-    private urlSearch = '/question/search';
+﻿class QuestionAnswer {
+    private urlGetData = "/question-answer/table-data-view";
+    private urlGetPaging = "/question-answer/table-paging-view";
+    private urlGetForm = "/question-answer/form-view";
+    private urlSave = '/question-answer/save';
+    private urlDelete = '/question-answer/delete';
+    private urlEdit = '/question-answer/edit';
+    private urlSearch = '/question-answer/search';
 
     private currentPage = 1;
 
@@ -47,14 +47,14 @@
     }
     private initTable(page) {
         try {
-            Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', (response) => {
+            Util.request(this.urlGetData + "?page=" + page + "&questionID=" + $("#Question").val(), 'GET', 'html', (response) => {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
                     console.error('Failed to get data. Please try again');
                     Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page, 'GET', 'html', (response) => {
+            Util.request(this.urlGetPaging + "?page=" + page + "&questionID=" + $("#Question").val(), 'GET', 'html', (response) => {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
@@ -77,10 +77,9 @@
                     locale: {
                         format: 'YYYY-MM-DD',
                         separator: ' s/d '
-                    }
-                });
-                (<any>$('#Description')).summernote({
-                    height: "150"
+                    },
+                    minDate: $("#PeriodStart").val(),
+                    maxDate: $("#PeriodEnd").val(),
                 });
             }, function () {
                 Util.error('Failed to get data. Please try again');
@@ -129,18 +128,21 @@
     }
     private create() {
         try {
+            var type = $("#Type").val();
+            var question = $("#Question").val();
             const data = {
                 ID: $('#ID').val(),
-                Section: {
-                    ID: $('#Section').val()
-                },
                 Sequence: $('#Sequence').val(),
-                QuestionType: $('#QuestionType').val(),
-                MatrixSubtype: $('#MatrixSubtype').val(),
-                IsMandatory: $('#IsMandatory').val(),
-                IsRandom: $('#IsRandomAnswer').val(),
-                Title: $('#Title').val(),
-                Description: (<any>$('#Description')).summernote('code'),
+                Value: $('#Value').val(),
+                Type: $('#Type').val(),
+                Weight: $('#Weight').val(),
+                AnswerScore: $('#AnswerScore').val(),
+                Question: {
+                    ID: type == "1" ? question : 0
+                },
+                MatrixQuestion: {
+                    ID: type == "2" ? question : 0
+                }
             };
             return data;
         } catch (e) {
@@ -178,10 +180,9 @@
                     locale: {
                         format: 'YYYY-MM-DD',
                         separator: ' s/d '
-                    }
-                });
-                (<any>$('#Description')).summernote({
-                    height: "150"
+                    },
+                    minDate: $("#PeriodStart").val(),
+                    maxDate: $("#PeriodEnd").val(),
                 });
             }, function () {
                 Util.error('Failed to get data. Please try again');
@@ -210,5 +211,5 @@
 }
 
 $(document).ready(function () {
-    new Question();
+    new QuestionAnswer();
 });
