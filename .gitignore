@@ -7,6 +7,7 @@
 # *.min.js
 # *.map
 
+dist/
 _build/
 _site/
 Properties/
