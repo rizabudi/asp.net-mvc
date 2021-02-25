@@ -24,6 +24,7 @@ namespace AdminLte.Controllers
             {
                 var data = await _db.VerticalDimentions
                     .Include("Section")
+                    .Include("SubVerticalDimentions")
                     .OrderBy(x=>x.Sequence)
                     .Skip((page-1)*10)
                     .Take(10)
@@ -32,7 +33,18 @@ namespace AdminLte.Controllers
                 var rows = new List<RowModel>();
                 foreach(var row in data)
                 {
-                    rows.Add(new RowModel { ID = row.ID, Value = new string[] { row.Section.Name, row.Name, row.Description, row.Sequence.ToString(), row.ValueDriverDimention.ToString() }});
+                    var subVerticalDimention = row.SubVerticalDimentions.Count();
+                    rows.Add(new RowModel { 
+                        ID = row.ID, 
+                        Value = new string[] { 
+                            row.Section.Name, 
+                            row.Name, 
+                            row.Description, 
+                            row.Sequence.ToString(), 
+                            row.ValueDriverDimention.ToString(),
+                            "HTML:<a href='/sub-vertical-dimention/" + row.ID + "'>" + subVerticalDimention + " Sub Dimensi Vertical</a>"
+                        }
+                    });
                 }
 
                 ViewData["Rows"] = rows;
@@ -122,6 +134,7 @@ namespace AdminLte.Controllers
             ColumnModels.Add(new ColumnModel { Label = "Keterangan", Name = "Description" });
             ColumnModels.Add(new ColumnModel { Label = "Urutan", Name = "Sequence" });
             ColumnModels.Add(new ColumnModel { Label = "Dimensi", Name = "SituationEvpDimention" });
+            ColumnModels.Add(new ColumnModel { Label = "Sub Dimensi Vertical", Name = "SubVerticalDimentions" });
 
             ViewData["Columns"] = ColumnModels;
             ViewData["Script"] = "vertical-dimention.js";

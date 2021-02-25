@@ -27,7 +27,8 @@ namespace AdminLte.Controllers
                     .Include("Question")
                     .Include("MatrixQuestion")
                     .Where(x=> x.Question.ID == questionID || x.MatrixQuestion.ID == questionID)
-                    .OrderBy(x=>x.MatrixQuestion == null ? 1 : 2)
+                    .OrderBy(x=> x.MatrixQuestion == null ? 1 : 2)
+                    .ThenBy(x=>x.Sequence)
                     .Skip((page-1)*10)
                     .Take(10)
                     .ToListAsync();

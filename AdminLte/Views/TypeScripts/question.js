@@ -72,12 +72,6 @@ var Question = /** @class */ (function () {
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
-                $('#Date').daterangepicker({
-                    locale: {
-                        format: 'YYYY-MM-DD',
-                        separator: ' s/d '
-                    }
-                });
                 $('#Description').summernote({
                     height: "150"
                 });
@@ -184,12 +178,6 @@ var Question = /** @class */ (function () {
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
-                $('#Date').daterangepicker({
-                    locale: {
-                        format: 'YYYY-MM-DD',
-                        separator: ' s/d '
-                    }
-                });
                 $('#Description').summernote({
                     height: "150"
                 });

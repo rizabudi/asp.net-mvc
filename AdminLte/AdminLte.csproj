@@ -49,6 +49,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Views\TypeScripts\sub-period - Copy %282%29.js">
+      <DependentUpon>sub-period.js</DependentUpon>
+    </None>
+    <None Update="Views\TypeScripts\sub-period - Copy %282%29.js.map">
+      <DependentUpon>sub-period.js.map</DependentUpon>
+    </None>
+    <None Update="Views\TypeScripts\sub-period - Copy - Copy.js">
+      <DependentUpon>sub-period - Copy.js</DependentUpon>
+    </None>
+    <None Update="Views\TypeScripts\sub-period - Copy - Copy.js.map">
+      <DependentUpon>sub-period - Copy.js.map</DependentUpon>
+    </None>
     <None Update="Views\TypeScripts\sub-period - Copy.js">
       <DependentUpon>sub-period.js</DependentUpon>
     </None>

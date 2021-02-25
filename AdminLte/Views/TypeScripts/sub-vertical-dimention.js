@@ -1,16 +1,16 @@
-var SubPeriod = /** @class */ (function () {
-    function SubPeriod() {
-        this.urlGetData = "/sub-period/table-data-view";
-        this.urlGetPaging = "/sub-period/table-paging-view";
-        this.urlGetForm = "/sub-period/form-view";
-        this.urlSave = '/sub-period/save';
-        this.urlDelete = '/sub-period/delete';
-        this.urlEdit = '/sub-period/edit';
-        this.urlSearch = '/sub-period/search';
+var SubVerticalDimention = /** @class */ (function () {
+    function SubVerticalDimention() {
+        this.urlGetData = "/sub-vertical-dimention/table-data-view";
+        this.urlGetPaging = "/sub-vertical-dimention/table-paging-view";
+        this.urlGetForm = "/sub-vertical-dimention/form-view";
+        this.urlSave = '/sub-vertical-dimention/save';
+        this.urlDelete = '/sub-vertical-dimention/delete';
+        this.urlEdit = '/sub-vertical-dimention/edit';
+        this.urlSearch = '/sub-vertical-dimention/search';
         this.currentPage = 1;
         this.init();
     }
-    SubPeriod.prototype.init = function () {
+    SubVerticalDimention.prototype.init = function () {
         var _this = this;
         try {
             this.initTable(this.currentPage);
@@ -43,16 +43,16 @@ var SubPeriod = /** @class */ (function () {
             Util.error(e);
         }
     };
-    SubPeriod.prototype.initTable = function (page) {
+    SubVerticalDimention.prototype.initTable = function (page) {
         try {
-            Util.request(this.urlGetData + "?page=" + page + "&periodID=" + $("#Period").val(), 'GET', 'html', function (response) {
+            Util.request(this.urlGetData + "?page=" + page + "&verticalDimentionID=" + $("#VerticalDimention").val(), 'GET', 'html', function (response) {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
                 console.error('Failed to get data. Please try again');
                 Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page + "&periodID=" + $("#Period").val(), 'GET', 'html', function (response) {
+            Util.request(this.urlGetPaging + "?page=" + page + "&verticalDimentionID=" + $("#VerticalDimention").val(), 'GET', 'html', function (response) {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
@@ -65,21 +65,13 @@ var SubPeriod = /** @class */ (function () {
             Util.error(e);
         }
     };
-    SubPeriod.prototype.add = function () {
+    SubVerticalDimention.prototype.add = function () {
         try {
             Util.request(this.urlGetForm, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Tambah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
-                $('#Date').daterangepicker({
-                    locale: {
-                        format: 'YYYY-MM-DD',
-                        separator: ' s/d '
-                    },
-                    minDate: $("#PeriodStart").val(),
-                    maxDate: $("#PeriodEnd").val(),
-                });
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -89,7 +81,7 @@ var SubPeriod = /** @class */ (function () {
             Util.error(e);
         }
     };
-    SubPeriod.prototype.initForm = function () {
+    SubVerticalDimention.prototype.initForm = function () {
         var _this = this;
         try {
             $('#save_form').click(function () {
@@ -105,7 +97,7 @@ var SubPeriod = /** @class */ (function () {
             Util.error(e);
         }
     };
-    SubPeriod.prototype.save = function () {
+    SubVerticalDimention.prototype.save = function () {
         var _this = this;
         try {
             var data = this.create();
@@ -132,18 +124,17 @@ var SubPeriod = /** @class */ (function () {
             Util.error(e);
         }
     };
-    SubPeriod.prototype.create = function () {
+    SubVerticalDimention.prototype.create = function () {
         try {
-            var Date = $('#Date').val().toString();
-            var Dates = Date.split(" s/d ");
             var data = {
                 ID: $('#ID').val(),
+                VerticalDimention: {
+                    ID: $('#VerticalDimention').val()
+                },
                 Name: $('#Name').val(),
-                Start: Dates[0],
-                End: Dates[1],
-                Period: {
-                    ID: $("#Period").val()
-                }
+                Description: $('#Description').val(),
+                Sequence: $('#Sequence').val(),
+                ValueDriverDimention: $('#ValueDriverDimention').val(),
             };
             return data;
         }
@@ -152,7 +143,7 @@ var SubPeriod = /** @class */ (function () {
             Util.error(e);
         }
     };
-    SubPeriod.prototype.delete = function (data) {
+    SubVerticalDimention.prototype.delete = function (data) {
         var _this = this;
         try {
             if (confirm("Apa anda yaking menghapus data ini ?") == true) {
@@ -174,21 +165,13 @@ var SubPeriod = /** @class */ (function () {
             Util.error(e);
         }
     };
-    SubPeriod.prototype.edit = function (data) {
+    SubVerticalDimention.prototype.edit = function (data) {
         try {
             Util.request(this.urlGetForm + "?id=" + data.id, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Ubah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
-                $('#Date').daterangepicker({
-                    locale: {
-                        format: 'YYYY-MM-DD',
-                        separator: ' s/d '
-                    },
-                    minDate: $("#PeriodStart").val(),
-                    maxDate: $("#PeriodEnd").val(),
-                });
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -197,7 +180,7 @@ var SubPeriod = /** @class */ (function () {
             console.error(e);
         }
     };
-    SubPeriod.prototype.search = function (keyword) {
+    SubVerticalDimention.prototype.search = function (keyword) {
         try {
             var data = { keyword: keyword };
             Util.request(this.urlSearch, 'GET', 'html', function (response) {
@@ -215,9 +198,9 @@ var SubPeriod = /** @class */ (function () {
             console.error(e);
         }
     };
-    return SubPeriod;
+    return SubVerticalDimention;
 }());
 $(document).ready(function () {
-    new SubPeriod();
+    new SubVerticalDimention();
 });
-//# sourceMappingURL=sub-period.js.map
+//# sourceMappingURL=sub-vertical-dimention.js.map

@@ -73,12 +73,6 @@
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 (<any>$("#modal-default")).modal("show");
-                (<any>$('#Date')).daterangepicker({
-                    locale: {
-                        format: 'YYYY-MM-DD',
-                        separator: ' s/d '
-                    }
-                });
                 (<any>$('#Description')).summernote({
                     height: "150"
                 });
@@ -174,12 +168,6 @@
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 (<any>$("#modal-default")).modal("show");
-                (<any>$('#Date')).daterangepicker({
-                    locale: {
-                        format: 'YYYY-MM-DD',
-                        separator: ' s/d '
-                    }
-                });
                 (<any>$('#Description')).summernote({
                     height: "150"
                 });

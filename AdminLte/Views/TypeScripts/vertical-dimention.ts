@@ -128,7 +128,7 @@
                 Name: $('#Name').val(),
                 Description: $('#Description').val(),
                 Sequence: $('#Sequence').val(),
-                SituationEvpDimention: $('#SituationEvpDimention').val(),
+                ValueDriverDimention: $('#ValueDriverDimention').val(),
             };
             return data;
         } catch (e) {

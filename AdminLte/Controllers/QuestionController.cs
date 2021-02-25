@@ -43,7 +43,7 @@ namespace AdminLte.Controllers
                         Value = new string[] { 
                             row.Section.Name + " - " + row.Section.Assesment.Name,
                             row.Sequence.ToString(),
-                            row.Title.ToString(),
+                            row.Title,
                             row.QuestionType.ToString() + " - " + row.MatrixSubType.ToString(),
                             row.IsMandatory ? "Iya" : "Tidak",
                             row.IsRandomAnswer ? "Iya" : "Tidak",
@@ -111,10 +111,10 @@ namespace AdminLte.Controllers
                 };
 
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = questionFromDb == null ? "0" : questionFromDb.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Konstruk", Name = "Section", InputType = InputType.DROPDOWN, Options = sections, Value = questionFromDb == null ? "" : questionFromDb.Section.Name + " - " + questionFromDb.Section.Assesment.Name, FormPosition = FormPosition.LEFT });
+                FormModels.Add(new FormModel { Label = "Konstruk", Name = "Section", InputType = InputType.DROPDOWN, Options = sections, Value = questionFromDb == null ? "" : questionFromDb.Section.ID.ToString(), FormPosition = FormPosition.LEFT });
                 FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = questionFromDb == null ? "" : questionFromDb.Sequence.ToString(), FormPosition = FormPosition.RIGHT });
-                FormModels.Add(new FormModel { Label = "Tipe Soal", Name = "QuestionType", InputType = InputType.DROPDOWN, Options = questionTypes, Value = questionFromDb == null ? "" : questionFromDb.QuestionType.ToString() });
-                FormModels.Add(new FormModel { Label = "Tipe Soal Matrix", Name = "MatrixSubtype", InputType = InputType.DROPDOWN, Options = matrixSubTypes, Value = questionFromDb == null ? "" : questionFromDb.MatrixSubType.ToString() });
+                FormModels.Add(new FormModel { Label = "Tipe Soal", Name = "QuestionType", InputType = InputType.DROPDOWN, Options = questionTypes, Value = questionFromDb == null ? "" : ((int)questionFromDb.QuestionType).ToString() });
+                FormModels.Add(new FormModel { Label = "Tipe Soal Matrix", Name = "MatrixSubtype", InputType = InputType.DROPDOWN, Options = matrixSubTypes, Value = questionFromDb == null ? "" : ((int)questionFromDb.MatrixSubType).ToString() });
                 FormModels.Add(new FormModel { Label = "Harus Diisi", Name = "IsMandatory", InputType = InputType.YESNO, Value = questionFromDb == null ? "" : questionFromDb.IsMandatory ? "1" : "0", FormPosition = FormPosition.RIGHT });
                 FormModels.Add(new FormModel { Label = "Jawaban Acak", Name = "IsRandomAnswer", InputType = InputType.YESNO, Value = questionFromDb == null ? "" : questionFromDb.IsRandomAnswer ? "1" : "0", FormPosition = FormPosition.RIGHT });
                 FormModels.Add(new FormModel { Label = "Judul Soal", Name = "Title", InputType = InputType.TEXTAREA, Value = questionFromDb == null ? "" : questionFromDb.Title, FormPosition = FormPosition.FULL });
@@ -203,6 +203,8 @@ namespace AdminLte.Controllers
                     return Json(new { success = false, message = "Data tidak ditemukan" });
                 }
 
+                var questionAnswersFromDb = await _db.QuestionAnswer.Where(e => e.Question.ID == id).ToListAsync();
+                _db.QuestionAnswer.RemoveRange(questionAnswersFromDb);
                 _db.Questions.Remove(questionFromDb);
                 await _db.SaveChangesAsync();
                 return Json(new { success = true, message = "Data berhasil dihapus" });

@@ -49,6 +49,7 @@ namespace AdminLte.Models
         [Key]
         public int ID { get; set; }
         public Section Section { get; set; }
+        [Required]
         public string Title { get; set; }
         public string Description { get; set; }
         public int Sequence { get; set; }

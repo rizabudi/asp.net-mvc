@@ -70,8 +70,8 @@
                     @if (User.IsInRole("Pengguna Khusus"))
                     {
 
-                        <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "assesment","section","horizontaldimention","verticaldimention","entity","position","divition","function","department","period", "subperiod", "question", "questionanswer" },"index")">
-                            <a href="#" class="nav-link @Url.MakeActiveClass(new List<string> { "assesment","section","horizontaldimention","verticaldimention","entity","position","divition","function","department","period", "subperiod", "question", "questionanswer" },"index")">
+                        <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "assesment","section","horizontaldimention","verticaldimention","SubVerticalDimention","entity","position","divition","function","department","period", "subperiod", "question", "questionanswer" },"index")">
+                            <a href="#" class="nav-link @Url.MakeActiveClass(new List<string> { "assesment","section","horizontaldimention","verticaldimention","SubVerticalDimention","entity","position","divition","function","department","period", "subperiod", "question", "questionanswer" },"index")">
                                 <i class="nav-icon fas fa-folder"></i>
                                 <p>
                                     Master Data
@@ -92,7 +92,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-controller="VerticalDimention" asp-action="Index" class="nav-link @Url.MakeActiveClass("verticaldimention","index")">
+                                    <a asp-controller="VerticalDimention" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "verticaldimention", "SubVerticalDimention" },"index")">
                                         <i class="fas fa-list nav-icon"></i>
                                         <p>Dimensi Vertikal</p>
                                     </a>

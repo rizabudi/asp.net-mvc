@@ -1,11 +1,11 @@
-﻿class QuestionAnswer {
-    private urlGetData = "/question-answer/table-data-view";
-    private urlGetPaging = "/question-answer/table-paging-view";
-    private urlGetForm = "/question-answer/form-view";
-    private urlSave = '/question-answer/save';
-    private urlDelete = '/question-answer/delete';
-    private urlEdit = '/question-answer/edit';
-    private urlSearch = '/question-answer/search';
+﻿class SubVerticalDimention {
+    private urlGetData = "/sub-vertical-dimention/table-data-view";
+    private urlGetPaging = "/sub-vertical-dimention/table-paging-view";
+    private urlGetForm = "/sub-vertical-dimention/form-view";
+    private urlSave = '/sub-vertical-dimention/save';
+    private urlDelete = '/sub-vertical-dimention/delete';
+    private urlEdit = '/sub-vertical-dimention/edit';
+    private urlSearch = '/sub-vertical-dimention/search';
 
     private currentPage = 1;
 
@@ -47,14 +47,14 @@
     }
     private initTable(page) {
         try {
-            Util.request(this.urlGetData + "?page=" + page + "&questionID=" + $("#Question").val(), 'GET', 'html', (response) => {
+            Util.request(this.urlGetData + "?page=" + page + "&verticalDimentionID=" + $("#VerticalDimention").val(), 'GET', 'html', (response) => {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
                     console.error('Failed to get data. Please try again');
                     Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page + "&questionID=" + $("#Question").val(), 'GET', 'html', (response) => {
+            Util.request(this.urlGetPaging + "?page=" + page + "&verticalDimentionID=" + $("#VerticalDimention").val(), 'GET', 'html', (response) => {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
@@ -120,21 +120,15 @@
     }
     private create() {
         try {
-            var type = $("#Type").val();
-            var question = $("#Question").val();
             const data = {
                 ID: $('#ID').val(),
-                Sequence: $('#Sequence').val(),
-                Value: $('#Value').val(),
-                Type: $('#Type').val(),
-                Weight: $('#Weight').val(),
-                AnswerScore: $('#AnswerScore').val(),
-                Question: {
-                    ID: type == "1" ? question : 0
+                VerticalDimention: {
+                    ID: $('#VerticalDimention').val()
                 },
-                MatrixQuestion: {
-                    ID: type == "2" ? question : 0
-                }
+                Name: $('#Name').val(),
+                Description: $('#Description').val(),
+                Sequence: $('#Sequence').val(),
+                ValueDriverDimention: $('#ValueDriverDimention').val(),
             };
             return data;
         } catch (e) {
@@ -195,5 +189,5 @@
 }
 
 $(document).ready(function () {
-    new QuestionAnswer();
+    new SubVerticalDimention();
 });
