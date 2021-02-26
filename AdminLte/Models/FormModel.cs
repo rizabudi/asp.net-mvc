@@ -9,6 +9,8 @@ namespace AdminLte.Models
     {
         TEXT,
         TEXTAREA,
+        EMAIL,
+        PASSWORD,
         WYSIWYG,
         NUMBER,
         HIDDEN,

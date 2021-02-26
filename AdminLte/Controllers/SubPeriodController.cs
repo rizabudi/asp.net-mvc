@@ -56,11 +56,13 @@ namespace AdminLte.Controllers
         }
 
         [HttpGet("sub-period/table-paging-view")]
-        public IActionResult GetPaging(int page = 1)
+        public IActionResult GetPaging(int page = 1, int periodID = 0)
         {
             try
             {
-                var total = _db.SubPeriods.Count();
+                var total = _db.SubPeriods
+                    .Where(x => x.Period.ID == periodID)
+                    .Count();
                 ViewData["Total"] = total;
                 ViewData["Page"] = page;
 

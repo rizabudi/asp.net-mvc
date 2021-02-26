@@ -1,16 +1,16 @@
-var QuestionAnswer = /** @class */ (function () {
-    function QuestionAnswer() {
-        this.urlGetData = "/question-answer/table-data-view";
-        this.urlGetPaging = "/question-answer/table-paging-view";
-        this.urlGetForm = "/question-answer/form-view";
-        this.urlSave = '/question-answer/save';
-        this.urlDelete = '/question-answer/delete';
-        this.urlEdit = '/question-answer/edit';
-        this.urlSearch = '/question-answer/search';
+var BackendUser = /** @class */ (function () {
+    function BackendUser() {
+        this.urlGetData = "/backend-user/table-data-view";
+        this.urlGetPaging = "/backend-user/table-paging-view";
+        this.urlGetForm = "/backend-user/form-view";
+        this.urlSave = '/backend-user/save';
+        this.urlDelete = '/backend-user/delete';
+        this.urlEdit = '/backend-user/edit';
+        this.urlSearch = '/backend-user/search';
         this.currentPage = 1;
         this.init();
     }
-    QuestionAnswer.prototype.init = function () {
+    BackendUser.prototype.init = function () {
         var _this = this;
         try {
             this.initTable(this.currentPage);
@@ -27,30 +27,14 @@ var QuestionAnswer = /** @class */ (function () {
                 _this.initTable(idx);
             });
             $(document).on("click", ".btn-delete", function (e) {
-                var id = $(e.currentTarget).data('id');
+                var id = $(e.currentTarget).data('id-strng');
                 var data = { id: id };
                 _this.delete(data);
             });
             $(document).on("click", ".btn-edit", function (e) {
-                var id = $(e.currentTarget).data('id');
+                var id = $(e.currentTarget).data('id-strng');
                 var data = { id: id };
                 _this.edit(data);
-            });
-            $(document).on("change", "#Type", function (e) {
-                var id = $(e.currentTarget).val();
-                if (id == "1") {
-                    $("#VerticalDimention").val("-1");
-                    $("#SubVerticalDimention").val("-1");
-                    $("#HorizontalDimention").val("-1");
-                    $("#VerticalDimention").attr('disabled', 'disabled');
-                    $("#SubVerticalDimention").attr('disabled', 'disabled');
-                    $("#HorizontalDimention").attr('disabled', 'disabled');
-                }
-                else {
-                    $("#VerticalDimention").removeAttr('disabled');
-                    $("#SubVerticalDimention").removeAttr('disabled');
-                    $("#HorizontalDimention").removeAttr('disabled');
-                }
             });
             this.initForm();
         }
@@ -59,16 +43,16 @@ var QuestionAnswer = /** @class */ (function () {
             Util.error(e);
         }
     };
-    QuestionAnswer.prototype.initTable = function (page) {
+    BackendUser.prototype.initTable = function (page) {
         try {
-            Util.request(this.urlGetData + "?page=" + page + "&questionID=" + $("#Question").val(), 'GET', 'html', function (response) {
+            Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', function (response) {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
                 console.error('Failed to get data. Please try again');
                 Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page + "&questionID=" + $("#Question").val(), 'GET', 'html', function (response) {
+            Util.request(this.urlGetPaging + "?page=" + page, 'GET', 'html', function (response) {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
@@ -81,9 +65,9 @@ var QuestionAnswer = /** @class */ (function () {
             Util.error(e);
         }
     };
-    QuestionAnswer.prototype.add = function () {
+    BackendUser.prototype.add = function () {
         try {
-            Util.request(this.urlGetForm + "?questionID=" + $("#Question").val(), 'GET', 'html', function (response) {
+            Util.request(this.urlGetForm, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Tambah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
@@ -97,7 +81,7 @@ var QuestionAnswer = /** @class */ (function () {
             Util.error(e);
         }
     };
-    QuestionAnswer.prototype.initForm = function () {
+    BackendUser.prototype.initForm = function () {
         var _this = this;
         try {
             $('#save_form').click(function () {
@@ -113,7 +97,7 @@ var QuestionAnswer = /** @class */ (function () {
             Util.error(e);
         }
     };
-    QuestionAnswer.prototype.save = function () {
+    BackendUser.prototype.save = function () {
         var _this = this;
         try {
             if (!Util.formCheck()) {
@@ -143,31 +127,17 @@ var QuestionAnswer = /** @class */ (function () {
             Util.error(e);
         }
     };
-    QuestionAnswer.prototype.create = function () {
+    BackendUser.prototype.create = function () {
         try {
-            var type = $("#Type").val();
-            var question = $("#Question").val();
             var data = {
-                ID: $('#ID').val(),
-                Sequence: $('#Sequence').val(),
-                Value: $('#Value').val(),
-                Type: $('#Type').val(),
-                Weight: $('#Weight').val(),
-                AnswerScore: $('#AnswerScore').val(),
-                Question: {
-                    ID: type == "1" ? question : 0
+                UserId: $('#UserId').val(),
+                Name: $('#Name').val(),
+                User: {
+                    UserName: $("#UserName").val(),
+                    PasswordHash: $("#Password").val(),
                 },
-                MatrixQuestion: {
-                    ID: type == "2" ? question : 0
-                },
-                VerticalDimention: {
-                    ID: $('#VerticalDimention').val()
-                },
-                SubVerticalDimention: {
-                    ID: $('#SubVerticalDimention').val()
-                },
-                HorizontalDimention: {
-                    ID: $('#HorizontalDimention').val()
+                Entity: {
+                    ID: $("#Entity").val()
                 }
             };
             return data;
@@ -177,7 +147,7 @@ var QuestionAnswer = /** @class */ (function () {
             Util.error(e);
         }
     };
-    QuestionAnswer.prototype.delete = function (data) {
+    BackendUser.prototype.delete = function (data) {
         var _this = this;
         try {
             if (confirm("Apa anda yaking menghapus data ini ?") == true) {
@@ -199,26 +169,13 @@ var QuestionAnswer = /** @class */ (function () {
             Util.error(e);
         }
     };
-    QuestionAnswer.prototype.edit = function (data) {
+    BackendUser.prototype.edit = function (data) {
         try {
-            Util.request(this.urlGetForm + "?id=" + data.id + "&questionID=" + $("#Question").val(), 'GET', 'html', function (response) {
+            Util.request(this.urlGetForm + "?id=" + data.id, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Ubah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
-                if ($("#Type").val() == "1") {
-                    $("#VerticalDimention").val("-1");
-                    $("#SubVerticalDimention").val("-1");
-                    $("#HorizontalDimention").val("-1");
-                    $("#VerticalDimention").attr('disabled', 'disabled');
-                    $("#SubVerticalDimention").attr('disabled', 'disabled');
-                    $("#HorizontalDimention").attr('disabled', 'disabled');
-                }
-                else {
-                    $("#VerticalDimention").removeAttr('disabled');
-                    $("#SubVerticalDimention").removeAttr('disabled');
-                    $("#HorizontalDimention").removeAttr('disabled');
-                }
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -227,7 +184,7 @@ var QuestionAnswer = /** @class */ (function () {
             console.error(e);
         }
     };
-    QuestionAnswer.prototype.search = function (keyword) {
+    BackendUser.prototype.search = function (keyword) {
         try {
             var data = { keyword: keyword };
             Util.request(this.urlSearch, 'GET', 'html', function (response) {
@@ -245,9 +202,9 @@ var QuestionAnswer = /** @class */ (function () {
             console.error(e);
         }
     };
-    return QuestionAnswer;
+    return BackendUser;
 }());
 $(document).ready(function () {
-    new QuestionAnswer();
+    new BackendUser();
 });
-//# sourceMappingURL=question-answer.js.map
+//# sourceMappingURL=backend-user.js.map

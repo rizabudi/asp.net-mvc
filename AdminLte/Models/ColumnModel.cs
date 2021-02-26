@@ -16,6 +16,7 @@ namespace AdminLte.Models
     public class RowModel
     {
         public int ID { get; set; }
+        public string IDString { get; set; }
         public string[] Value { get; set; }
     }
 }

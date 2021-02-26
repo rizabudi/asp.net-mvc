@@ -58,11 +58,13 @@ namespace AdminLte.Controllers
         }
 
         [HttpGet("sub-vertical-dimention/table-paging-view")]
-        public IActionResult GetPaging(int page = 1)
+        public IActionResult GetPaging(int page = 1, int verticalDimentionID = 0)
         {
             try
             {
-                var total = _db.SubVerticalDimentions.Count();
+                var total = _db.SubVerticalDimentions
+                    .Where(x => x.VerticalDimention.ID == verticalDimentionID)
+                    .Count();
                 ViewData["Total"] = total;
                 ViewData["Page"] = page;
 

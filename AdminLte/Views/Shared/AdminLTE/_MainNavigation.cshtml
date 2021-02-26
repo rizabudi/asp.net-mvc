@@ -187,8 +187,8 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
+                        <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "backenduser", "participantuser" }, "index")">
+                            <a href="#" class="nav-link @Url.MakeActiveClass(new List<string> { "backenduser", "participantuser" }, "index")">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>
                                     Pengaturan Pengguna
@@ -197,13 +197,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a asp-controller="ParticipantUser" asp-action="Index" class="nav-link">
+                                    <a asp-controller="ParticipantUser" asp-action="Index" class="nav-link @Url.MakeActiveClass("participantuser","index")">
                                         <i class="fas fa-user-friends nav-icon"></i>
                                         <p>Pengguna Umum</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-controller="BackendUser" asp-action="Index" class="nav-link">
+                                    <a asp-controller="BackendUser" asp-action="Index" class="nav-link @Url.MakeActiveClass("backenduser","index")">
                                         <i class="fas fa-user-astronaut nav-icon"></i>
                                         <p>Pengguna Khusus</p>
                                     </a>

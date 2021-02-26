@@ -67,11 +67,16 @@ namespace AdminLte.Controllers
         }
 
         [HttpGet("question-answer/table-paging-view")]
-        public IActionResult GetPaging(int page = 1)
+        public IActionResult GetPaging(int page = 1, int questionID = 0)
         {
             try
             {
-                var total = _db.QuestionAnswer.Count();
+                var total = _db.QuestionAnswer
+                    .Include("Question")
+                    .Include("MatrixQuestion")
+                    .Where(x => x.Question.ID == questionID || x.MatrixQuestion.ID == questionID)
+                    .Count();
+
                 ViewData["Total"] = total;
                 ViewData["Page"] = page;
 
@@ -85,7 +90,7 @@ namespace AdminLte.Controllers
         }
 
         [HttpGet("question-answer/form-view")]
-        public async Task<IActionResult> GetFormAsync(int id = 0)
+        public async Task<IActionResult> GetFormAsync(int id = 0, int questionID = 0)
         {
             try
             {
@@ -105,9 +110,24 @@ namespace AdminLte.Controllers
                     {"2", "Baris"},
                 };
 
-                var verticalDimentions = await _db.VerticalDimentions.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
-                var subVerticalDimentions = await _db.SubVerticalDimentions.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
-                var horizontalDimentions = await _db.HorizontalDimentions.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+                var question = await _db.Questions.Include(x=>x.Section).FirstOrDefaultAsync(x => x.ID == questionID);
+
+                var verticalDimentions = await _db.VerticalDimentions
+                    .Where(x=>x.Section.ID == question.Section.ID)
+                    .Include(x => x.Section)
+                    .OrderBy(x => x.Name)
+                    .ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+                var subVerticalDimentions = await _db.SubVerticalDimentions
+                    .Include(x=>x.VerticalDimention)
+                    .Include(x=>x.VerticalDimention.Section)
+                    .Where(x => x.VerticalDimention.Section.ID == question.Section.ID)
+                    .OrderBy(x => x.Name)
+                    .ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+                var horizontalDimentions = await _db.HorizontalDimentions
+                    .Include(x => x.Section)
+                    .Where(x => x.Section.ID == question.Section.ID)
+                    .OrderBy(x => x.Name)
+                    .ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
 
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = questionAnswerFromDb == null ? "0" : questionAnswerFromDb.ID.ToString() });
                 FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = questionAnswerFromDb == null ? "0" : questionAnswerFromDb.Sequence.ToString(), IsRequired = true });

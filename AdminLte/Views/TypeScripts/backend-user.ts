@@ -1,11 +1,11 @@
-﻿class QuestionAnswer {
-    private urlGetData = "/question-answer/table-data-view";
-    private urlGetPaging = "/question-answer/table-paging-view";
-    private urlGetForm = "/question-answer/form-view";
-    private urlSave = '/question-answer/save';
-    private urlDelete = '/question-answer/delete';
-    private urlEdit = '/question-answer/edit';
-    private urlSearch = '/question-answer/search';
+﻿class BackendUser {
+    private urlGetData = "/backend-user/table-data-view";
+    private urlGetPaging = "/backend-user/table-paging-view";
+    private urlGetForm = "/backend-user/form-view";
+    private urlSave = '/backend-user/save';
+    private urlDelete = '/backend-user/delete';
+    private urlEdit = '/backend-user/edit';
+    private urlSearch = '/backend-user/search';
 
     private currentPage = 1;
 
@@ -28,29 +28,14 @@
                 this.initTable(idx);
             });
             $(document).on("click", ".btn-delete", (e) => {
-                const id = $(e.currentTarget).data('id');
+                const id = $(e.currentTarget).data('id-strng');
                 const data = { id: id };
                 this.delete(data);
             });
             $(document).on("click", ".btn-edit", (e) => {
-                const id = $(e.currentTarget).data('id');
+                const id = $(e.currentTarget).data('id-strng');
                 const data = { id: id };
                 this.edit(data);
-            });
-            $(document).on("change", "#Type", (e) => {
-                const id = $(e.currentTarget).val();
-                if (id == "1") {
-                    $("#VerticalDimention").val("-1");
-                    $("#SubVerticalDimention").val("-1");
-                    $("#HorizontalDimention").val("-1");
-                    $("#VerticalDimention").attr('disabled', 'disabled');
-                    $("#SubVerticalDimention").attr('disabled', 'disabled');
-                    $("#HorizontalDimention").attr('disabled', 'disabled');
-                } else {
-                    $("#VerticalDimention").removeAttr('disabled');
-                    $("#SubVerticalDimention").removeAttr('disabled');
-                    $("#HorizontalDimention").removeAttr('disabled');
-                }
             });
 
             this.initForm();
@@ -62,14 +47,14 @@
     }
     private initTable(page) {
         try {
-            Util.request(this.urlGetData + "?page=" + page + "&questionID=" + $("#Question").val(), 'GET', 'html', (response) => {
+            Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', (response) => {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
                     console.error('Failed to get data. Please try again');
                     Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page + "&questionID=" + $("#Question").val(), 'GET', 'html', (response) => {
+            Util.request(this.urlGetPaging + "?page=" + page, 'GET', 'html', (response) => {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
@@ -83,11 +68,11 @@
     }
     private add() {
         try {
-            Util.request(this.urlGetForm + "?questionID=" + $("#Question").val(), 'GET', 'html', (response) => {
+            Util.request(this.urlGetForm, 'GET', 'html', (response) => {
                 $('#modal-default .modal-title').html("Tambah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
-                (<any>$("#modal-default")).modal("show");
+                (<any>$("#modal-default")).modal("show")
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -105,7 +90,6 @@
                 (<any>$("#modal-default")).modal("hide")
                 this.initTable(this.currentPage)
             });
-
         } catch (e) {
             console.error(e);
             Util.error(e);
@@ -139,29 +123,15 @@
     }
     private create() {
         try {
-            var type = $("#Type").val();
-            var question = $("#Question").val();
             const data = {
-                ID: $('#ID').val(),
-                Sequence: $('#Sequence').val(),
-                Value: $('#Value').val(),
-                Type: $('#Type').val(),
-                Weight: $('#Weight').val(),
-                AnswerScore: $('#AnswerScore').val(),
-                Question: {
-                    ID: type == "1" ? question : 0
+                UserId: $('#UserId').val(),
+                Name: $('#Name').val(),
+                User: {
+                    UserName: $("#UserName").val(),
+                    PasswordHash: $("#Password").val(),
                 },
-                MatrixQuestion: {
-                    ID: type == "2" ? question : 0
-                },
-                VerticalDimention: {
-                    ID: $('#VerticalDimention').val()
-                },
-                SubVerticalDimention: {
-                    ID: $('#SubVerticalDimention').val()
-                },
-                HorizontalDimention: {
-                    ID: $('#HorizontalDimention').val()
+                Entity: {
+                    ID: $("#Entity").val()
                 }
             };
             return data;
@@ -191,24 +161,11 @@
     }
     private edit(data) {
         try {
-            Util.request(this.urlGetForm + "?id=" + data.id + "&questionID=" + $("#Question").val(), 'GET', 'html', (response) => {
+            Util.request(this.urlGetForm + "?id=" + data.id, 'GET', 'html', (response) => {
                 $('#modal-default .modal-title').html("Ubah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
-                (<any>$("#modal-default")).modal("show");
-
-                if ($("#Type").val() == "1") {
-                    $("#VerticalDimention").val("-1");
-                    $("#SubVerticalDimention").val("-1");
-                    $("#HorizontalDimention").val("-1");
-                    $("#VerticalDimention").attr('disabled', 'disabled');
-                    $("#SubVerticalDimention").attr('disabled', 'disabled');
-                    $("#HorizontalDimention").attr('disabled', 'disabled');
-                } else {
-                    $("#VerticalDimention").removeAttr('disabled');
-                    $("#SubVerticalDimention").removeAttr('disabled');
-                    $("#HorizontalDimention").removeAttr('disabled');
-                }
+                (<any>$("#modal-default")).modal("show")
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -236,5 +193,5 @@
 }
 
 $(document).ready(function () {
-    new QuestionAnswer();
+    new BackendUser();
 });
