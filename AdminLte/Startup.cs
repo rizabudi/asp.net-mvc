@@ -35,8 +35,8 @@ namespace AdminLte
             //    options.UseSqlServer(
             //        Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<PostgreDbContext>(options =>
-                options.UseNpgsql(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql("name=ConnectionStrings:DefaultConnection"));
+//                    Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddDefaultTokenProviders()
                 .AddDefaultUI()
