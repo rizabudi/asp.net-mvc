@@ -228,3 +228,4 @@ __pycache__/
 Thumbs.db
 
 *package-lock.json
+appsettings.json
