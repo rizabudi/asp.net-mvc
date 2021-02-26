@@ -53,7 +53,6 @@ namespace AdminLte.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public int Sequence { get; set; }
-        public bool IsRandom { get; set; }
         public QuestionType QuestionType { get; set; }
         public MatrixSubType MatrixSubType { get; set; }
         public bool IsMandatory { get; set; }
@@ -65,21 +64,13 @@ namespace AdminLte.Models
 
     public enum ValueDriverDimention
     {
-        AMANAH,
-        KOMPETEN,
-        HARMONIS,
-        LOYAL,
-        ADAPTIF,
-        KOLABORATIF,
-        REPUTASI_ORGANISASI,
-        KEPEMIMPINAN,
-        KARIR_DAN_PENGEMBANGAN_DIRI,
-        PEKERJAAN,
-        KEBUTUHAN_DASAR,
-        HUBUNGAN_SOSIAL,
         LEARNING,
         GROWING,
-        CONTRIBUTING
+        CONTRIBUTING,
+
+        EFISIENSI,
+        EFEKTIVITAS,
+        KEADILAN
     }
 
     public class VerticalDimention
@@ -147,6 +138,7 @@ namespace AdminLte.Models
         public float Weight { get; set; }
         public float AnswerScore { get; set; }
         public bool IsCorrect { get; set; }
+        public bool IsUnFavorable { get; set; }
         public VerticalDimention VerticalDimention { get; set; }
         public SubVerticalDimention SubVerticalDimention { get; set; }
         public HorizontalDimention HorizontalDimention { get; set; }

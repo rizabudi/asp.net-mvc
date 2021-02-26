@@ -77,15 +77,15 @@ namespace AdminLte.Controllers
                 }
 
                 var sections = await _db.Sections.OrderBy(x=>x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
-                var situations = new Dictionary<string, string>()
-                {
-                    { ((int)SituationEvpDimention.URUTAN).ToString(), SituationEvpDimention.URUTAN.ToString() },
-                    { ((int)SituationEvpDimention.NILAI).ToString(), SituationEvpDimention.NILAI.ToString() },
-                    { ((int)SituationEvpDimention.SAY).ToString(), SituationEvpDimention.SAY.ToString() },
-                    { ((int)SituationEvpDimention.STAY_LEARNING).ToString(), SituationEvpDimention.STAY_LEARNING.ToString() },
-                    { ((int)SituationEvpDimention.STAY_GROWING).ToString(), SituationEvpDimention.STAY_GROWING.ToString() },
-                    { ((int)SituationEvpDimention.STRIVE_CONTRIBUTING).ToString(), SituationEvpDimention.STRIVE_CONTRIBUTING.ToString() },
-                };
+                //var situations = new Dictionary<string, string>()
+                //{
+                //    { ((int)SituationEvpDimention.URUTAN).ToString(), SituationEvpDimention.URUTAN.ToString() },
+                //    { ((int)SituationEvpDimention.NILAI).ToString(), SituationEvpDimention.NILAI.ToString() },
+                //    { ((int)SituationEvpDimention.SAY).ToString(), SituationEvpDimention.SAY.ToString() },
+                //    { ((int)SituationEvpDimention.STAY_LEARNING).ToString(), SituationEvpDimention.STAY_LEARNING.ToString() },
+                //    { ((int)SituationEvpDimention.STAY_GROWING).ToString(), SituationEvpDimention.STAY_GROWING.ToString() },
+                //    { ((int)SituationEvpDimention.STRIVE_CONTRIBUTING).ToString(), SituationEvpDimention.STRIVE_CONTRIBUTING.ToString() },
+                //};
 
                 List<FormModel> FormModels = new List<FormModel>();
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = horizontalDimentionFromDb == null ? "0" : horizontalDimentionFromDb.ID.ToString() });
@@ -93,7 +93,7 @@ namespace AdminLte.Controllers
                 FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = horizontalDimentionFromDb == null ? "" : horizontalDimentionFromDb.Name, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Keterangan", Name = "Description", InputType = InputType.TEXTAREA, Value = horizontalDimentionFromDb == null ? "" : horizontalDimentionFromDb.Description });
                 FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = horizontalDimentionFromDb == null ? "0" : horizontalDimentionFromDb.Sequence.ToString(), IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Dimensi", Name = "SituationEvpDimention", InputType = InputType.DROPDOWN, Options = situations, Value = horizontalDimentionFromDb == null ? "" : ((int)horizontalDimentionFromDb.SituationEvpDimention).ToString() });
+                //FormModels.Add(new FormModel { Label = "Dimensi", Name = "SituationEvpDimention", InputType = InputType.DROPDOWN, Options = situations, Value = horizontalDimentionFromDb == null ? "" : ((int)horizontalDimentionFromDb.SituationEvpDimention).ToString() });
 
                 ViewData["Forms"] = FormModels;
 
@@ -115,7 +115,7 @@ namespace AdminLte.Controllers
             ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name" });
             ColumnModels.Add(new ColumnModel { Label = "Keterangan", Name = "Description" });
             ColumnModels.Add(new ColumnModel { Label = "Urutan", Name = "Sequence" });
-            ColumnModels.Add(new ColumnModel { Label = "Dimensi", Name = "SituationEvpDimention" });
+            //ColumnModels.Add(new ColumnModel { Label = "Dimensi", Name = "SituationEvpDimention" });
 
             ViewData["Columns"] = ColumnModels;
             ViewData["Script"] = "horizontal-dimention.js";

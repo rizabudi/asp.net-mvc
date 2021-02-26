@@ -41,7 +41,7 @@ namespace AdminLte.Controllers
                             row.Name, 
                             row.Description, 
                             row.Sequence.ToString(), 
-                            row.ValueDriverDimention.ToString(),
+                            //row.ValueDriverDimention.ToString(),
                             "HTML:<a href='/sub-vertical-dimention/" + row.ID + "'>" + subVerticalDimention + " Sub Dimensi Vertical</a>"
                         }
                     });
@@ -89,21 +89,21 @@ namespace AdminLte.Controllers
                 }
 
                 var sections = await _db.Sections.OrderBy(x=>x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
-                var drivens = new Dictionary<string, string>()
-                {
-                    {((int)ValueDriverDimention.AMANAH).ToString(), ValueDriverDimention.AMANAH.ToString()},
-                    {((int)ValueDriverDimention.KOMPETEN).ToString(), ValueDriverDimention.KOMPETEN.ToString()},
-                    {((int)ValueDriverDimention.HARMONIS).ToString(), ValueDriverDimention.HARMONIS.ToString()},
-                    {((int)ValueDriverDimention.LOYAL).ToString(), ValueDriverDimention.LOYAL.ToString()},
-                    {((int)ValueDriverDimention.ADAPTIF).ToString(), ValueDriverDimention.ADAPTIF.ToString()},
-                    {((int)ValueDriverDimention.KOLABORATIF).ToString(), ValueDriverDimention.KOLABORATIF.ToString()},
-                    {((int)ValueDriverDimention.REPUTASI_ORGANISASI).ToString(), ValueDriverDimention.REPUTASI_ORGANISASI.ToString()},
-                    {((int)ValueDriverDimention.KEPEMIMPINAN).ToString(), ValueDriverDimention.KEPEMIMPINAN.ToString()},
-                    {((int)ValueDriverDimention.KARIR_DAN_PENGEMBANGAN_DIRI).ToString(), ValueDriverDimention.KARIR_DAN_PENGEMBANGAN_DIRI.ToString()},
-                    {((int)ValueDriverDimention.PEKERJAAN).ToString(), ValueDriverDimention.PEKERJAAN.ToString()},
-                    {((int)ValueDriverDimention.KEBUTUHAN_DASAR).ToString(), ValueDriverDimention.KEBUTUHAN_DASAR.ToString()},
-                    {((int)ValueDriverDimention.HUBUNGAN_SOSIAL).ToString(), ValueDriverDimention.HUBUNGAN_SOSIAL.ToString()},
-                };
+                //var drivens = new Dictionary<string, string>()
+                //{
+                //    {((int)ValueDriverDimention.AMANAH).ToString(), ValueDriverDimention.AMANAH.ToString()},
+                //    {((int)ValueDriverDimention.KOMPETEN).ToString(), ValueDriverDimention.KOMPETEN.ToString()},
+                //    {((int)ValueDriverDimention.HARMONIS).ToString(), ValueDriverDimention.HARMONIS.ToString()},
+                //    {((int)ValueDriverDimention.LOYAL).ToString(), ValueDriverDimention.LOYAL.ToString()},
+                //    {((int)ValueDriverDimention.ADAPTIF).ToString(), ValueDriverDimention.ADAPTIF.ToString()},
+                //    {((int)ValueDriverDimention.KOLABORATIF).ToString(), ValueDriverDimention.KOLABORATIF.ToString()},
+                //    {((int)ValueDriverDimention.REPUTASI_ORGANISASI).ToString(), ValueDriverDimention.REPUTASI_ORGANISASI.ToString()},
+                //    {((int)ValueDriverDimention.KEPEMIMPINAN).ToString(), ValueDriverDimention.KEPEMIMPINAN.ToString()},
+                //    {((int)ValueDriverDimention.KARIR_DAN_PENGEMBANGAN_DIRI).ToString(), ValueDriverDimention.KARIR_DAN_PENGEMBANGAN_DIRI.ToString()},
+                //    {((int)ValueDriverDimention.PEKERJAAN).ToString(), ValueDriverDimention.PEKERJAAN.ToString()},
+                //    {((int)ValueDriverDimention.KEBUTUHAN_DASAR).ToString(), ValueDriverDimention.KEBUTUHAN_DASAR.ToString()},
+                //    {((int)ValueDriverDimention.HUBUNGAN_SOSIAL).ToString(), ValueDriverDimention.HUBUNGAN_SOSIAL.ToString()},
+                //};
 
                 List<FormModel> FormModels = new List<FormModel>();
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = verticalDimentionFromDb == null ? "0" : verticalDimentionFromDb.ID.ToString() });
@@ -111,7 +111,7 @@ namespace AdminLte.Controllers
                 FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = verticalDimentionFromDb == null ? "" : verticalDimentionFromDb.Name, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Keterangan", Name = "Description", InputType = InputType.TEXTAREA, Value = verticalDimentionFromDb == null ? "" : verticalDimentionFromDb.Description });
                 FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = verticalDimentionFromDb == null ? "0" : verticalDimentionFromDb.Sequence.ToString(), IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Nilai", Name = "ValueDriverDimention", InputType = InputType.DROPDOWN, Options = drivens, Value = verticalDimentionFromDb == null ? "" : ((int)verticalDimentionFromDb.ValueDriverDimention).ToString() });
+                //FormModels.Add(new FormModel { Label = "Nilai", Name = "ValueDriverDimention", InputType = InputType.DROPDOWN, Options = drivens, Value = verticalDimentionFromDb == null ? "" : ((int)verticalDimentionFromDb.ValueDriverDimention).ToString() });
 
                 ViewData["Forms"] = FormModels;
 
@@ -133,7 +133,7 @@ namespace AdminLte.Controllers
             ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name" });
             ColumnModels.Add(new ColumnModel { Label = "Keterangan", Name = "Description" });
             ColumnModels.Add(new ColumnModel { Label = "Urutan", Name = "Sequence" });
-            ColumnModels.Add(new ColumnModel { Label = "Dimensi", Name = "SituationEvpDimention" });
+            //ColumnModels.Add(new ColumnModel { Label = "Dimensi", Name = "SituationEvpDimention" });
             ColumnModels.Add(new ColumnModel { Label = "Sub Dimensi Vertical", Name = "SubVerticalDimentions" });
 
             ViewData["Columns"] = ColumnModels;

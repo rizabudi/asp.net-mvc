@@ -136,21 +136,6 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SubPeriods",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Name = table.Column<string>(nullable: false),
-                    Start = table.Column<DateTime>(nullable: false),
-                    End = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Periods", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Position",
                 columns: table => new
                 {

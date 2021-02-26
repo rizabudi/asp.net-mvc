@@ -15,8 +15,8 @@ namespace AdminLte.Data
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseNpgsql("Server=103.23.22.126;Port=5533;Database=adminlte;Username=postgres;Password=!@#123qwe;Persist Security Info=True");
+        //protected override void OnConfiguring(DbContextOptionsBuilder options)
+        //    => options.UseNpgsql(options);
     
         public DbSet<Employee> Employees { get; set; }
         public DbSet<EmployeeGroup> EmployeeGroup { get; set; }

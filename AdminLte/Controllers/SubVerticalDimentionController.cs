@@ -92,7 +92,10 @@ namespace AdminLte.Controllers
                 {
                     {((int)ValueDriverDimention.LEARNING).ToString(), ValueDriverDimention.LEARNING.ToString()},
                     {((int)ValueDriverDimention.GROWING).ToString(), ValueDriverDimention.GROWING.ToString()},
-                    {((int)ValueDriverDimention.CONTRIBUTING).ToString(), ValueDriverDimention.CONTRIBUTING.ToString()}
+                    {((int)ValueDriverDimention.CONTRIBUTING).ToString(), ValueDriverDimention.CONTRIBUTING.ToString()},
+                    {((int)ValueDriverDimention.EFISIENSI).ToString(), ValueDriverDimention.EFISIENSI.ToString()},
+                    {((int)ValueDriverDimention.EFEKTIVITAS).ToString(), ValueDriverDimention.EFEKTIVITAS.ToString()},
+                    {((int)ValueDriverDimention.KEADILAN).ToString(), ValueDriverDimention.KEADILAN.ToString()}
                 };
 
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = subVerticalFromDb == null ? "0" : subVerticalFromDb.ID.ToString() });
