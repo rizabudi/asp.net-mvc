@@ -51,7 +51,7 @@
         })
 
         $(".select-required").each(function () {
-            if ($(this).val() == "" || $(this).val() == "-1") {
+            if ($(this).attr("disabled") == null && ($(this).val() == "" || $(this).val() == "-1")) {
                 msg += $(this).data('label') + " harus diisi" + "<br/>";
             }
         })
