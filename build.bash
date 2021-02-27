@@ -11,3 +11,5 @@ cp -r AdminLte/bin/Release/netcoreapp3.1/publish dist
 ## TODO dirty hack maybe?
 cp -r AdminLte/Views dist/
 systemctl --user start adminlte
+rm -rf dist/wwwroot/uploads
+ln -s /srv/uploads dist/wwwroot/uploads
