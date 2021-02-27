@@ -123,9 +123,7 @@ namespace AdminLte.Controllers
                 };
                 var matrixValueTypes = new Dictionary<string, string>()
                 {
-                    {((int)MatrixValueType.CHAR_BOX).ToString(), MatrixValueType.CHAR_BOX.ToString()},
-                    {((int)MatrixValueType.FREE_TEXT).ToString(), MatrixValueType.FREE_TEXT.ToString()},
-                    {((int)MatrixValueType.LEVEL).ToString(), MatrixValueType.LEVEL.ToString()},
+                    {((int)MatrixValueType.SEQUENCE).ToString(), MatrixValueType.SEQUENCE.ToString()},
                     {((int)MatrixValueType.SUGGESTION).ToString(), MatrixValueType.SUGGESTION.ToString()},
                     {((int)MatrixValueType.NUMERICAL_BOX).ToString(), MatrixValueType.NUMERICAL_BOX.ToString()}
                 };
