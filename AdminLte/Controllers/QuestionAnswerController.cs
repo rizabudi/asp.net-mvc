@@ -126,7 +126,8 @@ namespace AdminLte.Controllers
                     {((int)MatrixValueType.CHAR_BOX).ToString(), MatrixValueType.CHAR_BOX.ToString()},
                     {((int)MatrixValueType.FREE_TEXT).ToString(), MatrixValueType.FREE_TEXT.ToString()},
                     {((int)MatrixValueType.LEVEL).ToString(), MatrixValueType.LEVEL.ToString()},
-                    {((int)MatrixValueType.SUGGESTION).ToString(), MatrixValueType.SUGGESTION.ToString()}
+                    {((int)MatrixValueType.SUGGESTION).ToString(), MatrixValueType.SUGGESTION.ToString()},
+                    {((int)MatrixValueType.NUMERICAL_BOX).ToString(), MatrixValueType.NUMERICAL_BOX.ToString()}
                 };
 
                 var question = await _db.Questions.Include(x=>x.Section).FirstOrDefaultAsync(x => x.ID == questionID);
@@ -141,7 +142,7 @@ namespace AdminLte.Controllers
                     .Include(x=>x.VerticalDimention.Section)
                     .Where(x => x.VerticalDimention.Section.ID == question.Section.ID)
                     .OrderBy(x => x.Name)
-                    .ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+                    .ToDictionaryAsync(x => x.ID.ToString(), y => y.VerticalDimention.Name + " - " + y.Name);
                 var horizontalDimentions = await _db.HorizontalDimentions
                     .Include(x => x.Section)
                     .Where(x => x.Section.ID == question.Section.ID)
