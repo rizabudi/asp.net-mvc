@@ -28,8 +28,9 @@ namespace AdminLte.Controllers
                     .Include("Section.Assesment")
                     .Include("QuestionAnswers")
                     .Include("QuestionAnswerMatrixs")
-                    .OrderBy(x=>x.Section.Sequence)
-                    .OrderBy(x=>x.Sequence)
+                    .OrderBy(x=>x.Section.Construct)
+                    .ThenBy(x => x.Section.Sequence)
+                    .ThenBy(x=>x.Sequence)
                     .Skip((page-1)*10)
                     .Take(10)
                     .ToListAsync();
@@ -181,6 +182,7 @@ namespace AdminLte.Controllers
                     questionFromDb.IsRandomAnswer = question.IsRandomAnswer;
                     questionFromDb.Title = question.Title;
                     questionFromDb.Description = question.Description;
+
                     _db.Questions.Update(questionFromDb);
                     _db.SaveChanges();
                     return Json(new { success = true, message = "Data berhasil diperbarui" });
@@ -206,8 +208,13 @@ namespace AdminLte.Controllers
                 }
 
                 var questionAnswersFromDb = await _db.QuestionAnswer.Where(e => e.Question.ID == id).ToListAsync();
+                var questionAnswersFromDb1 = await _db.QuestionAnswer.Where(e => e.MatrixQuestion.ID == id).ToListAsync();
+                
                 _db.QuestionAnswer.RemoveRange(questionAnswersFromDb);
+                _db.QuestionAnswer.RemoveRange(questionAnswersFromDb1);
+
                 _db.Questions.Remove(questionFromDb);
+
                 await _db.SaveChangesAsync();
                 return Json(new { success = true, message = "Data berhasil dihapus" });
             }

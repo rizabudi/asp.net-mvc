@@ -24,7 +24,8 @@ namespace AdminLte.Controllers
             {
                 var data = await _db.HorizontalDimentions
                     .Include("Section")
-                    .OrderBy(x=>x.Sequence)
+                    .OrderBy(x => x.Section.Construct)
+                    .ThenBy(x => x.Sequence)
                     .Skip((page-1)*10)
                     .Take(10)
                     .ToListAsync();

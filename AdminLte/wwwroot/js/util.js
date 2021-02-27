@@ -45,7 +45,7 @@
         })
 
         $(".number-required").each(function () {
-            if ($(this).val() == "" || $(this).val() == "0") {
+            if ($(this).val() == "") {
                 msg += $(this).data('label') + " harus diisi" + "<br/>";
             }
         })

@@ -23,6 +23,8 @@ namespace AdminLte.Controllers
         {
             try
             {
+                var question = await _db.Questions.Include(x => x.Section).FirstOrDefaultAsync(x => x.ID == questionID);
+
                 var data = await _db.QuestionAnswer
                     .Include("Question")
                     .Include("MatrixQuestion")
@@ -47,10 +49,20 @@ namespace AdminLte.Controllers
                             row.Question == null ? "Baris" : "Kolom",
                             row.Weight.ToString(),
                             row.AnswerScore.ToString(),
-                            row.VerticalDimention != null ? row.VerticalDimention.Name : "",
-                            row.SubVerticalDimention != null ? row.SubVerticalDimention.Name : "",
-                            row.HorizontalDimention != null ? row.HorizontalDimention.Name : ""
-                        } 
+                            row.Question == null ?
+                                "HTML:Dimensi Vertical : " + (row.VerticalDimention != null ? row.VerticalDimention.Name : "-") + "<br/>" +
+                                "Sub Dimensi Vertical : " + (row.SubVerticalDimention != null ? row.SubVerticalDimention.Name : "-") + "<br/>" +
+                                "Dimensi Horizontal : " + (row.HorizontalDimention != null ? row.HorizontalDimention.Name : "-") + "<br/>" +
+                                (question.Section.Construct == Construct.PERFORMANCE ?
+                                    "Un-Favorable : " + (row.IsUnFavorable ? "Iya" : "Tidak")
+                                    :
+                                    "")
+                                : 
+                                (question.Section.Construct == Construct.CULTURE ?
+                                    "Tipe Jawaban Matrix : " + row.MatrixValue.ToString() : 
+                                    ""
+                                )
+                        }
                     });
                 }
 
@@ -109,6 +121,13 @@ namespace AdminLte.Controllers
                     {"1", "Kolom"},
                     {"2", "Baris"},
                 };
+                var matrixValueTypes = new Dictionary<string, string>()
+                {
+                    {((int)MatrixValueType.CHAR_BOX).ToString(), MatrixValueType.CHAR_BOX.ToString()},
+                    {((int)MatrixValueType.FREE_TEXT).ToString(), MatrixValueType.FREE_TEXT.ToString()},
+                    {((int)MatrixValueType.LEVEL).ToString(), MatrixValueType.LEVEL.ToString()},
+                    {((int)MatrixValueType.SUGGESTION).ToString(), MatrixValueType.SUGGESTION.ToString()}
+                };
 
                 var question = await _db.Questions.Include(x=>x.Section).FirstOrDefaultAsync(x => x.ID == questionID);
 
@@ -132,12 +151,21 @@ namespace AdminLte.Controllers
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = questionAnswerFromDb == null ? "0" : questionAnswerFromDb.ID.ToString() });
                 FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = questionAnswerFromDb == null ? "0" : questionAnswerFromDb.Sequence.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Jawaban", Name = "Value", InputType = InputType.TEXTAREA, Value = questionAnswerFromDb == null ? "" : questionAnswerFromDb.Value, IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Tampilan Matrix", Name = "Type", InputType = InputType.DROPDOWN, Options = answerTypes, Value = questionAnswerFromDb == null ? "" : questionAnswerFromDb.Question != null ? "1" : "2" });
+                FormModels.Add(new FormModel { Label = "Tampilan Matrix", Name = "Type", InputType = InputType.DROPDOWN, Options = answerTypes, Value = questionAnswerFromDb == null ? "" : questionAnswerFromDb.Question != null ? "1" : "2", IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Bobot", Name = "Weight", InputType = InputType.NUMBER, Value = questionAnswerFromDb == null ? "0" : questionAnswerFromDb.Weight.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Nilai", Name = "AnswerScore", InputType = InputType.NUMBER, Value = questionAnswerFromDb == null ? "0" : questionAnswerFromDb.AnswerScore.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Dimensi Vertical", Name = "VerticalDimention", InputType = InputType.DROPDOWN, Options = verticalDimentions, Value = questionAnswerFromDb == null || questionAnswerFromDb.VerticalDimention == null ? "" : ((int)questionAnswerFromDb.VerticalDimention.ID).ToString(), FormPosition = FormPosition.RIGHT });
                 FormModels.Add(new FormModel { Label = "Sub Dimensi Vertical", Name = "SubVerticalDimention", InputType = InputType.DROPDOWN, Options = subVerticalDimentions, Value = questionAnswerFromDb == null || questionAnswerFromDb.SubVerticalDimention == null ? "" : ((int)questionAnswerFromDb.SubVerticalDimention.ID).ToString(), FormPosition = FormPosition.RIGHT });
                 FormModels.Add(new FormModel { Label = "Dimensi Horizontal", Name = "HorizontalDimention", InputType = InputType.DROPDOWN, Options = horizontalDimentions, Value = questionAnswerFromDb == null || questionAnswerFromDb.HorizontalDimention == null ? "" : ((int)questionAnswerFromDb.HorizontalDimention.ID).ToString(), FormPosition = FormPosition.RIGHT });
+
+                if(question.Section.Construct == Construct.PERFORMANCE)
+                {
+                    FormModels.Add(new FormModel { Label = "Un-Favorable", Name = "IsUnFavorable", InputType = InputType.YESNO, Value = questionAnswerFromDb == null ? "" : questionAnswerFromDb.IsUnFavorable ? "1" : "0", FormPosition = FormPosition.RIGHT });
+                } 
+                else if (question.Section.Construct == Construct.CULTURE)
+                {
+                    FormModels.Add(new FormModel { Label = "Tipe Jawaban Matrix", Name = "MatrixValue", InputType = InputType.DROPDOWN, Options = matrixValueTypes, Value = questionAnswerFromDb == null ? "" : ((int)questionAnswerFromDb.MatrixValue).ToString(), FormPosition = FormPosition.LEFT, IsRequired = true });
+                }
 
                 ViewData["Forms"] = FormModels;
                 ViewData["ColumnNumber"] = 2;
@@ -155,7 +183,9 @@ namespace AdminLte.Controllers
         [Route("question-answer/{questionID:int}")]
         public async Task<IActionResult> IndexAsync(int questionID)
         {
-            var question = await _db.Questions.FirstOrDefaultAsync(x => x.ID == questionID);
+            var question = await _db.Questions
+                .Include(x=>x.Section)
+                .FirstOrDefaultAsync(x => x.ID == questionID);
 
             if (question == null)
             {
@@ -165,13 +195,11 @@ namespace AdminLte.Controllers
             ViewData["Title"] = "Daftar Jawaban | " + question.Title;
             List<ColumnModel> ColumnModels = new List<ColumnModel>();
             ColumnModels.Add(new ColumnModel { Label = "Urutan", Name = "Sequence", Style = "width: 5%; min-width: 100px" });
-            ColumnModels.Add(new ColumnModel { Label = "Jawaban", Name = "Value" });
-            ColumnModels.Add(new ColumnModel { Label = "Tampilan Matrix", Name = "TypeAnswer" });
-            ColumnModels.Add(new ColumnModel { Label = "Bobot", Name = "Weight" });
-            ColumnModels.Add(new ColumnModel { Label = "Nilai", Name = "AnswerScore" });
-            ColumnModels.Add(new ColumnModel { Label = "Dimensi Vertikal", Name = "VerticalDimention" });
-            ColumnModels.Add(new ColumnModel { Label = "Sub Dimensi Vertikal", Name = "SubVerticalDimention" });
-            ColumnModels.Add(new ColumnModel { Label = "Dimensi Horizontal", Name = "HorizontalDimention" });
+            ColumnModels.Add(new ColumnModel { Label = "Jawaban", Name = "Value", Style = "width: 35%; min-width: 350px" });
+            ColumnModels.Add(new ColumnModel { Label = "Tampilan Matrix", Name = "TypeAnswer", Style = "width: 5%; min-width: 100px" });
+            ColumnModels.Add(new ColumnModel { Label = "Bobot", Name = "Weight", Style = "width: 5%; min-width: 100px" });
+            ColumnModels.Add(new ColumnModel { Label = "Nilai", Name = "AnswerScore", Style = "width: 5%; min-width: 100px" });
+            ColumnModels.Add(new ColumnModel { Label = "Keterangan", Name = "Note" });
 
             ViewData["Columns"] = ColumnModels;
             ViewData["Script"] = "question-answer.js";
@@ -181,7 +209,8 @@ namespace AdminLte.Controllers
             }; 
             ViewData["Values"] = new Dictionary<string, string>()
             {
-                {"Question", questionID.ToString()}
+                {"Question", questionID.ToString()},
+                {"Construct", question.Section.Construct.ToString() }
             };
             ViewData["ModalStye"] = "modal-xl";
 
@@ -226,6 +255,8 @@ namespace AdminLte.Controllers
                     questionAnswerFromDb.Value = questionAnswer.Value;
                     questionAnswerFromDb.Weight = questionAnswer.Weight;
                     questionAnswerFromDb.AnswerScore = questionAnswer.AnswerScore;
+                    questionAnswerFromDb.MatrixValue = questionAnswer.MatrixValue;
+                    questionAnswerFromDb.IsUnFavorable = questionAnswer.IsUnFavorable;
 
                     _db.QuestionAnswer.Update(questionAnswerFromDb);
                     _db.SaveChanges();

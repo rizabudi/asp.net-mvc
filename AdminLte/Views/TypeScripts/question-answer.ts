@@ -46,10 +46,23 @@
                     $("#VerticalDimention").attr('disabled', 'disabled');
                     $("#SubVerticalDimention").attr('disabled', 'disabled');
                     $("#HorizontalDimention").attr('disabled', 'disabled');
+
+                    if ($("#Construct").val() == "CULTURE") {
+                        $("#MatrixValue").removeAttr('disabled');
+                    } else if ($("#Construct").val() == "PERFORMANCE") {
+                        $("#div_IsUnFavorable").hide();
+                    }
                 } else {
                     $("#VerticalDimention").removeAttr('disabled');
                     $("#SubVerticalDimention").removeAttr('disabled');
                     $("#HorizontalDimention").removeAttr('disabled');
+
+                    if ($("#Construct").val() == "CULTURE") {
+                        $("#MatrixValue").attr('disabled', 'disabled');
+                        $("#MatrixValue").val("-1");
+                    } else if ($("#Construct").val() == "PERFORMANCE") {
+                        $("#div_IsUnFavorable").show();
+                    }
                 }
             });
 
@@ -141,6 +154,7 @@
         try {
             var type = $("#Type").val();
             var question = $("#Question").val();
+            var construct = $("#Construct").val();
             const data = {
                 ID: $('#ID').val(),
                 Sequence: $('#Sequence').val(),
@@ -149,7 +163,10 @@
                 Weight: $('#Weight').val(),
                 AnswerScore: $('#AnswerScore').val(),
                 Question: {
-                    ID: type == "1" ? question : 0
+                    ID: type == "1" ? question : 0,
+                    Section: {
+                        Construct: construct
+                    }
                 },
                 MatrixQuestion: {
                     ID: type == "2" ? question : 0
@@ -162,7 +179,9 @@
                 },
                 HorizontalDimention: {
                     ID: $('#HorizontalDimention').val()
-                }
+                },
+                MatrixValue: $("#MatrixValue").val(),
+                IsUnFavorable: $('#IsUnFavorable').is(":checked"),
             };
             return data;
         } catch (e) {
@@ -204,10 +223,24 @@
                     $("#VerticalDimention").attr('disabled', 'disabled');
                     $("#SubVerticalDimention").attr('disabled', 'disabled');
                     $("#HorizontalDimention").attr('disabled', 'disabled');
+
+                    if ($("#Construct").val() == "CULTURE") {
+                        $("#MatrixValue").removeAttr('disabled');
+                    } else if ($("#Construct").val() == "PERFORMANCE") {
+                        $("#div_IsUnFavorable").hide();
+                    }
+
                 } else {
                     $("#VerticalDimention").removeAttr('disabled');
                     $("#SubVerticalDimention").removeAttr('disabled');
                     $("#HorizontalDimention").removeAttr('disabled');
+
+                    if ($("#Construct").val() == "CULTURE") {
+                        $("#MatrixValue").attr('disabled', 'disabled');
+                        $("#MatrixValue").val("-1");
+                    } else if ($("#Construct").val() == "PERFORMANCE") {
+                        $("#div_IsUnFavorable").show();
+                    }
                 }
             }, function () {
                 Util.error('Failed to get data. Please try again');

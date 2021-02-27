@@ -64,6 +64,8 @@ namespace AdminLte.Models
 
     public enum ValueDriverDimention
     {
+        NONE,
+
         LEARNING,
         GROWING,
         CONTRIBUTING,
@@ -117,6 +119,7 @@ namespace AdminLte.Models
 
     public enum MatrixValueType
     {
+        LEVEL,
         SUGGESTION,
         CHAR_BOX,
         FREE_TEXT,

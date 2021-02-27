@@ -134,8 +134,8 @@
                 Sequence: $('#Sequence').val(),
                 QuestionType: $('#QuestionType').val(),
                 MatrixSubtype: $('#MatrixSubtype').val(),
-                IsMandatory: $('#IsMandatory').val(),
-                IsRandom: $('#IsRandomAnswer').val(),
+                IsMandatory: $('#IsMandatory').is(":checked"),
+                IsRandom: $('#IsRandom').is(":checked"),
                 Title: $('#Title').val(),
                 Description: (<any>$('#Description')).summernote('code'),
             };

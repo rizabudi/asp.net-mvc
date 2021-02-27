@@ -3,7 +3,7 @@
 @foreach (FormModel FormModel in Model)
 {
     var display = FormModel.InputType == AdminLte.Models.InputType.HIDDEN ? "none" : "";
-    <div class="form-group row" style="display: @display">
+    <div class="form-group row" style="display: @display" id="div_@FormModel.Name">
         @{
             var offset = "";
             var offset1 = "col-md-9";
