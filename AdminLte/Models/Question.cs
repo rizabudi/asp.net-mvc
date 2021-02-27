@@ -120,10 +120,8 @@ namespace AdminLte.Models
 
     public enum MatrixValueType
     {
-        LEVEL,
+        SEQUENCE,
         SUGGESTION,
-        CHAR_BOX,
-        FREE_TEXT,
         NUMERICAL_BOX
     }
 
