@@ -121,10 +121,16 @@ namespace AdminLte.Controllers
                 string image = "";
                 if(questionFromDb != null && questionFromDb.Attachment != null)
                 {
-                    string uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
-                    string filePath = Path.Combine(uploads, questionFromDb.Attachment);
-                    byte[] b = System.IO.File.ReadAllBytes(filePath);
-                    image = "data:image/png;base64," + Convert.ToBase64String(b);
+                    try
+                    {
+                        string uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+                        string filePath = Path.Combine(uploads, questionFromDb.Attachment);
+                        byte[] b = System.IO.File.ReadAllBytes(filePath);
+                        image = "data:image/png;base64," + Convert.ToBase64String(b);
+                    } 
+                    catch (Exception)
+                    {
+                    }
                 }
 
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = questionFromDb == null ? "0" : questionFromDb.ID.ToString() });
