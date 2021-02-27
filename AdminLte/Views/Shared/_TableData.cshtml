@@ -30,6 +30,16 @@
                     var html = value.Replace("HTML:", "");
                     <td style="text-align:left">@Html.Raw(html)</td>
                 }
+                else if(value != null && value.Contains("IMAGE:"))
+                {
+                    var html = value.Replace("IMAGE:", "");
+                    <td style="text-align:left">
+                        @if(html != "")
+                        {
+                        <img style="width:100px" src="~/uploads/@html"/>
+                        }
+                    </td>
+                }
                 else
                 {
                     <td style="text-align:left">@value</td>

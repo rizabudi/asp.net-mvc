@@ -229,3 +229,5 @@ Thumbs.db
 
 *package-lock.json
 appsettings.json
+
+AdminLte/uploads/*

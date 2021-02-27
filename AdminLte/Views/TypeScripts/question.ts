@@ -6,6 +6,7 @@
     private urlDelete = '/question/delete';
     private urlEdit = '/question/edit';
     private urlSearch = '/question/search';
+    private urlUploadImage = '/question/upload-image';
 
     private currentPage = 1;
 
@@ -76,6 +77,10 @@
                 (<any>$('#Description')).summernote({
                     height: "150"
                 });
+                $(document).on("change", "#Attachment", (e) => {
+                    const file = $(e.currentTarget).prop('files')[0];
+                    this.uploadImage($(e.currentTarget).attr("id"), file);
+                });
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -135,9 +140,10 @@
                 QuestionType: $('#QuestionType').val(),
                 MatrixSubtype: $('#MatrixSubtype').val(),
                 IsMandatory: $('#IsMandatory').is(":checked"),
-                IsRandom: $('#IsRandom').is(":checked"),
+                IsRandomAnswer: $('#IsRandomAnswer').is(":checked"),
                 Title: $('#Title').val(),
                 Description: (<any>$('#Description')).summernote('code'),
+                Attachment: $("#Attachment").data("image")
             };
             return data;
         } catch (e) {
@@ -174,6 +180,10 @@
                 (<any>$('#Description')).summernote({
                     height: "150"
                 });
+                $(document).on("change", "#Attachment", (e) => {
+                    const file = $(e.currentTarget).prop('files')[0];
+                    this.uploadImage($(e.currentTarget).attr("id"), file);
+                });
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -197,6 +207,31 @@
         } catch (e) {
             console.error(e);
         }
+    }
+
+    private uploadImage(id, image) {
+        var data = new FormData();
+        data.append("image", image);
+        $.ajax({
+            url: this.urlUploadImage,
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: data,
+            type: "POST",
+            success: function (result) {
+                if (result.success) {
+                    $("#img_" + id).attr("src", result.data.base64);
+                    $("#" + id).data("image", result.data.filename);
+                } else {
+                    Util.alert(result.message);
+                }
+            },
+            error: function (data) {
+                console.log(data);
+                Util.alert('Failed to get data. Please try again.');
+            }
+        });
     }
 }
 

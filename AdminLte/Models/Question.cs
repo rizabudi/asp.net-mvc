@@ -52,6 +52,7 @@ namespace AdminLte.Models
         [Required]
         public string Title { get; set; }
         public string Description { get; set; }
+        public string Attachment { get; set; }
         public int Sequence { get; set; }
         public QuestionType QuestionType { get; set; }
         public MatrixSubType MatrixSubType { get; set; }
