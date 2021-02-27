@@ -114,7 +114,6 @@ namespace AdminLte.Controllers
                 var matrixSubTypes = new Dictionary<string, string>()
                 {
                     {((int)MatrixSubType.SIMPLE).ToString(), MatrixSubType.SIMPLE.ToString()},
-                    {((int)MatrixSubType.MULTIPLE).ToString(), MatrixSubType.MULTIPLE.ToString()},
                     {((int)MatrixSubType.CUSTOM).ToString(), MatrixSubType.CUSTOM.ToString()}
                 };
 
@@ -206,7 +205,11 @@ namespace AdminLte.Controllers
                     questionFromDb.IsRandomAnswer = question.IsRandomAnswer;
                     questionFromDb.Title = question.Title;
                     questionFromDb.Description = question.Description;
-                    questionFromDb.Attachment = question.Attachment;
+
+                    if(question.Attachment != "")
+                    {
+                        questionFromDb.Attachment = question.Attachment;
+                    }
 
                     _db.Questions.Update(questionFromDb);
                     _db.SaveChanges();
