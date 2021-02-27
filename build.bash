@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 systemctl --user stop adminlte
-rm -rf AdminLte/bin
+rm -rf AdminLte/{obj,bin}
 rm -rf dist
 pushd AdminLte
 dotnet publish --configuration Release
