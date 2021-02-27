@@ -7,6 +7,7 @@ var Question = /** @class */ (function () {
         this.urlDelete = '/question/delete';
         this.urlEdit = '/question/edit';
         this.urlSearch = '/question/search';
+        this.urlUploadImage = '/question/upload-image';
         this.currentPage = 1;
         this.init();
     }
@@ -66,6 +67,7 @@ var Question = /** @class */ (function () {
         }
     };
     Question.prototype.add = function () {
+        var _this = this;
         try {
             Util.request(this.urlGetForm, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Tambah Data");
@@ -74,6 +76,10 @@ var Question = /** @class */ (function () {
                 $("#modal-default").modal("show");
                 $('#Description').summernote({
                     height: "150"
+                });
+                $(document).on("change", "#Attachment", function (e) {
+                    var file = $(e.currentTarget).prop('files')[0];
+                    _this.uploadImage($(e.currentTarget).attr("id"), file);
                 });
             }, function () {
                 Util.error('Failed to get data. Please try again');
@@ -141,9 +147,10 @@ var Question = /** @class */ (function () {
                 QuestionType: $('#QuestionType').val(),
                 MatrixSubtype: $('#MatrixSubtype').val(),
                 IsMandatory: $('#IsMandatory').is(":checked"),
-                IsRandom: $('#IsRandom').is(":checked"),
+                IsRandomAnswer: $('#IsRandomAnswer').is(":checked"),
                 Title: $('#Title').val(),
                 Description: $('#Description').summernote('code'),
+                Attachment: $("#Attachment").data("image")
             };
             return data;
         }
@@ -175,6 +182,7 @@ var Question = /** @class */ (function () {
         }
     };
     Question.prototype.edit = function (data) {
+        var _this = this;
         try {
             Util.request(this.urlGetForm + "?id=" + data.id, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Ubah Data");
@@ -183,6 +191,10 @@ var Question = /** @class */ (function () {
                 $("#modal-default").modal("show");
                 $('#Description').summernote({
                     height: "150"
+                });
+                $(document).on("change", "#Attachment", function (e) {
+                    var file = $(e.currentTarget).prop('files')[0];
+                    _this.uploadImage($(e.currentTarget).attr("id"), file);
                 });
             }, function () {
                 Util.error('Failed to get data. Please try again');
@@ -209,6 +221,31 @@ var Question = /** @class */ (function () {
         catch (e) {
             console.error(e);
         }
+    };
+    Question.prototype.uploadImage = function (id, image) {
+        var data = new FormData();
+        data.append("image", image);
+        $.ajax({
+            url: this.urlUploadImage,
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: data,
+            type: "POST",
+            success: function (result) {
+                if (result.success) {
+                    $("#img_" + id).attr("src", result.data.base64);
+                    $("#" + id).data("image", result.data.filename);
+                }
+                else {
+                    Util.alert(result.message);
+                }
+            },
+            error: function (data) {
+                console.log(data);
+                Util.alert('Failed to get data. Please try again.');
+            }
+        });
     };
     return Question;
 }());

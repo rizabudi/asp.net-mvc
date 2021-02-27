@@ -15,7 +15,8 @@ namespace AdminLte.Models
         NUMBER,
         HIDDEN,
         DROPDOWN,
-        YESNO
+        YESNO,
+        IMAGE,
     }
 
     public enum FormPosition

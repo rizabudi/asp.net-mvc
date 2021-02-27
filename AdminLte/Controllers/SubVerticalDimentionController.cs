@@ -26,7 +26,7 @@ namespace AdminLte.Controllers
                 var data = await _db.SubVerticalDimentions
                     .Include("VerticalDimention")
                     .Where(x=> x.VerticalDimention.ID == verticalDimentionID)
-                    .OrderBy(x=>x.Name)
+                    .OrderBy(x=>x.Sequence)
                     .Skip((page-1)*10)
                     .Take(10)
                     .ToListAsync();
