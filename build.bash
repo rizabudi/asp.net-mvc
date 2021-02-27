@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1001/bus
 systemctl --user stop adminlte
 rm -rf AdminLte/{obj,bin}
 rm -rf dist
