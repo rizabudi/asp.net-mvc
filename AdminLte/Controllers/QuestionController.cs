@@ -206,7 +206,7 @@ namespace AdminLte.Controllers
                     questionFromDb.Title = question.Title;
                     questionFromDb.Description = question.Description;
 
-                    if(question.Attachment != "")
+                    if(question.Attachment != null)
                     {
                         questionFromDb.Attachment = question.Attachment;
                     }
