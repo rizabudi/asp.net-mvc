@@ -1,0 +1,35 @@
+﻿@model List<Participant>
+@{
+    ViewData["Title"] = "Daftar Survei Tersedia";
+    Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
+}
+
+<div class="module form-modal">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Daftar Survei Tersedia</h3>
+            <div class="card-tools">
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            @foreach(Participant participant in Model)
+            {
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <b>@participant.QuestionPackage.Assesment.Name - @participant.QuestionPackage.Name</b><br />
+                            Entitas : @participant.Schedule.Entity.Name<br/>
+                            Jadwal : @participant.Schedule.Name (@participant.Schedule.Start.ToString("yyyy-MM-dd") s/d @participant.Schedule.End.ToString("yyyy-MM-dd"))
+                        </div>
+                        <div class="card-footer">
+                            <a href="~/survey-participant/detail/@participant.ID" style="color:white" class="btn btn-primary">Mulai Survei</a>
+                        </div>
+                    </div>
+                    
+                </div>
+                }
+            </div>
+        <!-- /.card-body -->
+    </div>
+</div>

@@ -86,14 +86,16 @@ namespace AdminLte.Controllers
 
                 List<FormModel> FormModels = new List<FormModel>();
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = sectionFromDb == null ? "0" : sectionFromDb.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Jenis Survei", Name = "Assesment", InputType = InputType.DROPDOWN, Options = assesments, Value = sectionFromDb == null ? "" : sectionFromDb.Assesment.ID.ToString(), IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = sectionFromDb == null ? "" : sectionFromDb.Name, IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Keterangan", Name = "Description", InputType = InputType.TEXTAREA, Value = sectionFromDb == null ? "" : sectionFromDb.Description });
-                FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = sectionFromDb == null ? "0" : sectionFromDb.Sequence.ToString() });
-                FormModels.Add(new FormModel { Label = "Soal Acak", Name = "IsRandom", InputType = InputType.YESNO, Value = sectionFromDb == null ? "0" : sectionFromDb.IsRandom ? "1" : "0" });
-                FormModels.Add(new FormModel { Label = "Konstruk", Name = "Construct", InputType = InputType.DROPDOWN, Options = constructs, Value = sectionFromDb == null ? "" : ((int)sectionFromDb.Construct).ToString() });
+                FormModels.Add(new FormModel { Label = "Jenis Survei", Name = "Assesment", InputType = InputType.DROPDOWN, Options = assesments, Value = sectionFromDb == null ? "" : sectionFromDb.Assesment.ID.ToString(), IsRequired = true, FormPosition = FormPosition.LEFT });
+                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = sectionFromDb == null ? "" : sectionFromDb.Name, IsRequired = true, FormPosition = FormPosition.LEFT });
+                FormModels.Add(new FormModel { Label = "Keterangan", Name = "Description", InputType = InputType.TEXTAREA, Value = sectionFromDb == null ? "" : sectionFromDb.Description, FormPosition = FormPosition.LEFT });
+                FormModels.Add(new FormModel { Label = "Urutan", Name = "Sequence", InputType = InputType.NUMBER, Value = sectionFromDb == null ? "0" : sectionFromDb.Sequence.ToString(), FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Soal Acak", Name = "IsRandom", InputType = InputType.YESNO, Value = sectionFromDb == null ? "0" : sectionFromDb.IsRandom ? "1" : "0", FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Konstruk", Name = "Construct", InputType = InputType.DROPDOWN, Options = constructs, Value = sectionFromDb == null ? "" : ((int)sectionFromDb.Construct).ToString(), FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Narasi", Name = "Introduction", InputType = InputType.WYSIWYG, Value = sectionFromDb == null ? "" : sectionFromDb.Introduction, FormPosition = FormPosition.FULL });
 
                 ViewData["Forms"] = FormModels;
+                ViewData["ColumnNumber"] = 2;
 
                 return PartialView("~/Views/Shared/_FormView.cshtml");
             }
@@ -118,6 +120,7 @@ namespace AdminLte.Controllers
 
             ViewData["Columns"] = ColumnModels;
             ViewData["Script"] = "section.js";
+            ViewData["ModalStye"] = "modal-xl";
 
             return View("~/Views/Shared/_Index.cshtml");
         }
@@ -149,6 +152,7 @@ namespace AdminLte.Controllers
                     sectionFromDb.Sequence = section.Sequence;
                     sectionFromDb.IsRandom = section.IsRandom;
                     sectionFromDb.Construct = section.Construct;
+                    sectionFromDb.Introduction = section.Introduction;
 
                     _db.Sections.Update(sectionFromDb);
                     _db.SaveChanges();

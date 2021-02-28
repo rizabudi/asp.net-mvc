@@ -23,6 +23,7 @@ namespace AdminLte.Models
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Introduction { get; set; }
         public int Sequence { get; set; }
         public bool IsRandom { get; set; }
         public Construct Construct { get; set; }

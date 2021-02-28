@@ -66,6 +66,9 @@ var Section = /** @class */ (function () {
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
+                $('#Introduction').summernote({
+                    height: "150"
+                });
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -133,6 +136,7 @@ var Section = /** @class */ (function () {
                 Sequence: $('#Sequence').val(),
                 IsRandom: $('#IsRandom').is(":checked"),
                 Construct: $('#Construct').val(),
+                Introduction: $('#Introduction').summernote('code'),
             };
             return data;
         }
@@ -170,6 +174,9 @@ var Section = /** @class */ (function () {
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
+                $('#Introduction').summernote({
+                    height: "150"
+                });
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });

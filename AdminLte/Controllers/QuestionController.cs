@@ -30,21 +30,21 @@ namespace AdminLte.Controllers
             try
             {
                 var data = await _db.Questions
-                    .Include("Section")
-                    .Include("Section.Assesment")
-                    .Include("QuestionAnswers")
-                    .Include("QuestionAnswerMatrixs")
-                    .OrderBy(x=>x.Section.Construct)
+                    .Include(x => x.Section)
+                    .Include(x => x.Section.Assesment)
+                    .OrderBy(x => x.Section.Construct)
                     .ThenBy(x => x.Section.Sequence)
                     .ThenBy(x=>x.Sequence)
                     .Skip((page-1)*10)
                     .Take(10)
                     .ToListAsync();
 
+                var answers = await _db.QuestionAnswer.Where(x => data.Contains(x.Question) || data.Contains(x.MatrixQuestion)).ToListAsync();
+
                 var rows = new List<RowModel>();
-                foreach(var row in data)
+                foreach (var row in data)
                 {
-                    var answer = row.QuestionAnswers.Count() + row.QuestionAnswerMatrixs.Count();
+                    var answer = answers.Where(x => (x.Question != null && x.Question.ID == row.ID) || (x.MatrixQuestion != null && x.MatrixQuestion.ID == row.ID)).Count();
                     rows.Add(new RowModel { 
                         ID = row.ID, 
                         Value = new string[] { 

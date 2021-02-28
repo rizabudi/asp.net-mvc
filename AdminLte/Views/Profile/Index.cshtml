@@ -1,0 +1,60 @@
+﻿@model ParticipantUser
+@{
+    ViewData["Title"] = "Profil";
+    Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
+
+    var forms1 = new Dictionary<string, string>
+    {
+        { "Nomor Karyawan", Model.EmployeeNumber },
+        { "Nama Karyawan", Model.Name },
+        { "Email", Model.Email },
+        { "No Telp", Model.Phone },
+        { "Username", Model.User.UserName },
+    };
+    var forms2 = new Dictionary<string, string>
+    {
+        { "Entitas", Model.Entity.Name },
+        { "Posisi", Model.Position.Name },
+        { "Fungsi", Model.CompanyFunction.Name },
+        { "Divisi", Model.Divition.Name },
+        { "Departemen", Model.Department.Name },
+    };
+}
+
+<div class="module form-modal">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Profil</h3>
+            <div class="card-tools">
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <form class="form-horizontal row col-md-12">
+                <div class="col-md-6">
+                    @foreach (string key in forms1.Keys)
+                    {
+                        <div class="row">
+                            <label for="inputEmail3" class="col-sm-3 col-form-label">@key</label>
+                            <div class="col-sm-9">
+                                <label class="col-form-label">: @forms1[key]</label>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="col-md-6">
+                    @foreach (string key in forms2.Keys)
+                    {
+                        <div class="row">
+                            <label for="inputEmail3" class="col-sm-3 col-form-label">@key</label>
+                            <div class="col-sm-9">
+                                <label class="col-form-label">: @forms2[key]</label>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </form>
+        </div>
+        <!-- /.card-body -->
+    </div>
+</div>

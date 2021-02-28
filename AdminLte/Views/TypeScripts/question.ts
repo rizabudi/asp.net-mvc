@@ -42,6 +42,7 @@
     }
     private initTable(page) {
         try {
+            $('#table_list tbody').empty();
             Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', (response) => {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);

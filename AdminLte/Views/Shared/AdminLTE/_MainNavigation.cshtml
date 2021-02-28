@@ -25,7 +25,8 @@
                 <div class="info">
                     @if (user != null)
                     {
-                        <a href="#" class="d-block">Hi, @user.BackendUser.Name</a>
+                        var name = user.BackendUser != null ? user.BackendUser.Name : (user.ParticipantUser != null ? user.ParticipantUser.Name : "-");
+                        <a href="#" class="d-block">Hi, @name</a>
                     }
                 </div>
             </div>
@@ -214,13 +215,13 @@
                     else
                     {
                         <li class="nav-item">
-                            <a class="nav-link">
+                            <a asp-controller="Profile" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "Profile" },"index")">
                                 <i class="fas fa-user nav-icon"></i>
                                 <p>Profile</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link">
+                            <a asp-controller="SurveyParticipant" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "SurveyParticipant" }, new List<string> { "index", "detail" })">
                                 <i class="fas fa-file-signature nav-icon"></i>
                                 <p>Daftar Survei Tersedia</p>
                             </a>

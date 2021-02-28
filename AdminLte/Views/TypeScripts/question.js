@@ -40,6 +40,7 @@ var Question = /** @class */ (function () {
     };
     Question.prototype.initTable = function (page) {
         try {
+            $('#table_list tbody').empty();
             Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', function (response) {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);

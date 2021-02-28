@@ -80,6 +80,7 @@
     }
     private initTable(page) {
         try {
+            $('#table_list tbody').empty();
             Util.request(this.urlGetData + "?page=" + page + "&questionID=" + $("#Question").val(), 'GET', 'html', (response) => {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);

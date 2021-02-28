@@ -79,6 +79,7 @@ var QuestionAnswer = /** @class */ (function () {
     };
     QuestionAnswer.prototype.initTable = function (page) {
         try {
+            $('#table_list tbody').empty();
             Util.request(this.urlGetData + "?page=" + page + "&questionID=" + $("#Question").val(), 'GET', 'html', function (response) {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);

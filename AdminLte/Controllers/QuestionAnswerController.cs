@@ -26,12 +26,10 @@ namespace AdminLte.Controllers
                 var question = await _db.Questions.Include(x => x.Section).FirstOrDefaultAsync(x => x.ID == questionID);
 
                 var data = await _db.QuestionAnswer
-                    .Include("Question")
-                    .Include("MatrixQuestion")
-                    .Include("VerticalDimention")
-                    .Include("SubVerticalDimention")
-                    .Include("HorizontalDimention")
-                    .Where(x=> x.Question.ID == questionID || x.MatrixQuestion.ID == questionID)
+                    .Include(x=>x.VerticalDimention)
+                    .Include(x => x.SubVerticalDimention)
+                    .Include(x => x.HorizontalDimention)
+                    .Where(x=> (x.Question != null && x.Question.ID == questionID) || (x.MatrixQuestion != null && x.MatrixQuestion.ID == questionID))
                     .OrderBy(x=> x.MatrixQuestion == null ? 1 : 2)
                     .ThenBy(x=>x.Sequence)
                     .Skip((page-1)*10)

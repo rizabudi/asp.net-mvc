@@ -57,6 +57,35 @@ namespace AdminLte.Helpers
             }
         }
 
+        public static string MakeActiveClass(this IUrlHelper urlHelper, List<string> controllers, List<string> actions)
+        {
+            try
+            {
+                string result = "active";
+                string controllerName = urlHelper.ActionContext.RouteData.Values["controller"].ToString();
+                string methodName = urlHelper.ActionContext.RouteData.Values["action"].ToString();
+                if (string.IsNullOrEmpty(controllerName)) return null;
+                foreach (string controller in controllers)
+                {
+                    if (controller.Equals(controllerName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        foreach (string action in actions)
+                        {
+                            if (methodName.Equals(action, StringComparison.OrdinalIgnoreCase))
+                            {
+                                return result;
+                            }
+                        }
+                    }
+                }
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public static string MakeOpenClass(this IUrlHelper urlHelper, List<string> controllers, string action)
         {
             try
