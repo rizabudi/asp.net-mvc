@@ -4,8 +4,6 @@
     private urlGetForm = "/function/form-view";
     private urlSave = '/function/save';
     private urlDelete = '/function/delete';
-    private urlEdit = '/function/edit';
-    private urlSearch = '/function/search';
 
     private currentPage = 1;
 
@@ -17,10 +15,6 @@
             this.initTable(this.currentPage);
             $('#add').click(() => {
                 this.add();
-            });
-            $('#search').click(() => {
-                const keyword = $('#keyword').val();
-                this.search(keyword);
             });
             $(document).on("click", ".page-link", (e) => {
                 const idx = $(e.currentTarget).data('dt-idx');
@@ -162,23 +156,6 @@
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
-        } catch (e) {
-            console.error(e);
-        }
-    }
-    private search(keyword) {
-        try {
-            const data = { keyword: keyword };
-            Util.request(this.urlSearch, 'GET', 'html', (response) => {
-                const currentKeyWord = $('#keyword').val();
-                if (currentKeyWord === keyword) {
-                    $('#table_list tbody').empty();
-                    $('#table_list tbody').append(response);
-                }
-            }, function () {
-                Util.alert('Failed to get data. Please try again.');
-                console.error('Failed to get data #T09576. Please try again.');
-            }, data);
         } catch (e) {
             console.error(e);
         }

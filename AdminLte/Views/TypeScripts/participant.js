@@ -1,14 +1,14 @@
-var Position = /** @class */ (function () {
-    function Position() {
-        this.urlGetData = "/position/table-data-view";
-        this.urlGetPaging = "/position/table-paging-view";
-        this.urlGetForm = "/position/form-view";
-        this.urlSave = '/position/save';
-        this.urlDelete = '/position/delete';
+var Participant = /** @class */ (function () {
+    function Participant() {
+        this.urlGetData = "/participant/table-data-view";
+        this.urlGetPaging = "/participant/table-paging-view";
+        this.urlGetForm = "/participant/form-view";
+        this.urlSave = '/participant/save';
+        this.urlDelete = '/participant/delete';
         this.currentPage = 1;
         this.init();
     }
-    Position.prototype.init = function () {
+    Participant.prototype.init = function () {
         var _this = this;
         try {
             this.initTable(this.currentPage);
@@ -30,6 +30,15 @@ var Position = /** @class */ (function () {
                 var data = { id: id };
                 _this.edit(data);
             });
+            $(document).on("change", "#IsCanRetake", function (e) {
+                var isChecked = $("#IsCanRetake").is(":checked");
+                if (isChecked) {
+                    $("#div_MaxRetake").show();
+                }
+                else {
+                    $("#div_MaxRetake").hide();
+                }
+            });
             this.initForm();
         }
         catch (e) {
@@ -37,9 +46,9 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.initTable = function (page) {
+    Participant.prototype.initTable = function (page) {
         try {
-            Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', function (response) {
+            Util.request(this.urlGetData + "?page=" + page + "&scheduleID=" + $("#Schedule").val(), 'GET', 'html', function (response) {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
@@ -59,13 +68,14 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.add = function () {
+    Participant.prototype.add = function () {
         try {
-            Util.request(this.urlGetForm, 'GET', 'html', function (response) {
+            Util.request(this.urlGetForm + "?scheduleID=" + $("#Schedule").val(), 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Tambah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
+                $("#div_MaxRetake").hide();
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -75,7 +85,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.initForm = function () {
+    Participant.prototype.initForm = function () {
         var _this = this;
         try {
             $('#save_form').click(function () {
@@ -91,7 +101,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.save = function () {
+    Participant.prototype.save = function () {
         var _this = this;
         try {
             if (!Util.formCheck()) {
@@ -121,11 +131,21 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.create = function () {
+    Participant.prototype.create = function () {
         try {
             var data = {
                 ID: $('#ID').val(),
-                Name: $('#Name').val()
+                QuestionPackage: {
+                    ID: $('#QuestionPackage').val(),
+                },
+                ParticipantUser: {
+                    UserId: $('#ParticipantUser').val(),
+                },
+                Schedule: {
+                    ID: $('#Schedule').val(),
+                },
+                IsCanRetake: $('#IsCanRetake').is(":checked"),
+                MaxRetake: $('#MaxRetake').val()
             };
             return data;
         }
@@ -134,7 +154,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.delete = function (data) {
+    Participant.prototype.delete = function (data) {
         var _this = this;
         try {
             if (confirm("Apa anda yaking menghapus data ini ?") == true) {
@@ -156,13 +176,17 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.edit = function (data) {
+    Participant.prototype.edit = function (data) {
         try {
-            Util.request(this.urlGetForm + "?id=" + data.id, 'GET', 'html', function (response) {
+            Util.request(this.urlGetForm + "?id=" + data.id + "&scheduleID=" + $("#Schedule").val(), 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Ubah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
+                $("#div_MaxRetake").hide();
+                if ($("#IsCanRetake").is(":checked")) {
+                    $("#div_MaxRetake").show();
+                }
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -171,9 +195,9 @@ var Position = /** @class */ (function () {
             console.error(e);
         }
     };
-    return Position;
+    return Participant;
 }());
 $(document).ready(function () {
-    new Position();
+    new Participant();
 });
-//# sourceMappingURL=position.js.map
+//# sourceMappingURL=participant.js.map

@@ -1,9 +1,9 @@
-﻿class SubVerticalDimention {
-    private urlGetData = "/sub-vertical-dimention/table-data-view";
-    private urlGetPaging = "/sub-vertical-dimention/table-paging-view";
-    private urlGetForm = "/sub-vertical-dimention/form-view";
-    private urlSave = '/sub-vertical-dimention/save';
-    private urlDelete = '/sub-vertical-dimention/delete';
+﻿class ParticipantUser {
+    private urlGetData = "/participant-user/table-data-view";
+    private urlGetPaging = "/participant-user/table-paging-view";
+    private urlGetForm = "/participant-user/form-view";
+    private urlSave = '/participant-user/save';
+    private urlDelete = '/participant-user/delete';
 
     private currentPage = 1;
 
@@ -22,12 +22,12 @@
                 this.initTable(idx);
             });
             $(document).on("click", ".btn-delete", (e) => {
-                const id = $(e.currentTarget).data('id');
+                const id = $(e.currentTarget).data('id-strng');
                 const data = { id: id };
                 this.delete(data);
             });
             $(document).on("click", ".btn-edit", (e) => {
-                const id = $(e.currentTarget).data('id');
+                const id = $(e.currentTarget).data('id-strng');
                 const data = { id: id };
                 this.edit(data);
             });
@@ -41,14 +41,14 @@
     }
     private initTable(page) {
         try {
-            Util.request(this.urlGetData + "?page=" + page + "&verticalDimentionID=" + $("#VerticalDimention").val(), 'GET', 'html', (response) => {
+            Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', (response) => {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
                     console.error('Failed to get data. Please try again');
                     Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page + "&verticalDimentionID=" + $("#VerticalDimention").val(), 'GET', 'html', (response) => {
+            Util.request(this.urlGetPaging + "?page=" + page, 'GET', 'html', (response) => {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
@@ -66,7 +66,7 @@
                 $('#modal-default .modal-title').html("Tambah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
-                (<any>$("#modal-default")).modal("show");
+                (<any>$("#modal-default")).modal("show")
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -118,14 +118,30 @@
     private create() {
         try {
             const data = {
-                ID: $('#ID').val(),
-                VerticalDimention: {
-                    ID: $('#VerticalDimention').val()
-                },
+                UserId: $('#UserId').val(),
                 Name: $('#Name').val(),
-                Description: $('#Description').val(),
-                Sequence: $('#Sequence').val(),
-                ValueDriverDimention: $('#ValueDriverDimention').val(),
+                Email: $('#Email').val(),
+                Phone: $('#Phone').val(),
+                EmployeeNumber: $('#EmployeeNumber').val(),
+                User: {
+                    UserName: $("#UserName").val(),
+                    PasswordHash: $("#Password").val(),
+                },
+                Entity: {
+                    ID: $("#Entity").val()
+                },
+                Position: {
+                    ID: $("#Position").val()
+                },
+                CompanyFunction: {
+                    ID: $("#CompanyFunction").val()
+                },
+                Divition: {
+                    ID: $("#Divition").val()
+                },
+                Department: {
+                    ID: $("#Department").val()
+                }
             };
             return data;
         } catch (e) {
@@ -158,7 +174,7 @@
                 $('#modal-default .modal-title').html("Ubah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
-                (<any>$("#modal-default")).modal("show");
+                (<any>$("#modal-default")).modal("show")
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -169,5 +185,5 @@
 }
 
 $(document).ready(function () {
-    new SubVerticalDimention();
+    new ParticipantUser();
 });

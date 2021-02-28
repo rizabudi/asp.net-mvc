@@ -209,5 +209,26 @@ namespace AdminLte.Controllers
                 return Json(new { success = false, message = "Terjadi kesalahan. Err : " + ex.Message });
             }
         }
+
+        [HttpGet("sub-vertical-dimention/select-option")]
+        public async Task<IActionResult> GetSelectOptions(int verticalDimentionID = 0)
+        {
+            try
+            {
+                var data = await _db.SubVerticalDimentions
+                    .Include("VerticalDimention")
+                    .Where(x => x.VerticalDimention.ID == verticalDimentionID)
+                    .OrderBy(x => x.Sequence)
+                    .Take(10)
+                    .ToDictionaryAsync(x => x.ID.ToString(), y => y.VerticalDimention.Name + " - " + y.Name);
+
+                return PartialView("~/Views/Shared/_SelectOptionView.cshtml", data);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
+        }
     }
 }

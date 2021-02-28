@@ -33,7 +33,15 @@ namespace AdminLte.Controllers
                 var rows = new List<RowModel>();
                 foreach(var row in data)
                 {
-                    rows.Add(new RowModel { ID = row.ID, Value = new string[] { row.Section.Name, row.Name, row.Description, row.Sequence.ToString(), row.SituationEvpDimention.ToString() }});
+                    rows.Add(new RowModel { 
+                        ID = row.ID, 
+                        Value = new string[] { 
+                            row.Section.Name, 
+                            row.Name, 
+                            row.Description, 
+                            row.Sequence.ToString()
+                        }
+                    });
                 }
 
                 ViewData["Rows"] = rows;

@@ -5,8 +5,7 @@ var QuestionAnswer = /** @class */ (function () {
         this.urlGetForm = "/question-answer/form-view";
         this.urlSave = '/question-answer/save';
         this.urlDelete = '/question-answer/delete';
-        this.urlEdit = '/question-answer/edit';
-        this.urlSearch = '/question-answer/search';
+        this.urlSubVerticalDimention = '/sub-vertical-dimention/select-option';
         this.currentPage = 1;
         this.init();
     }
@@ -16,10 +15,6 @@ var QuestionAnswer = /** @class */ (function () {
             this.initTable(this.currentPage);
             $('#add').click(function () {
                 _this.add();
-            });
-            $('#search').click(function () {
-                var keyword = $('#keyword').val();
-                _this.search(keyword);
             });
             $(document).on("click", ".page-link", function (e) {
                 var idx = $(e.currentTarget).data('dt-idx');
@@ -64,6 +59,16 @@ var QuestionAnswer = /** @class */ (function () {
                         $("#div_IsUnFavorable").show();
                     }
                 }
+            });
+            $(document).on("change", "#VerticalDimention", function (e) {
+                var id = $(e.currentTarget).val();
+                Util.request(_this.urlSubVerticalDimention + "?verticalDimentionID=" + id, 'GET', 'html', function (response) {
+                    $('#SubVerticalDimention').empty();
+                    $('#SubVerticalDimention').append(response);
+                }, function () {
+                    console.error('Failed to get data. Please try again');
+                    Util.error('Failed to get data. Please try again');
+                });
             });
             this.initForm();
         }
@@ -254,24 +259,6 @@ var QuestionAnswer = /** @class */ (function () {
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
-        }
-        catch (e) {
-            console.error(e);
-        }
-    };
-    QuestionAnswer.prototype.search = function (keyword) {
-        try {
-            var data = { keyword: keyword };
-            Util.request(this.urlSearch, 'GET', 'html', function (response) {
-                var currentKeyWord = $('#keyword').val();
-                if (currentKeyWord === keyword) {
-                    $('#table_list tbody').empty();
-                    $('#table_list tbody').append(response);
-                }
-            }, function () {
-                Util.alert('Failed to get data. Please try again.');
-                console.error('Failed to get data #T09576. Please try again.');
-            }, data);
         }
         catch (e) {
             console.error(e);

@@ -191,5 +191,51 @@ namespace AdminLte.Controllers
                 return Json(new { success = false, message = "Terjadi kesalahan. Err : " + ex.Message });
             }
         }
+
+        [HttpGet("sub-period/select-option")]
+        public async Task<IActionResult> GetSelectOptions(int periodID = 0)
+        {
+            try
+            {
+                var data = await _db.SubPeriods
+                    .Include("Period")
+                    .Where(x => x.Period.ID == periodID)
+                    .OrderBy(x => x.Start)
+                    .Take(10)
+                    .ToDictionaryAsync(x => x.ID.ToString(), y => y.Name + " ("  + y.Start.ToString("yyyy-MM-dd") + " s/d " + y.End.ToString("yyyy-MM-dd") + ")");
+
+                return PartialView("~/Views/Shared/_SelectOptionView.cshtml", data);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
+        }
+
+
+
+        [HttpGet("sub-period/detail")]
+        public async Task<IActionResult> Detail(int subPeriodID)
+        {
+            try
+            {
+                SubPeriod subPeriodFromDb = await _db.SubPeriods.FirstOrDefaultAsync(e => e.ID == subPeriodID);
+
+                if (subPeriodFromDb == null)
+                {
+                    return Json(new { success = false, message = "Data tidak ditemukan" });
+                }
+                else
+                {
+                    return Json(new { success = true, data = subPeriodFromDb });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Json(new { success = false, message = "Terjadi kesalahan. Err : " + ex.Message });
+            }
+        }
     }
 }

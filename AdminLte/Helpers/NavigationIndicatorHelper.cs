@@ -41,7 +41,7 @@ namespace AdminLte.Helpers
                 if (string.IsNullOrEmpty(controllerName)) return null;
                 foreach(string controller in controllers)
                 {
-                    if (controller.Contains(controllerName, StringComparison.OrdinalIgnoreCase))
+                    if (controller.Equals(controllerName, StringComparison.OrdinalIgnoreCase))
                     {
                         if (methodName.Equals(action, StringComparison.OrdinalIgnoreCase))
                         {
@@ -67,7 +67,7 @@ namespace AdminLte.Helpers
                 if (string.IsNullOrEmpty(controllerName)) return null;
                 foreach (string controller in controllers)
                 {
-                    if (controller.Contains(controllerName, StringComparison.OrdinalIgnoreCase))
+                    if (controller.Equals(controllerName, StringComparison.OrdinalIgnoreCase))
                     {
                         if (methodName.Equals(action, StringComparison.OrdinalIgnoreCase))
                         {

@@ -5,8 +5,6 @@ var CompanyFunction = /** @class */ (function () {
         this.urlGetForm = "/function/form-view";
         this.urlSave = '/function/save';
         this.urlDelete = '/function/delete';
-        this.urlEdit = '/function/edit';
-        this.urlSearch = '/function/search';
         this.currentPage = 1;
         this.init();
     }
@@ -16,10 +14,6 @@ var CompanyFunction = /** @class */ (function () {
             this.initTable(this.currentPage);
             $('#add').click(function () {
                 _this.add();
-            });
-            $('#search').click(function () {
-                var keyword = $('#keyword').val();
-                _this.search(keyword);
             });
             $(document).on("click", ".page-link", function (e) {
                 var idx = $(e.currentTarget).data('dt-idx');
@@ -172,24 +166,6 @@ var CompanyFunction = /** @class */ (function () {
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
-        }
-        catch (e) {
-            console.error(e);
-        }
-    };
-    CompanyFunction.prototype.search = function (keyword) {
-        try {
-            var data = { keyword: keyword };
-            Util.request(this.urlSearch, 'GET', 'html', function (response) {
-                var currentKeyWord = $('#keyword').val();
-                if (currentKeyWord === keyword) {
-                    $('#table_list tbody').empty();
-                    $('#table_list tbody').append(response);
-                }
-            }, function () {
-                Util.alert('Failed to get data. Please try again.');
-                console.error('Failed to get data #T09576. Please try again.');
-            }, data);
         }
         catch (e) {
             console.error(e);

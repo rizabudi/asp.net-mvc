@@ -1,14 +1,17 @@
-var Position = /** @class */ (function () {
-    function Position() {
-        this.urlGetData = "/position/table-data-view";
-        this.urlGetPaging = "/position/table-paging-view";
-        this.urlGetForm = "/position/form-view";
-        this.urlSave = '/position/save';
-        this.urlDelete = '/position/delete';
+var Schedule = /** @class */ (function () {
+    function Schedule() {
+        this.urlGetData = "/schedule/table-data-view";
+        this.urlGetPaging = "/schedule/table-paging-view";
+        this.urlGetForm = "/schedule/form-view";
+        this.urlSave = '/schedule/save';
+        this.urlDelete = '/schedule/delete';
+        this.urlSubPeriode = '/sub-period/select-option';
+        this.urlPeriodeDetail = '/period/detail';
+        this.urlSubPeriodeDetail = '/sub-period/detail';
         this.currentPage = 1;
         this.init();
     }
-    Position.prototype.init = function () {
+    Schedule.prototype.init = function () {
         var _this = this;
         try {
             this.initTable(this.currentPage);
@@ -30,6 +33,72 @@ var Position = /** @class */ (function () {
                 var data = { id: id };
                 _this.edit(data);
             });
+            $(document).on("change", "#Period", function (e) {
+                var id = $(e.currentTarget).val();
+                Util.request(_this.urlSubPeriode + "?periodID=" + id, 'GET', 'html', function (response) {
+                    $('#SubPeriod').empty();
+                    $('#SubPeriod').append(response);
+                }, function () {
+                    console.error('Failed to get data. Please try again');
+                    Util.error('Failed to get data. Please try again');
+                });
+                if (id == "-1") {
+                    $('#Date').daterangepicker({
+                        locale: {
+                            format: 'YYYY-MM-DD',
+                            separator: ' s/d '
+                        }
+                    });
+                    return;
+                }
+                Util.request(_this.urlPeriodeDetail + "?periodID=" + id, 'GET', 'html', function (response) {
+                    var json = JSON.parse(response);
+                    console.log(json);
+                    if (json.success) {
+                        $('#Date').daterangepicker({
+                            locale: {
+                                format: 'YYYY-MM-DD',
+                                separator: ' s/d '
+                            },
+                            minDate: json.data.start.substring(0, 10),
+                            maxDate: json.data.end.substring(0, 10),
+                        });
+                    }
+                    else {
+                        Util.error(json.message);
+                    }
+                }, function () {
+                    console.error('Failed to get data. Please try again');
+                    Util.error('Failed to get data. Please try again');
+                });
+            });
+            $(document).on("change", "#SubPeriod", function (e) {
+                var id = $(e.currentTarget).val();
+                if (id == "-1") {
+                    $('#Period').trigger('change');
+                    return;
+                }
+                Util.request(_this.urlSubPeriodeDetail + "?subPeriodID=" + id, 'GET', 'html', function (response) {
+                    var json = JSON.parse(response);
+                    console.log(json);
+                    if (json.success) {
+                        $('#Date').daterangepicker({
+                            locale: {
+                                format: 'YYYY-MM-DD',
+                                separator: ' s/d '
+                            },
+                            minDate: json.data.start.substring(0, 10),
+                            maxDate: json.data.end.substring(0, 10),
+                        });
+                    }
+                    else {
+                        Util.error(json.message);
+                    }
+                }, function () {
+                    console.error('Failed to get data. Please try again');
+                    Util.error('Failed to get data. Please try again');
+                });
+            });
             this.initForm();
         }
         catch (e) {
@@ -37,7 +106,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.initTable = function (page) {
+    Schedule.prototype.initTable = function (page) {
         try {
             Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', function (response) {
                 $('#table_list tbody').empty();
@@ -59,13 +128,19 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.add = function () {
+    Schedule.prototype.add = function () {
         try {
             Util.request(this.urlGetForm, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Tambah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
+                $('#Date').daterangepicker({
+                    locale: {
+                        format: 'YYYY-MM-DD',
+                        separator: ' s/d '
+                    }
+                });
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -75,7 +150,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.initForm = function () {
+    Schedule.prototype.initForm = function () {
         var _this = this;
         try {
             $('#save_form').click(function () {
@@ -91,7 +166,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.save = function () {
+    Schedule.prototype.save = function () {
         var _this = this;
         try {
             if (!Util.formCheck()) {
@@ -121,11 +196,27 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.create = function () {
+    Schedule.prototype.create = function () {
         try {
+            var Date = $('#Date').val().toString();
+            var Dates = Date.split(" s/d ");
             var data = {
                 ID: $('#ID').val(),
-                Name: $('#Name').val()
+                Assesment: {
+                    ID: $('#Assesment').val(),
+                },
+                Entity: {
+                    ID: $('#Entity').val(),
+                },
+                Period: {
+                    ID: $('#Period').val(),
+                },
+                SubPeriod: {
+                    ID: $('#SubPeriod').val(),
+                },
+                Name: $('#Name').val(),
+                Start: Dates[0],
+                End: Dates[1],
             };
             return data;
         }
@@ -134,7 +225,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.delete = function (data) {
+    Schedule.prototype.delete = function (data) {
         var _this = this;
         try {
             if (confirm("Apa anda yaking menghapus data ini ?") == true) {
@@ -156,13 +247,21 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.edit = function (data) {
+    Schedule.prototype.edit = function (data) {
         try {
-            Util.request(this.urlGetForm + "?id=" + data.id, 'GET', 'html', function (response) {
+            Util.request(this.urlGetForm + "?id=" + data.id + "&scheduleID=" + $("#Schedule").val(), 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Ubah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
+                $('#Date').daterangepicker({
+                    locale: {
+                        format: 'YYYY-MM-DD',
+                        separator: ' s/d '
+                    },
+                    minDate: $("#MinDate").val(),
+                    maxDate: $("#MaxDate").val(),
+                });
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -171,9 +270,9 @@ var Position = /** @class */ (function () {
             console.error(e);
         }
     };
-    return Position;
+    return Schedule;
 }());
 $(document).ready(function () {
-    new Position();
+    new Schedule();
 });
-//# sourceMappingURL=position.js.map
+//# sourceMappingURL=schedule.js.map

@@ -1,14 +1,14 @@
-var Position = /** @class */ (function () {
-    function Position() {
-        this.urlGetData = "/position/table-data-view";
-        this.urlGetPaging = "/position/table-paging-view";
-        this.urlGetForm = "/position/form-view";
-        this.urlSave = '/position/save';
-        this.urlDelete = '/position/delete';
+var SurveyQuestion = /** @class */ (function () {
+    function SurveyQuestion() {
+        this.urlGetData = "/survey-question/table-data-view";
+        this.urlGetPaging = "/survey-question/table-paging-view";
+        this.urlGetForm = "/survey-question/form-view";
+        this.urlSave = '/survey-question/save';
+        this.urlDelete = '/survey-question/delete';
         this.currentPage = 1;
         this.init();
     }
-    Position.prototype.init = function () {
+    SurveyQuestion.prototype.init = function () {
         var _this = this;
         try {
             this.initTable(this.currentPage);
@@ -37,16 +37,16 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.initTable = function (page) {
+    SurveyQuestion.prototype.initTable = function (page) {
         try {
-            Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', function (response) {
+            Util.request(this.urlGetData + "?page=" + page + "&surveyID=" + $("#QuestionPackage").val(), 'GET', 'html', function (response) {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
                 console.error('Failed to get data. Please try again');
                 Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page, 'GET', 'html', function (response) {
+            Util.request(this.urlGetPaging + "?page=" + page + "&surveyID=" + $("#QuestionPackage").val(), 'GET', 'html', function (response) {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
@@ -59,13 +59,21 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.add = function () {
+    SurveyQuestion.prototype.add = function () {
         try {
-            Util.request(this.urlGetForm, 'GET', 'html', function (response) {
+            Util.request(this.urlGetForm + "?surveyID=" + $("#QuestionPackage").val(), 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Tambah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
+                $('#Date').daterangepicker({
+                    locale: {
+                        format: 'YYYY-MM-DD',
+                        separator: ' s/d '
+                    },
+                    minDate: $("#PeriodStart").val(),
+                    maxDate: $("#PeriodEnd").val(),
+                });
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -75,7 +83,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.initForm = function () {
+    SurveyQuestion.prototype.initForm = function () {
         var _this = this;
         try {
             $('#save_form').click(function () {
@@ -91,7 +99,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.save = function () {
+    SurveyQuestion.prototype.save = function () {
         var _this = this;
         try {
             if (!Util.formCheck()) {
@@ -121,11 +129,16 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.create = function () {
+    SurveyQuestion.prototype.create = function () {
         try {
             var data = {
                 ID: $('#ID').val(),
-                Name: $('#Name').val()
+                Question: {
+                    ID: $('#Question').val()
+                },
+                QuestionPackage: {
+                    ID: $('#QuestionPackage').val()
+                }
             };
             return data;
         }
@@ -134,7 +147,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.delete = function (data) {
+    SurveyQuestion.prototype.delete = function (data) {
         var _this = this;
         try {
             if (confirm("Apa anda yaking menghapus data ini ?") == true) {
@@ -156,13 +169,21 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.edit = function (data) {
+    SurveyQuestion.prototype.edit = function (data) {
         try {
             Util.request(this.urlGetForm + "?id=" + data.id, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Ubah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
+                $('#Date').daterangepicker({
+                    locale: {
+                        format: 'YYYY-MM-DD',
+                        separator: ' s/d '
+                    },
+                    minDate: $("#PeriodStart").val(),
+                    maxDate: $("#PeriodEnd").val(),
+                });
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -171,9 +192,9 @@ var Position = /** @class */ (function () {
             console.error(e);
         }
     };
-    return Position;
+    return SurveyQuestion;
 }());
 $(document).ready(function () {
-    new Position();
+    new SurveyQuestion();
 });
-//# sourceMappingURL=position.js.map
+//# sourceMappingURL=survey-question.js.map

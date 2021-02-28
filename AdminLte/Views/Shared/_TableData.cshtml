@@ -1,6 +1,12 @@
 ﻿@{
     List<RowModel> RowModels = (List<RowModel>)ViewData["Rows"];
     int Page = (int)ViewData["Page"];
+
+    bool IsEditable = true;
+    if(ViewData["IsEditable"] != null)
+    {
+        IsEditable = (bool)ViewData["IsEditable"];
+    }
 }
 
 @if (RowModels.Count > 0)
@@ -8,6 +14,11 @@
     var i = 1;
     foreach (var row in RowModels)
     {
+        var deleteHide = "";
+        if(!IsEditable)
+        {
+            deleteHide = "none";
+        }
         <tr class="employees-row" style="width: 20%; text-align:center;">
             <td>
                 @{
@@ -16,7 +27,7 @@
                 @no
             </td>
             <td nowrap="" style="">
-                <button type="button" class="btn btn-sm btn-dark btn-edit" data-id="@row.ID" data-id-strng="@row.IDString">
+                <button style="display: @deleteHide" type="button" class="btn btn-sm btn-dark btn-edit" data-id="@row.ID" data-id-strng="@row.IDString">
                     <i class="fa fa-edit"></i>
                 </button>&nbsp;
                 <butto type="button" class="btn btn-sm btn-danger btn-delete" data-id="@row.ID" data-id-strng="@row.IDString">

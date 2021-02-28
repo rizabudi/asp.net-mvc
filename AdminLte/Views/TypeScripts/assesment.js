@@ -5,8 +5,6 @@ var Assesment = /** @class */ (function () {
         this.urlGetForm = "/assesment/form-view";
         this.urlSave = '/assesment/save';
         this.urlDelete = '/assesment/delete';
-        this.urlEdit = '/assesment/edit';
-        this.urlSearch = '/assesment/search';
         this.currentPage = 1;
         this.init();
     }
@@ -16,10 +14,6 @@ var Assesment = /** @class */ (function () {
             this.initTable(this.currentPage);
             $('#add').click(function () {
                 _this.add();
-            });
-            $('#search').click(function () {
-                var keyword = $('#keyword').val();
-                _this.search(keyword);
             });
             $(document).on("click", ".page-link", function (e) {
                 var idx = $(e.currentTarget).data('dt-idx');
@@ -173,24 +167,6 @@ var Assesment = /** @class */ (function () {
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
-        }
-        catch (e) {
-            console.error(e);
-        }
-    };
-    Assesment.prototype.search = function (keyword) {
-        try {
-            var data = { keyword: keyword };
-            Util.request(this.urlSearch, 'GET', 'html', function (response) {
-                var currentKeyWord = $('#keyword').val();
-                if (currentKeyWord === keyword) {
-                    $('#table_list tbody').empty();
-                    $('#table_list tbody').append(response);
-                }
-            }, function () {
-                Util.alert('Failed to get data. Please try again.');
-                console.error('Failed to get data #T09576. Please try again.');
-            }, data);
         }
         catch (e) {
             console.error(e);

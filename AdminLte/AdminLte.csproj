@@ -48,4 +48,16 @@
     <TypeScriptCompile Include="Views\Employee\employee.ts" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Views\TypeScripts\backend-user - Copy.js">
+      <DependentUpon>backend-user.js</DependentUpon>
+    </None>
+    <None Update="Views\TypeScripts\backend-user - Copy.js.map">
+      <DependentUpon>backend-user.js.map</DependentUpon>
+    </None>
+    <None Update="Views\TypeScripts\survey - Copy.js.map">
+      <DependentUpon>survey.js.map</DependentUpon>
+    </None>
+  </ItemGroup>
+
 </Project>

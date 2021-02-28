@@ -133,18 +133,19 @@ namespace AdminLte.Controllers
                 var verticalDimentions = await _db.VerticalDimentions
                     .Where(x=>x.Section.ID == question.Section.ID)
                     .Include(x => x.Section)
-                    .OrderBy(x => x.Name)
+                    .OrderBy(x => x.Sequence)
                     .ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
                 var subVerticalDimentions = await _db.SubVerticalDimentions
                     .Include(x=>x.VerticalDimention)
                     .Include(x=>x.VerticalDimention.Section)
-                    .Where(x => x.VerticalDimention.Section.ID == question.Section.ID)
-                    .OrderBy(x => x.Name)
+                    .Where(x => x.VerticalDimention.Section.ID == question.Section.ID && (id == 0 ? false : x.VerticalDimention == questionAnswerFromDb.VerticalDimention))
+                    .OrderBy(x => x.VerticalDimention.Sequence)
+                    .ThenBy(x => x.Sequence)
                     .ToDictionaryAsync(x => x.ID.ToString(), y => y.VerticalDimention.Name + " - " + y.Name);
                 var horizontalDimentions = await _db.HorizontalDimentions
                     .Include(x => x.Section)
                     .Where(x => x.Section.ID == question.Section.ID)
-                    .OrderBy(x => x.Name)
+                    .OrderBy(x => x.Sequence)
                     .ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
 
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = questionAnswerFromDb == null ? "0" : questionAnswerFromDb.ID.ToString() });

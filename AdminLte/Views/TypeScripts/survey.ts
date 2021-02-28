@@ -1,9 +1,9 @@
-﻿class SubVerticalDimention {
-    private urlGetData = "/sub-vertical-dimention/table-data-view";
-    private urlGetPaging = "/sub-vertical-dimention/table-paging-view";
-    private urlGetForm = "/sub-vertical-dimention/form-view";
-    private urlSave = '/sub-vertical-dimention/save';
-    private urlDelete = '/sub-vertical-dimention/delete';
+﻿class Survey {
+    private urlGetData = "/survey/table-data-view";
+    private urlGetPaging = "/survey/table-paging-view";
+    private urlGetForm = "/survey/form-view";
+    private urlSave = '/survey/save';
+    private urlDelete = '/survey/delete';
 
     private currentPage = 1;
 
@@ -41,19 +41,19 @@
     }
     private initTable(page) {
         try {
-            Util.request(this.urlGetData + "?page=" + page + "&verticalDimentionID=" + $("#VerticalDimention").val(), 'GET', 'html', (response) => {
+            Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', (response) => {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
-                    console.error('Failed to get data. Please try again');
-                    Util.error('Failed to get data. Please try again');
+                console.error('Failed to get data. Please try again');
+                Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page + "&verticalDimentionID=" + $("#VerticalDimention").val(), 'GET', 'html', (response) => {
+            Util.request(this.urlGetPaging + "?page=" + page, 'GET', 'html', (response) => {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
-                    console.error('Failed to get data. Please try again');
-                    Util.error('Failed to get data. Please try again');
+                console.error('Failed to get data. Please try again');
+                Util.error('Failed to get data. Please try again');
             });
         } catch (e) {
             console.error(e);
@@ -66,7 +66,7 @@
                 $('#modal-default .modal-title').html("Tambah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
-                (<any>$("#modal-default")).modal("show");
+                (<any>$("#modal-default")).modal("show")
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -119,13 +119,10 @@
         try {
             const data = {
                 ID: $('#ID').val(),
-                VerticalDimention: {
-                    ID: $('#VerticalDimention').val()
+                Assesment: {
+                    ID: $('#Assesment').val(),
                 },
-                Name: $('#Name').val(),
-                Description: $('#Description').val(),
-                Sequence: $('#Sequence').val(),
-                ValueDriverDimention: $('#ValueDriverDimention').val(),
+                Name: $('#Name').val()
             };
             return data;
         } catch (e) {
@@ -158,7 +155,7 @@
                 $('#modal-default .modal-title').html("Ubah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
-                (<any>$("#modal-default")).modal("show");
+                (<any>$("#modal-default")).modal("show")
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -169,5 +166,5 @@
 }
 
 $(document).ready(function () {
-    new SubVerticalDimention();
+    new Survey();
 });

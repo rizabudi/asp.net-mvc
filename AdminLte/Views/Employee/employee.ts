@@ -4,7 +4,6 @@
     private urlSaveEmployee = '/adminlte/employee/save';
     private urlDeleteEmployee = '/adminlte/employee/delete';
     private urlEditEmployee = '/adminlte/employee/edit';
-    private urlSearchEmployee = '/adminlte/employee/search';
 
     constructor() {
         this.init();
@@ -14,10 +13,6 @@
             this.initTable();
             $('#add_employee').click(() => {
                 this.add();
-            });
-            $('#search_employee').click(() => {
-                const keyword = $('#keyword').val();
-                this.search(keyword);
             });
         } catch (e) {
             console.error(e);
@@ -125,23 +120,6 @@
                 this.initForm();
             }, () => {
                 console.error('Failed to get data. Please try again');
-            }, data);
-        } catch (e) {
-            console.error(e);
-        }
-    }
-    private search(keyword) {
-        try {
-            const data = { keyword: keyword };
-            Util.request(this.urlSearchEmployee, 'GET', 'html', (response) => {
-                const currentKeyWord = $('#keyword').val();
-                if (currentKeyWord === keyword) {
-                    $('#employees_list tbody').empty();
-                    $('#employees_list tbody').append(response);
-                }
-            }, function () {
-                Util.alert('Failed to get data. Please try again.');
-                console.error('Failed to get data #T09576. Please try again.');
             }, data);
         } catch (e) {
             console.error(e);

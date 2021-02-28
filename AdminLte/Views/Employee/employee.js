@@ -5,7 +5,6 @@ var Employees = /** @class */ (function () {
         this.urlSaveEmployee = '/adminlte/employee/save';
         this.urlDeleteEmployee = '/adminlte/employee/delete';
         this.urlEditEmployee = '/adminlte/employee/edit';
-        this.urlSearchEmployee = '/adminlte/employee/search';
         this.init();
     }
     Employees.prototype.init = function () {
@@ -14,10 +13,6 @@ var Employees = /** @class */ (function () {
             this.initTable();
             $('#add_employee').click(function () {
                 _this.add();
-            });
-            $('#search_employee').click(function () {
-                var keyword = $('#keyword').val();
-                _this.search(keyword);
             });
         }
         catch (e) {
@@ -137,24 +132,6 @@ var Employees = /** @class */ (function () {
                 _this.initForm();
             }, function () {
                 console.error('Failed to get data. Please try again');
-            }, data);
-        }
-        catch (e) {
-            console.error(e);
-        }
-    };
-    Employees.prototype.search = function (keyword) {
-        try {
-            var data = { keyword: keyword };
-            Util.request(this.urlSearchEmployee, 'GET', 'html', function (response) {
-                var currentKeyWord = $('#keyword').val();
-                if (currentKeyWord === keyword) {
-                    $('#employees_list tbody').empty();
-                    $('#employees_list tbody').append(response);
-                }
-            }, function () {
-                Util.alert('Failed to get data. Please try again.');
-                console.error('Failed to get data #T09576. Please try again.');
             }, data);
         }
         catch (e) {

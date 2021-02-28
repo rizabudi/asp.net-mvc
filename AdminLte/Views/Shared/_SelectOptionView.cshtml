@@ -1,0 +1,6 @@
+﻿@model Dictionary<string, string>
+<option value="-1">Pilih</option>
+@foreach (string key in Model.Keys)
+{
+    <option value="@key">@Model[key]</option>
+}

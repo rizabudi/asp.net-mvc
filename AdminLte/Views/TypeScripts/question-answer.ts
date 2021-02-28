@@ -4,8 +4,7 @@
     private urlGetForm = "/question-answer/form-view";
     private urlSave = '/question-answer/save';
     private urlDelete = '/question-answer/delete';
-    private urlEdit = '/question-answer/edit';
-    private urlSearch = '/question-answer/search';
+    private urlSubVerticalDimention = '/sub-vertical-dimention/select-option';
 
     private currentPage = 1;
 
@@ -17,10 +16,6 @@
             this.initTable(this.currentPage);
             $('#add').click(() => {
                 this.add();
-            });
-            $('#search').click(() => {
-                const keyword = $('#keyword').val();
-                this.search(keyword);
             });
             $(document).on("click", ".page-link", (e) => {
                 const idx = $(e.currentTarget).data('dt-idx');
@@ -64,6 +59,16 @@
                         $("#div_IsUnFavorable").show();
                     }
                 }
+            });
+            $(document).on("change", "#VerticalDimention", (e) => {
+                const id = $(e.currentTarget).val();
+                Util.request(this.urlSubVerticalDimention + "?verticalDimentionID=" + id, 'GET', 'html', (response) => {
+                    $('#SubVerticalDimention').empty();
+                    $('#SubVerticalDimention').append(response);
+                }, function () {
+                    console.error('Failed to get data. Please try again');
+                    Util.error('Failed to get data. Please try again');
+                });
             });
 
             this.initForm();
@@ -245,23 +250,6 @@
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
-        } catch (e) {
-            console.error(e);
-        }
-    }
-    private search(keyword) {
-        try {
-            const data = { keyword: keyword };
-            Util.request(this.urlSearch, 'GET', 'html', (response) => {
-                const currentKeyWord = $('#keyword').val();
-                if (currentKeyWord === keyword) {
-                    $('#table_list tbody').empty();
-                    $('#table_list tbody').append(response);
-                }
-            }, function () {
-                Util.alert('Failed to get data. Please try again.');
-                console.error('Failed to get data #T09576. Please try again.');
-            }, data);
         } catch (e) {
             console.error(e);
         }

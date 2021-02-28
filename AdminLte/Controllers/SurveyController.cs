@@ -1,6 +1,5 @@
 ﻿using AdminLte.Data;
 using AdminLte.Models;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,22 +9,24 @@ using System.Threading.Tasks;
 
 namespace AdminLte.Controllers
 {
-    public class PeriodController : Controller
+    public class SurveyController : Controller
     {
         private readonly PostgreDbContext _db;
-        public PeriodController(PostgreDbContext db)
+        public SurveyController(PostgreDbContext db)
         {
             _db = db;
         }
 
-        [HttpGet("period/table-data-view")]
+        [HttpGet("survey/table-data-view")]
         public async Task<IActionResult> GetAll(int page = 1)
         {
             try
             {
-                var data = await _db.Periods
-                    .Include("SubPeriods")
-                    .OrderBy(x=>x.Name)
+                var data = await _db.QuestionPackages
+                    .Include(x=>x.Assesment)
+                    .Include(x=>x.QuestionPackageLines)
+                    .OrderBy(x => x.Assesment.Name)
+                    .ThenBy(x=>x.Name)
                     .Skip((page-1)*10)
                     .Take(10)
                     .ToListAsync();
@@ -33,14 +34,14 @@ namespace AdminLte.Controllers
                 var rows = new List<RowModel>();
                 foreach(var row in data)
                 {
-                    var subPeriods = row.SubPeriods.Count();
+                    var questions = row.QuestionPackageLines.Count();
                     rows.Add(new RowModel { 
                         ID = row.ID, 
                         Value = new string[] { 
-                            row.Name, 
-                            row.Start.ToString("yyyy-MM-dd") + " s/d " + row.End.ToString("yyyy-MM-dd"),
-                            "HTML:<a href='/sub-period/" + row.ID + "'>" + subPeriods + " Sub Periode</a>"
-                        } 
+                            row.Assesment.Name,
+                            row.Name,
+                            "HTML:<a href='/survey-question/" + row.ID + "'>" + questions + " Soal</a>"
+                        }
                     });
                 }
 
@@ -56,12 +57,12 @@ namespace AdminLte.Controllers
             }
         }
 
-        [HttpGet("period/table-paging-view")]
+        [HttpGet("survey/table-paging-view")]
         public IActionResult GetPaging(int page = 1)
         {
             try
             {
-                var total = _db.Periods.Count();
+                var total = _db.QuestionPackages.Count();
                 ViewData["Total"] = total;
                 ViewData["Page"] = page;
 
@@ -74,21 +75,23 @@ namespace AdminLte.Controllers
             }
         }
 
-        [HttpGet("period/form-view")]
+        [HttpGet("survey/form-view")]
         public async Task<IActionResult> GetFormAsync(int id = 0)
         {
             try
             {
-                Period periodFromDb = null;
+                QuestionPackage questionPackageFromDb = null;
                 if(id != 0)
                 {
-                    periodFromDb = await _db.Periods.FirstOrDefaultAsync(e => e.ID == id);
+                    questionPackageFromDb = await _db.QuestionPackages.FirstOrDefaultAsync(e => e.ID == id);
                 }
+                var assesments = await _db.Assesments.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+
                 List<FormModel> FormModels = new List<FormModel>();
                
-                FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = periodFromDb == null ? "0" : periodFromDb.ID.ToString() });
-                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = periodFromDb == null ? "" : periodFromDb.Name, IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Tanggal Mulai & Selesai", Name = "Date", InputType = InputType.TEXT, Value = periodFromDb == null ? "" : periodFromDb.Start.ToString("yyyy-MM-dd") + " s/d " + periodFromDb.End.ToString("yyyy-MM-dd") });
+                FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = questionPackageFromDb == null ? "0" : questionPackageFromDb.ID.ToString() });
+                FormModels.Add(new FormModel { Label = "Jenis Survei", Name = "Assesment", InputType = InputType.DROPDOWN, Options = assesments, Value = questionPackageFromDb == null ? "" : questionPackageFromDb.Assesment.ID.ToString(), IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = questionPackageFromDb == null ? "" : questionPackageFromDb.Name, IsRequired = true });
 
                 ViewData["Forms"] = FormModels;
 
@@ -101,41 +104,42 @@ namespace AdminLte.Controllers
             }
         }
 
-        [HttpGet("period")]
+        [HttpGet("survey")]
         public IActionResult Index()
         {
-            ViewData["Title"] = "Periode";
+            ViewData["Title"] = "Daftar Survei";
             List<ColumnModel> ColumnModels = new List<ColumnModel>();
-            ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name", Style = "width: 15%; min-width: 200px" });
-            ColumnModels.Add(new ColumnModel { Label = "Tanggal Mulai & Selesai", Name = "Date", Style = "width: 15%; min-width: 250px" });
-            ColumnModels.Add(new ColumnModel { Label = "Sub Periode", Name = "SubPeriode" });
+            ColumnModels.Add(new ColumnModel { Label = "Jenis Survei", Name = "Assesment", Style = "width: 15%; min-width: 200px" });
+            ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name" });
+            ColumnModels.Add(new ColumnModel { Label = "Daftar Soal", Name = "Questions" });
 
             ViewData["Columns"] = ColumnModels;
-            ViewData["Script"] = "period.js";
+            ViewData["Script"] = "survey.js";
 
             return View("~/Views/Shared/_Index.cshtml");
         }
 
-        [HttpPost("period/save")]
-        public async Task<IActionResult> Save(Period period)
+        [HttpPost("survey/save")]
+        public async Task<IActionResult> Save(QuestionPackage questionPackage)
         {
             try
             {
-                Period periodFromDb = await _db.Periods.FirstOrDefaultAsync(e => e.ID == period.ID);
+                QuestionPackage questionPackageFromDb = await _db.QuestionPackages.FirstOrDefaultAsync(e => e.ID == questionPackage.ID);
 
-                if (periodFromDb == null)
+                if (questionPackageFromDb == null)
                 {
-                    _db.Periods.Add(period);
+                    questionPackage.Assesment = await _db.Assesments.FirstOrDefaultAsync(e => e.ID == questionPackage.Assesment.ID);
+
+                    _db.QuestionPackages.Add(questionPackage);
                     _db.SaveChanges();
 
                     return Json(new { success = true, message = "Data berhasil disimpan" });
                 }
                 else
                 {
-                    periodFromDb.Name = period.Name;
-                    periodFromDb.Start = period.Start;
-                    periodFromDb.End = period.End;
-                    _db.Periods.Update(periodFromDb);
+                    questionPackageFromDb.Assesment = await _db.Assesments.FirstOrDefaultAsync(e => e.ID == questionPackage.Assesment.ID);
+                    questionPackageFromDb.Name = questionPackage.Name;
+                    _db.QuestionPackages.Update(questionPackageFromDb);
                     _db.SaveChanges();
                     return Json(new { success = true, message = "Data berhasil diperbarui" });
                 }
@@ -147,44 +151,21 @@ namespace AdminLte.Controllers
             }
         }
 
-        [HttpPost("period/delete")]
+        [HttpPost("survey/delete")]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var periodFromDb = await _db.Periods.FirstOrDefaultAsync(e => e.ID == id);
+                var questionPackageFromDb = await _db.QuestionPackages.FirstOrDefaultAsync(e => e.ID == id);
 
-                if (periodFromDb == null)
+                if (questionPackageFromDb == null)
                 {
                     return Json(new { success = false, message = "Data tidak ditemukan" });
                 }
 
-                _db.Periods.Remove(periodFromDb);
+                _db.QuestionPackages.Remove(questionPackageFromDb);
                 await _db.SaveChangesAsync();
                 return Json(new { success = true, message = "Data berhasil dihapus" });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return Json(new { success = false, message = "Terjadi kesalahan. Err : " + ex.Message });
-            }
-        }
-
-        [HttpGet("period/detail")]
-        public async Task<IActionResult> Detail(int periodID)
-        {
-            try
-            {
-                Period periodFromDb = await _db.Periods.FirstOrDefaultAsync(e => e.ID == periodID);
-
-                if (periodFromDb == null)
-                {
-                    return Json(new { success = false, message = "Data tidak ditemukan" });
-                }
-                else
-                {
-                    return Json(new { success = true, data = periodFromDb });
-                }
             }
             catch (Exception ex)
             {

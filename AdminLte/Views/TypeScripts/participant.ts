@@ -1,9 +1,9 @@
-﻿class SubVerticalDimention {
-    private urlGetData = "/sub-vertical-dimention/table-data-view";
-    private urlGetPaging = "/sub-vertical-dimention/table-paging-view";
-    private urlGetForm = "/sub-vertical-dimention/form-view";
-    private urlSave = '/sub-vertical-dimention/save';
-    private urlDelete = '/sub-vertical-dimention/delete';
+﻿class Participant {
+    private urlGetData = "/participant/table-data-view";
+    private urlGetPaging = "/participant/table-paging-view";
+    private urlGetForm = "/participant/form-view";
+    private urlSave = '/participant/save';
+    private urlDelete = '/participant/delete';
 
     private currentPage = 1;
 
@@ -31,6 +31,14 @@
                 const data = { id: id };
                 this.edit(data);
             });
+            $(document).on("change", "#IsCanRetake", (e) => {
+                var isChecked = $("#IsCanRetake").is(":checked");
+                if (isChecked) {
+                    $("#div_MaxRetake").show();
+                } else {
+                    $("#div_MaxRetake").hide();
+                }
+            });
 
             this.initForm();
 
@@ -41,19 +49,19 @@
     }
     private initTable(page) {
         try {
-            Util.request(this.urlGetData + "?page=" + page + "&verticalDimentionID=" + $("#VerticalDimention").val(), 'GET', 'html', (response) => {
+            Util.request(this.urlGetData + "?page=" + page + "&scheduleID=" + $("#Schedule").val(), 'GET', 'html', (response) => {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
-                    console.error('Failed to get data. Please try again');
-                    Util.error('Failed to get data. Please try again');
+                console.error('Failed to get data. Please try again');
+                Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page + "&verticalDimentionID=" + $("#VerticalDimention").val(), 'GET', 'html', (response) => {
+            Util.request(this.urlGetPaging + "?page=" + page, 'GET', 'html', (response) => {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
-                    console.error('Failed to get data. Please try again');
-                    Util.error('Failed to get data. Please try again');
+                console.error('Failed to get data. Please try again');
+                Util.error('Failed to get data. Please try again');
             });
         } catch (e) {
             console.error(e);
@@ -62,11 +70,12 @@
     }
     private add() {
         try {
-            Util.request(this.urlGetForm, 'GET', 'html', (response) => {
+            Util.request(this.urlGetForm + "?scheduleID=" + $("#Schedule").val(), 'GET', 'html', (response) => {
                 $('#modal-default .modal-title').html("Tambah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 (<any>$("#modal-default")).modal("show");
+                $("#div_MaxRetake").hide();
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -119,13 +128,17 @@
         try {
             const data = {
                 ID: $('#ID').val(),
-                VerticalDimention: {
-                    ID: $('#VerticalDimention').val()
+                QuestionPackage: {
+                    ID: $('#QuestionPackage').val(),
                 },
-                Name: $('#Name').val(),
-                Description: $('#Description').val(),
-                Sequence: $('#Sequence').val(),
-                ValueDriverDimention: $('#ValueDriverDimention').val(),
+                ParticipantUser: {
+                    UserId: $('#ParticipantUser').val(),
+                },
+                Schedule: {
+                    ID: $('#Schedule').val(),
+                },
+                IsCanRetake: $('#IsCanRetake').is(":checked"),
+                MaxRetake: $('#MaxRetake').val()
             };
             return data;
         } catch (e) {
@@ -154,11 +167,15 @@
     }
     private edit(data) {
         try {
-            Util.request(this.urlGetForm + "?id=" + data.id, 'GET', 'html', (response) => {
+            Util.request(this.urlGetForm + "?id=" + data.id + "&scheduleID=" + $("#Schedule").val(), 'GET', 'html', (response) => {
                 $('#modal-default .modal-title').html("Ubah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 (<any>$("#modal-default")).modal("show");
+                $("#div_MaxRetake").hide();
+                if ($("#IsCanRetake").is(":checked")) {
+                    $("#div_MaxRetake").show();
+                }
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -169,5 +186,5 @@
 }
 
 $(document).ready(function () {
-    new SubVerticalDimention();
+    new Participant();
 });

@@ -1,14 +1,14 @@
-var Position = /** @class */ (function () {
-    function Position() {
-        this.urlGetData = "/position/table-data-view";
-        this.urlGetPaging = "/position/table-paging-view";
-        this.urlGetForm = "/position/form-view";
-        this.urlSave = '/position/save';
-        this.urlDelete = '/position/delete';
+var Survey = /** @class */ (function () {
+    function Survey() {
+        this.urlGetData = "/survey/table-data-view";
+        this.urlGetPaging = "/survey/table-paging-view";
+        this.urlGetForm = "/survey/form-view";
+        this.urlSave = '/survey/save';
+        this.urlDelete = '/survey/delete';
         this.currentPage = 1;
         this.init();
     }
-    Position.prototype.init = function () {
+    Survey.prototype.init = function () {
         var _this = this;
         try {
             this.initTable(this.currentPage);
@@ -37,7 +37,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.initTable = function (page) {
+    Survey.prototype.initTable = function (page) {
         try {
             Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', function (response) {
                 $('#table_list tbody').empty();
@@ -59,7 +59,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.add = function () {
+    Survey.prototype.add = function () {
         try {
             Util.request(this.urlGetForm, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Tambah Data");
@@ -75,7 +75,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.initForm = function () {
+    Survey.prototype.initForm = function () {
         var _this = this;
         try {
             $('#save_form').click(function () {
@@ -91,7 +91,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.save = function () {
+    Survey.prototype.save = function () {
         var _this = this;
         try {
             if (!Util.formCheck()) {
@@ -121,10 +121,13 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.create = function () {
+    Survey.prototype.create = function () {
         try {
             var data = {
                 ID: $('#ID').val(),
+                Assesment: {
+                    ID: $('#Assesment').val(),
+                },
                 Name: $('#Name').val()
             };
             return data;
@@ -134,7 +137,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.delete = function (data) {
+    Survey.prototype.delete = function (data) {
         var _this = this;
         try {
             if (confirm("Apa anda yaking menghapus data ini ?") == true) {
@@ -156,7 +159,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.edit = function (data) {
+    Survey.prototype.edit = function (data) {
         try {
             Util.request(this.urlGetForm + "?id=" + data.id, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Ubah Data");
@@ -171,9 +174,9 @@ var Position = /** @class */ (function () {
             console.error(e);
         }
     };
-    return Position;
+    return Survey;
 }());
 $(document).ready(function () {
-    new Position();
+    new Survey();
 });
-//# sourceMappingURL=position.js.map
+//# sourceMappingURL=survey.js.map

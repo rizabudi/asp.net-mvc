@@ -1,14 +1,14 @@
-var Position = /** @class */ (function () {
-    function Position() {
-        this.urlGetData = "/position/table-data-view";
-        this.urlGetPaging = "/position/table-paging-view";
-        this.urlGetForm = "/position/form-view";
-        this.urlSave = '/position/save';
-        this.urlDelete = '/position/delete';
+var ParticipantUser = /** @class */ (function () {
+    function ParticipantUser() {
+        this.urlGetData = "/participant-user/table-data-view";
+        this.urlGetPaging = "/participant-user/table-paging-view";
+        this.urlGetForm = "/participant-user/form-view";
+        this.urlSave = '/participant-user/save';
+        this.urlDelete = '/participant-user/delete';
         this.currentPage = 1;
         this.init();
     }
-    Position.prototype.init = function () {
+    ParticipantUser.prototype.init = function () {
         var _this = this;
         try {
             this.initTable(this.currentPage);
@@ -21,12 +21,12 @@ var Position = /** @class */ (function () {
                 _this.initTable(idx);
             });
             $(document).on("click", ".btn-delete", function (e) {
-                var id = $(e.currentTarget).data('id');
+                var id = $(e.currentTarget).data('id-strng');
                 var data = { id: id };
                 _this.delete(data);
             });
             $(document).on("click", ".btn-edit", function (e) {
-                var id = $(e.currentTarget).data('id');
+                var id = $(e.currentTarget).data('id-strng');
                 var data = { id: id };
                 _this.edit(data);
             });
@@ -37,7 +37,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.initTable = function (page) {
+    ParticipantUser.prototype.initTable = function (page) {
         try {
             Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', function (response) {
                 $('#table_list tbody').empty();
@@ -59,7 +59,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.add = function () {
+    ParticipantUser.prototype.add = function () {
         try {
             Util.request(this.urlGetForm, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Tambah Data");
@@ -75,7 +75,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.initForm = function () {
+    ParticipantUser.prototype.initForm = function () {
         var _this = this;
         try {
             $('#save_form').click(function () {
@@ -91,7 +91,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.save = function () {
+    ParticipantUser.prototype.save = function () {
         var _this = this;
         try {
             if (!Util.formCheck()) {
@@ -121,11 +121,33 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.create = function () {
+    ParticipantUser.prototype.create = function () {
         try {
             var data = {
-                ID: $('#ID').val(),
-                Name: $('#Name').val()
+                UserId: $('#UserId').val(),
+                Name: $('#Name').val(),
+                Email: $('#Email').val(),
+                Phone: $('#Phone').val(),
+                EmployeeNumber: $('#EmployeeNumber').val(),
+                User: {
+                    UserName: $("#UserName").val(),
+                    PasswordHash: $("#Password").val(),
+                },
+                Entity: {
+                    ID: $("#Entity").val()
+                },
+                Position: {
+                    ID: $("#Position").val()
+                },
+                CompanyFunction: {
+                    ID: $("#CompanyFunction").val()
+                },
+                Divition: {
+                    ID: $("#Divition").val()
+                },
+                Department: {
+                    ID: $("#Department").val()
+                }
             };
             return data;
         }
@@ -134,7 +156,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.delete = function (data) {
+    ParticipantUser.prototype.delete = function (data) {
         var _this = this;
         try {
             if (confirm("Apa anda yaking menghapus data ini ?") == true) {
@@ -156,7 +178,7 @@ var Position = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Position.prototype.edit = function (data) {
+    ParticipantUser.prototype.edit = function (data) {
         try {
             Util.request(this.urlGetForm + "?id=" + data.id, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Ubah Data");
@@ -171,9 +193,9 @@ var Position = /** @class */ (function () {
             console.error(e);
         }
     };
-    return Position;
+    return ParticipantUser;
 }());
 $(document).ready(function () {
-    new Position();
+    new ParticipantUser();
 });
-//# sourceMappingURL=position.js.map
+//# sourceMappingURL=participant-user.js.map

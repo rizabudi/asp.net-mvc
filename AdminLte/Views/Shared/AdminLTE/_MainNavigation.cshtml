@@ -159,13 +159,13 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Survey" asp-action="Index" class="nav-link">
+                            <a asp-controller="Survey" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "Survey", "SurveyQuestion" },"index")">
                                 <i class="fas fa-file-signature nav-icon"></i>
                                 <p>Daftar Survei</p>
                             </a>
                         </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
+                        <li class="nav-item has-treeview  @Url.MakeOpenClass(new List<string> { "SurveySchedule", "Schedule", "Participant" },"index")">
+                            <a href="#" class="nav-link  @Url.MakeActiveClass(new List<string> { "SurveySchedule", "Schedule", "Participant" },"index")">
                                 <i class="nav-icon fas fa-calendar"></i>
                                 <p>
                                     Penjadwalan
@@ -174,13 +174,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a asp-controller="Schedule" asp-action="Index" class="nav-link">
+                                    <a asp-controller="SurveySchedule" asp-action="Index" class="nav-link @Url.MakeActiveClass("SurveySchedule","index")">
                                         <i class="fas fa-calendar-check nav-icon"></i>
                                         <p>Penjadwalan Survei</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-controller="Participant" asp-action="Index" class="nav-link">
+                                    <a asp-controller="Schedule" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "Schedule","Participant" },"index")">
                                         <i class="fas fa-calendar-week nav-icon"></i>
                                         <p>Penjadwalan Peserta</p>
                                     </a>

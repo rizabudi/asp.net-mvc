@@ -49,6 +49,10 @@
             {
                 <input type="password" class="form-control" id="@FormModel.Name" data-label="@FormModel.Label" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
             }
+            else @if (FormModel.InputType == AdminLte.Models.InputType.EMAIL)
+            {
+                <input type="email" class="form-control" id="@FormModel.Name" data-label="@FormModel.Label" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
+            }
             else @if (FormModel.InputType == AdminLte.Models.InputType.IMAGE)
             {
                 <input type="file" accept="image/*" class="" id="@FormModel.Name" data-label="@FormModel.Label" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">

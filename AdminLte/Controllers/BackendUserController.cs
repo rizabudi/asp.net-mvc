@@ -101,7 +101,7 @@ namespace AdminLte.Controllers
                 FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.Name, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Entitas", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = userFromDb == null ? "" : userFromDb.Entity.ID.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "User Name", Name = "UserName", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.User.UserName, IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Password " + (userFromDb != null ? "(Kosongkan jika tidak ingin mengganti password)" : ""), Name = "Password", InputType = InputType.PASSWORD, Value = "" });
+                FormModels.Add(new FormModel { Label = "Password " + (userFromDb != null ? "(Kosongkan jika tidak ingin mengganti password)" : ""), Name = "Password", InputType = InputType.PASSWORD, Value = "", IsRequired = id == "" });
 
                 ViewData["Forms"] = FormModels;
 

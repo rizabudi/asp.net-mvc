@@ -1,9 +1,12 @@
-﻿class SubPeriod {
-    private urlGetData = "/sub-period/table-data-view";
-    private urlGetPaging = "/sub-period/table-paging-view";
-    private urlGetForm = "/sub-period/form-view";
-    private urlSave = '/sub-period/save';
-    private urlDelete = '/sub-period/delete';
+﻿class Schedule {
+    private urlGetData = "/schedule/table-data-view";
+    private urlGetPaging = "/schedule/table-paging-view";
+    private urlGetForm = "/schedule/form-view";
+    private urlSave = '/schedule/save';
+    private urlDelete = '/schedule/delete';
+    private urlSubPeriode = '/sub-period/select-option';
+    private urlPeriodeDetail = '/period/detail';
+    private urlSubPeriodeDetail = '/sub-period/detail';
 
     private currentPage = 1;
 
@@ -31,6 +34,70 @@
                 const data = { id: id };
                 this.edit(data);
             });
+            $(document).on("change", "#Period", (e) => {
+                const id = $(e.currentTarget).val();
+                Util.request(this.urlSubPeriode + "?periodID=" + id, 'GET', 'html', (response) => {
+                    $('#SubPeriod').empty();
+                    $('#SubPeriod').append(response);
+                }, function () {
+                    console.error('Failed to get data. Please try again');
+                    Util.error('Failed to get data. Please try again');
+                });
+                if (id == "-1") {
+                    (<any>$('#Date')).daterangepicker({
+                        locale: {
+                            format: 'YYYY-MM-DD',
+                            separator: ' s/d '
+                        }
+                    });
+                    return;
+                }
+                Util.request(this.urlPeriodeDetail + "?periodID=" + id, 'GET', 'html', (response) => {
+                    var json = JSON.parse(response);
+                    console.log(json);
+                    if (json.success) {
+                        (<any>$('#Date')).daterangepicker({
+                            locale: {
+                                format: 'YYYY-MM-DD',
+                                separator: ' s/d '
+                            },
+                            minDate: json.data.start.substring(0, 10),
+                            maxDate: json.data.end.substring(0, 10),
+                        });
+                    } else {
+                        Util.error(json.message);
+                    }
+                }, function () {
+                    console.error('Failed to get data. Please try again');
+                    Util.error('Failed to get data. Please try again');
+                });
+            });
+            $(document).on("change", "#SubPeriod", (e) => {
+                const id = $(e.currentTarget).val();
+                if (id == "-1") {
+                    $('#Period').trigger('change');
+                    return;
+                }
+                Util.request(this.urlSubPeriodeDetail + "?subPeriodID=" + id, 'GET', 'html', (response) => {
+                    var json = JSON.parse(response);
+                    console.log(json);
+                    if (json.success) {
+                        (<any>$('#Date')).daterangepicker({
+                            locale: {
+                                format: 'YYYY-MM-DD',
+                                separator: ' s/d '
+                            },
+                            minDate: json.data.start.substring(0, 10),
+                            maxDate: json.data.end.substring(0, 10),
+                        });
+                    } else {
+                        Util.error(json.message);
+                    }
+                }, function () {
+                    console.error('Failed to get data. Please try again');
+                    Util.error('Failed to get data. Please try again');
+                });
+            });
 
             this.initForm();
 
@@ -41,19 +108,19 @@
     }
     private initTable(page) {
         try {
-            Util.request(this.urlGetData + "?page=" + page + "&periodID=" + $("#Period").val(), 'GET', 'html', (response) => {
+            Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', (response) => {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
-                    console.error('Failed to get data. Please try again');
-                    Util.error('Failed to get data. Please try again');
+                console.error('Failed to get data. Please try again');
+                Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page + "&periodID=" + $("#Period").val(), 'GET', 'html', (response) => {
+            Util.request(this.urlGetPaging + "?page=" + page, 'GET', 'html', (response) => {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
-                    console.error('Failed to get data. Please try again');
-                    Util.error('Failed to get data. Please try again');
+                console.error('Failed to get data. Please try again');
+                Util.error('Failed to get data. Please try again');
             });
         } catch (e) {
             console.error(e);
@@ -71,9 +138,7 @@
                     locale: {
                         format: 'YYYY-MM-DD',
                         separator: ' s/d '
-                    },
-                    minDate: $("#PeriodStart").val(),
-                    maxDate: $("#PeriodEnd").val(),
+                    }
                 });
             }, function () {
                 Util.error('Failed to get data. Please try again');
@@ -129,12 +194,21 @@
             var Dates = Date.split(" s/d ");
             const data = {
                 ID: $('#ID').val(),
+                Assesment: {
+                    ID: $('#Assesment').val(),
+                },
+                Entity: {
+                    ID: $('#Entity').val(),
+                },
+                Period: {
+                    ID: $('#Period').val(),
+                },
+                SubPeriod: {
+                    ID: $('#SubPeriod').val(),
+                },
                 Name: $('#Name').val(),
                 Start: Dates[0],
                 End: Dates[1],
-                Period: {
-                    ID: $("#Period").val()
-                }
             };
             return data;
         } catch (e) {
@@ -163,7 +237,7 @@
     }
     private edit(data) {
         try {
-            Util.request(this.urlGetForm + "?id=" + data.id, 'GET', 'html', (response) => {
+            Util.request(this.urlGetForm + "?id=" + data.id + "&scheduleID=" + $("#Schedule").val(), 'GET', 'html', (response) => {
                 $('#modal-default .modal-title').html("Ubah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
@@ -173,8 +247,8 @@
                         format: 'YYYY-MM-DD',
                         separator: ' s/d '
                     },
-                    minDate: $("#PeriodStart").val(),
-                    maxDate: $("#PeriodEnd").val(),
+                    minDate: $("#MinDate").val(),
+                    maxDate: $("#MaxDate").val(),
                 });
             }, function () {
                 Util.error('Failed to get data. Please try again');
@@ -186,5 +260,5 @@
 }
 
 $(document).ready(function () {
-    new SubPeriod();
+    new Schedule();
 });

@@ -1,9 +1,9 @@
-﻿class SubVerticalDimention {
-    private urlGetData = "/sub-vertical-dimention/table-data-view";
-    private urlGetPaging = "/sub-vertical-dimention/table-paging-view";
-    private urlGetForm = "/sub-vertical-dimention/form-view";
-    private urlSave = '/sub-vertical-dimention/save';
-    private urlDelete = '/sub-vertical-dimention/delete';
+﻿class SurveyQuestion {
+    private urlGetData = "/survey-question/table-data-view";
+    private urlGetPaging = "/survey-question/table-paging-view";
+    private urlGetForm = "/survey-question/form-view";
+    private urlSave = '/survey-question/save';
+    private urlDelete = '/survey-question/delete';
 
     private currentPage = 1;
 
@@ -41,19 +41,19 @@
     }
     private initTable(page) {
         try {
-            Util.request(this.urlGetData + "?page=" + page + "&verticalDimentionID=" + $("#VerticalDimention").val(), 'GET', 'html', (response) => {
+            Util.request(this.urlGetData + "?page=" + page + "&surveyID=" + $("#QuestionPackage").val(), 'GET', 'html', (response) => {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
-                    console.error('Failed to get data. Please try again');
-                    Util.error('Failed to get data. Please try again');
+                console.error('Failed to get data. Please try again');
+                Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page + "&verticalDimentionID=" + $("#VerticalDimention").val(), 'GET', 'html', (response) => {
+            Util.request(this.urlGetPaging + "?page=" + page + "&surveyID=" + $("#QuestionPackage").val(), 'GET', 'html', (response) => {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
-                    console.error('Failed to get data. Please try again');
-                    Util.error('Failed to get data. Please try again');
+                console.error('Failed to get data. Please try again');
+                Util.error('Failed to get data. Please try again');
             });
         } catch (e) {
             console.error(e);
@@ -62,11 +62,19 @@
     }
     private add() {
         try {
-            Util.request(this.urlGetForm, 'GET', 'html', (response) => {
+            Util.request(this.urlGetForm + "?surveyID=" + $("#QuestionPackage").val(), 'GET', 'html', (response) => {
                 $('#modal-default .modal-title').html("Tambah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 (<any>$("#modal-default")).modal("show");
+                (<any>$('#Date')).daterangepicker({
+                    locale: {
+                        format: 'YYYY-MM-DD',
+                        separator: ' s/d '
+                    },
+                    minDate: $("#PeriodStart").val(),
+                    maxDate: $("#PeriodEnd").val(),
+                });
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -119,13 +127,12 @@
         try {
             const data = {
                 ID: $('#ID').val(),
-                VerticalDimention: {
-                    ID: $('#VerticalDimention').val()
+                Question: {
+                    ID: $('#Question').val()
                 },
-                Name: $('#Name').val(),
-                Description: $('#Description').val(),
-                Sequence: $('#Sequence').val(),
-                ValueDriverDimention: $('#ValueDriverDimention').val(),
+                QuestionPackage: {
+                    ID: $('#QuestionPackage').val()
+                }
             };
             return data;
         } catch (e) {
@@ -159,6 +166,14 @@
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 (<any>$("#modal-default")).modal("show");
+                (<any>$('#Date')).daterangepicker({
+                    locale: {
+                        format: 'YYYY-MM-DD',
+                        separator: ' s/d '
+                    },
+                    minDate: $("#PeriodStart").val(),
+                    maxDate: $("#PeriodEnd").val(),
+                });
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -169,5 +184,5 @@
 }
 
 $(document).ready(function () {
-    new SubVerticalDimention();
+    new SurveyQuestion();
 });
