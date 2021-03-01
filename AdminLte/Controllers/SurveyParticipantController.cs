@@ -87,7 +87,7 @@ namespace AdminLte.Controllers
                         listI = new List<Question>();
                     }
                     listI.Add(ques);
-                    if (i == 6)
+                    if (i == 5)
                     {
                         i = 0;
                         list.Add(listI);

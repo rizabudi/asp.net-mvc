@@ -14,57 +14,66 @@
     var questionAnswerMatrix = (List<QuestionAnswer>)ViewData["QuestionAnswerMatrix"];
 }
 
-
 <div class="row">
-    <div class="col-md-3">
-        <div class="module form-modal">
+    <div class="col-md-12">
+        @if (mode == 1 && part != null)
+        {
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Indek Survei</h3>
+                    <h3 class="card-title">Panduan Pengisian</h3>
                     <div class="card-tools">
                     </div>
                 </div>
-                <!-- /.card-header -->
                 <div class="card-body">
-                    @foreach (Section sect in indexs.Keys)
-                    {
-                        <b><a href="~/survey-participant/detail/@Model.ID?mode=0&id=@sect.ID">Bagian @sect.Sequence</a></b>
-                        @foreach (List<Question> quess in indexs[sect])
-                        {
-                            <ul class="pagination" style="margin-bottom:0px">
-                                @foreach (Question ques in quess)
-                                {
-                                    <li class="paginate_button page-item ">
-                                        <a style="width:45px;padding:0.25rem;text-align:center" href="~/survey-participant/detail/@Model.ID?mode=1&id=@ques.ID" data-question="@ques.ID" tabindex="0" class="page-link">@ques.Sequence</a>
-                                    </li>
-                                }
-                            </ul>
-                        }
-                        <br />
-                    }
+                    @Html.Raw(part.Introduction)
                 </div>
-                <!-- /.card-body -->
             </div>
-            @if (mode == 1 && part != null)
-            {
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Panduan Pengisian</h3>
-                        <div class="card-tools">
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        @Html.Raw(part.Introduction)
-                    </div>
-                </div>
+        }
+    </div>
+</div>
 
-            }
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Indek Survei</h3>
+                <div class="card-tools">
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="">
+                    <table>
+                        @foreach (Section sect in indexs.Keys)
+                        {
+                            <tr>
+                                <td><b><a href="~/survey-participant/detail/@Model.ID?mode=0&id=@sect.ID">Bagian @sect.Sequence</a></b></td>
+                                <td>&nbsp;&nbsp;:&nbsp;&nbsp;</td>
+                                <td>
+                                    <ul class="pagination" style="margin-bottom:0px; flex-wrap:wrap">
+                                        @foreach (List<Question> quess in indexs[sect])
+                                        {
+                                            @foreach (Question ques in quess)
+                                            {
+                                                <li class="paginate_button page-item ">
+                                                    <a style="width:45px;padding:0.25rem;text-align:center" href="~/survey-participant/detail/@Model.ID?mode=1&id=@ques.ID" data-question="@ques.ID" tabindex="0" class="page-link">@ques.Sequence</a>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-9">
+</div>
+
+<div class="row">
+    <div class="col-md-6">
         <div class="module form-modal">
             <div class="card">
-
                 @if ((mode == 0 && part == null) || (mode == 1 && question == null))
                 {
                     <div class="card-header">
@@ -86,7 +95,7 @@
                             }
                             else
                             {
-                                <span>@question.Sequence. @question.Title</span>;
+                                <span>Situasi @question.Sequence</span>;
                             }
                         </h3>
                         <div class="card-tools">
@@ -103,11 +112,44 @@
                         }
                         else
                         {
-                            <img style="width:50%" src="https://app.lp3t.abdil.my.id/uploads/@question.Attachment" />
+                            <img style="width:100%" src="https://app.lp3t.abdil.my.id/uploads/@question.Attachment" />
+                            <br />
                             @Html.Raw(question.Description)
-
-                            <hr/>
-                            
+                        }
+                        <br />
+                    </div>
+                    <!-- /.card-body -->
+                }
+            </div>
+        </div>
+    </div>
+    @if (mode == 1)
+    {
+        <div class="col-md-6">
+            <div class="module form-modal">
+                <div class="card">
+                    @if ((mode == 0 && part == null) || (mode == 1 && question == null))
+                    {
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Data Tidak Ditemukan
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <h2>Data Tidak Ditemukan</h2>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>Respon Situasi @question.Sequence</span>
+                            </h3>
+                            <div class="card-tools">
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
                             <table cellpadding="2" cellspacing="2" style="width:100%" class="table">
                                 <thead>
                                     <tr>
@@ -117,11 +159,12 @@
                                         {
                                             @if (question.QuestionType == QuestionType.MATRIX && question.MatrixSubType == MatrixSubType.CUSTOM)
                                             {
-                                                <th style="width:85px">@qa.Value</th>
+                                                <th style="width:85px;text-align:center">@qa.Value</th>
                                             }
                                             else if (question.QuestionType == QuestionType.MATRIX && question.MatrixSubType == MatrixSubType.SIMPLE)
                                             {
-                                                <th style="width:30px">@qa.Value</th>
+                                                <th style="width:225px;text-align:center">Respon</th>
+                                                break;
                                             }
                                         }
                                     </tr>
@@ -133,19 +176,19 @@
                                         <tr>
                                             <td>@no</td>
                                             <td>@qa.Value</td>
-                                            @foreach (QuestionAnswer qa1 in questionAnswer.OrderBy(x => x.Sequence))
-                                            {
-                                                <td>
-                                                    @if (question.QuestionType == QuestionType.MATRIX && question.MatrixSubType == MatrixSubType.CUSTOM)
-                                                    {
-                                                        if (qa1.MatrixValue == MatrixValueType.NUMERICAL_BOX)
+                                            @if(question.QuestionType == QuestionType.MATRIX && question.MatrixSubType == MatrixSubType.CUSTOM) 
+                                            { 
+                                                foreach (QuestionAnswer qa1 in questionAnswer.OrderBy(x => x.Sequence))
+                                                {
+                                                    <td>
+                                                        @if (qa1.MatrixValue == MatrixValueType.NUMERICAL_BOX)
                                                         {
                                                             <input style="text-align:center" value="0" type="number" class="form-control" />
                                                         }
                                                         else if (qa.MatrixValue == MatrixValueType.SEQUENCE)
                                                         {
                                                             <select class="form-control">
-                                                                <option value="1"></option>
+                                                                <option value=""></option>
                                                                 <option value="1">1</option>
                                                                 <option value="2">2</option>
                                                                 <option value="3">3</option>
@@ -153,17 +196,19 @@
                                                                 <option value="5">5</option>
                                                             </select>
                                                         }
-                                                    }
-                                                    else if (question.QuestionType == QuestionType.MATRIX && question.MatrixSubType == MatrixSubType.SIMPLE)
-                                                    {
-                                                        <div class="icheck-primary d-inline">
-                                                            @{ 
-                                                                var name = qa.ID + "_" + qa1.ID;
-                                                            }
-                                                            <input name="rdo_@qa.ID" id="rdo_@name" style="text-align:center" value="0" type="radio" />
-                                                            <label for="rdo_@name"></label>
-                                                        </div>
-                                                    }
+                                                    </td>
+                                                }
+                                            }
+                                            else if(question.QuestionType == QuestionType.MATRIX && question.MatrixSubType == MatrixSubType.SIMPLE)
+                                            {
+                                                <td>
+                                                    <select class="form-control">
+                                                        <option value=""></option>
+                                                        @foreach (QuestionAnswer qa1 in questionAnswer.OrderBy(x => x.Sequence))
+                                                        {
+                                                            <option value="@qa1.Value">@qa1.Value</option>
+                                                        }
+                                                    </select>
                                                 </td>
                                             }
                                         </tr>
@@ -180,38 +225,42 @@
                                     </tfoot>
                                 }
                             </table>
-                            <br/>
-                            <button class="btn btn-danger pull-right"><i class="fa fa-save"></i>&nbsp;&nbsp;Simpan Jawaban</button>
-                        }
-                        <br/>
-                    </div>
-                    <!-- /.card-body -->
-                    <div class="modal-footer justify-content-between">
-                        @if(questionPrevious != null && mode == 1)
-                        {
-                            if (questionPrevious.Section.ID == question.Section.ID)
-                            {
-                                <a href="~/survey-participant/detail/@Model.ID?mode=1&id=@questionPrevious.ID" id="close_form" class="btn btn-default"><i class="fa fa-step-backward"></i>&nbsp;Pertanyaan Sebelumnya</a>
-                            }
-                            else
-                            {
-                                <a href="~/survey-participant/detail/@Model.ID?mode=0&id=@questionPrevious.Section.ID" id="close_form" class="btn btn-default"><i class="fa fa-step-backward"></i>&nbsp;Pertanyaan Sebelumnya</a>
-                            }
-                        }
-                        @if(questionNext != null && mode == 1)
-                        {
-                            if (questionNext.Section.ID == question.Section.ID)
-                            {
-                                <a href="~/survey-participant/detail/@Model.ID?mode=1&id=@questionNext.ID" style="color:white" id="save_form" class="btn btn-primary right">Pertanyaan Selanjutnya&nbsp;<i class="fa fa-step-forward"></i></a>
-                            }
-                            else
-                            {
-                                <a href="~/survey-participant/detail/@Model.ID?mode=0&id=@questionNext.Section.ID" style="color:white" id="save_form" class="btn btn-primary right">Pertanyaan Selanjutnya&nbsp;<i class="fa fa-step-forward"></i></a>
-                            }
-                        }
-                    </div>
-                }
+                            <br />
+                            <button class="btn btn-danger pull-right"><i class="fa fa-save"></i>&nbsp;&nbsp;Simpan Respon</button>
+                        </div>
+                        <!-- /.card-body -->
+
+                    }
+                </div>
             </div>
         </div>
+    }
+
+    <div class="col-md-12">
+        <div class="modal-footer" style="justify-content:center">
+            @if (questionPrevious != null && mode == 1)
+            {
+                if (questionPrevious.Section.ID == question.Section.ID)
+                {
+                    <a href="~/survey-participant/detail/@Model.ID?mode=1&id=@questionPrevious.ID" id="close_form" class="btn btn-default"><i class="fa fa-step-backward"></i>&nbsp;Pertanyaan Sebelumnya</a>
+                }
+                else
+                {
+                    <a href="~/survey-participant/detail/@Model.ID?mode=0&id=@questionPrevious.Section.ID" id="close_form" class="btn btn-default"><i class="fa fa-step-backward"></i>&nbsp;Pertanyaan Sebelumnya</a>
+                }
+            }
+            @if (questionNext != null && mode == 1)
+            {
+                if (questionNext.Section.ID == question.Section.ID)
+                {
+                    <a href="~/survey-participant/detail/@Model.ID?mode=1&id=@questionNext.ID" style="color:white" class="btn btn-primary">Pertanyaan Selanjutnya&nbsp;<i class="fa fa-step-forward"></i></a>
+                }
+                else
+                {
+                    <a href="~/survey-participant/detail/@Model.ID?mode=0&id=@questionNext.Section.ID" style="color:white" class="btn btn-primary">Pertanyaan Selanjutnya&nbsp;<i class="fa fa-step-forward"></i></a>
+                }
+            }
+        </div>
     </div>
+
 </div>
