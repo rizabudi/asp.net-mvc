@@ -23,6 +23,7 @@ namespace AdminLte.Controllers
 
         [AllowAnonymous]
         [HttpGet("home")]
+        [HttpGet("")]
         public IActionResult Index()
         {
             return View();
