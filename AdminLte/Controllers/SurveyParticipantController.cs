@@ -49,6 +49,9 @@ namespace AdminLte.Controllers
             var participant = await _db.Participants
                 .Include(x => x.ParticipantUser)
                 .Include(x => x.QuestionPackage.Assesment)
+                .Include(x => x.ParticipantAnswerSheets)
+                .ThenInclude(x => x.ParticipantAnswerSheetSections)
+                .ThenInclude(x => x.Section)
                 .Where(x => x.ParticipantUser.UserId == userId && x.ID == participantID)
                 .OrderBy(x => x.Schedule.Start)
                 .FirstOrDefaultAsync();
@@ -56,6 +59,17 @@ namespace AdminLte.Controllers
             if(participant == null)
             {
                 return Redirect("/home/errors/404");
+            }
+
+            ParticipantAnswerSheet participantAnswerSheet = participant.ParticipantAnswerSheets.FirstOrDefault(x => !x.IsFinish);
+            if (participantAnswerSheet == null)
+            {
+                participantAnswerSheet = new ParticipantAnswerSheet();
+                participantAnswerSheet.Participant = participant;
+                participantAnswerSheet.IsFinish = false;
+
+                _db.ParticipantAnswerSheets.Add(participantAnswerSheet);
+                _db.SaveChanges();
             }
 
             ViewData["Title"] = participant.QuestionPackage.Assesment.Name + " - " + participant.QuestionPackage.Name;
@@ -77,6 +91,20 @@ namespace AdminLte.Controllers
             var indexs = new Dictionary<Section, List<List<Question>>>();
             foreach (Section sct in sections)
             {
+                ParticipantAnswerSheetSection newParticipantAnswerSheetSection = participantAnswerSheet.ParticipantAnswerSheetSections.FirstOrDefault(x => x.Section.ID == sct.ID);
+                if(newParticipantAnswerSheetSection == null)
+                {
+                    newParticipantAnswerSheetSection = new ParticipantAnswerSheetSection();
+                    newParticipantAnswerSheetSection.IsFinish = false;
+                    newParticipantAnswerSheetSection.Section = sct;
+                    newParticipantAnswerSheetSection.ParticipantAnswerSheet = participantAnswerSheet;
+
+                    participantAnswerSheet.ParticipantAnswerSheetSections.Add(newParticipantAnswerSheetSection);
+
+                    _db.ParticipantAnswerSheetSections.Add(newParticipantAnswerSheetSection);
+                    _db.SaveChanges();
+                }
+
                 var list = new List<List<Question>>();
                 var listI = new List<Question>();
                 var i = 1;
@@ -101,50 +129,42 @@ namespace AdminLte.Controllers
                 indexs.Add(sct, list);
             }
 
+            ParticipantAnswerSheetSection participantAnswerSheetSection = participantAnswerSheet.ParticipantAnswerSheetSections.FirstOrDefault(x => !x.IsFinish);
             Section section = null;
+
+            if(participantAnswerSheetSection != null)
+            {
+                section = participantAnswerSheetSection.Section;
+            }
 
             Question question = null;
             Question questionNext = null;
             Question questionPrevious = null;
 
-            if (mode == 0)
-            {
-                if (id == 0 && sections.Count > 0)
-                {
-                    section = sections[0];
+            var questionAnswereds = await _db.ParticipantAnswerSheetLines
+                .Where(x => x.ParticipantAnswerSheet.ID == participantAnswerSheet.ID)
+                .Select(x => x.Question)
+                .Distinct()
+                .ToListAsync();
 
-                }
-                else
-                {
-                    section = sections.Where(x => x.ID == id).FirstOrDefault();
-                }
-                if (section != null)
-                {
-                    var sectionQuestions = questions.Where(x => x.Section.ID == section.ID).OrderBy(x => x.Sequence).ToList();
-                    if (sectionQuestions.Count > 0)
-                    {
-                        question = sectionQuestions[0];
-                        if (sectionQuestions.Count > 1)
-                        {
-                            questionNext = sectionQuestions[1];
-                        }
-                    }
-                }
-            }
-            else
+            if (section != null)
             {
-                if (id == 0 && questions.Count > 0)
+                if (id == 0 && questions.Where(x=>x.Section.ID == section.ID).Count() > 0)
                 {
-                    question = questions[0];
-                    section = question.Section;
+                    question = questions.FirstOrDefault(x=>x.Section.ID == section.ID && questionAnswereds.Contains(x));
+                    if(question == null)
+                    {
+                        question = questions.FirstOrDefault(x => x.Section.ID == section.ID);
+                    }
                 }
                 else
                 {
                     question = await _db.Questions
-                        .FirstOrDefaultAsync(x => x.ID == id);
-                    if(question != null)
+                        .FirstOrDefaultAsync(x => x.ID == id && x.Section.ID == section.ID);
+                    if(!questionAnswereds.Contains(question))
                     {
-                        section = question.Section;
+                        question = questions
+                            .FirstOrDefault(x => x.Section.ID == section.ID && !questionAnswereds.Contains(x));
                     }
                 }
 
@@ -161,24 +181,64 @@ namespace AdminLte.Controllers
 
             if (question != null)
             {
+                ViewData["Answer"] = await _db.ParticipantAnswerSheetLines.Where(x => x.Question.ID == question.ID && x.ParticipantAnswerSheet.ID == participantAnswerSheet.ID).ToListAsync();
                 ViewData["QuestionAnswer"] = await _db.QuestionAnswer.Where(x => x.Question.ID == question.ID).ToListAsync();
                 ViewData["QuestionAnswerMatrix"] = await _db.QuestionAnswer.Where(x => x.MatrixQuestion.ID == question.ID).ToListAsync();
             } 
             else
             {
+                ViewData["Answer"] = new List<ParticipantAnswerSheetLine>();
                 ViewData["QuestionAnswer"] = new List<QuestionAnswer>();
                 ViewData["QuestionAnswerMatrix"] = new List<QuestionAnswer>();
             }
 
             ViewData["Question"] = question;
+            ViewData["QuestionAnswered"] = questionAnswereds;
             ViewData["QuestionNext"] = questionNext;
             ViewData["QuestionPrevious"] = questionPrevious;
             ViewData["Section"] = section;
             ViewData["Indexs"] = indexs;
             ViewData["Mode"] = mode;
             ViewData["Id"] = id;
+            ViewData["SideBarCollapse"] = true;
+            ViewData["ParticipantID"] = participantID;
+            ViewData["Script"] = "survey-participant-detail.js";
 
-            return View(participant);
+            return View(participantAnswerSheet); 
         }
+
+        [HttpPost("[action]")]
+        [Route("survey-participant/save")]
+        public async Task<IActionResult> Save([FromBody] ParticipantAnswerSheetLine[] participantAnswerSheetLines)
+        {
+            try
+            {
+                if (participantAnswerSheetLines.Length > 0)
+                {
+                    Question question = await _db.Questions.FirstOrDefaultAsync(x => x.ID == participantAnswerSheetLines.First().Question.ID);
+                    ParticipantAnswerSheet participantAnswerSheet = await _db.ParticipantAnswerSheets.FirstOrDefaultAsync(x => x.ID == participantAnswerSheetLines.First().ParticipantAnswerSheet.ID);
+
+                    var oldAnswers = await _db.ParticipantAnswerSheetLines.Where(x => x.ParticipantAnswerSheet.ID == participantAnswerSheet.ID && x.Question.ID == question.ID).ToListAsync();
+                    _db.ParticipantAnswerSheetLines.RemoveRange(oldAnswers);
+
+                    foreach (ParticipantAnswerSheetLine participantAnswerSheetLine in participantAnswerSheetLines)
+                    {
+                        participantAnswerSheetLine.Question = question;
+                        participantAnswerSheetLine.ParticipantAnswerSheet = participantAnswerSheet;
+
+                        _db.ParticipantAnswerSheetLines.Add(participantAnswerSheetLine);
+                    }
+                }
+                _db.SaveChanges();
+
+                return Json(new { success = true, message = "Jawaban berhasil disimpan" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Json(new { success = false, message = "Terjadi kesalahan. Err : " + ex.Message });
+            }
+        }
+
     }
 }

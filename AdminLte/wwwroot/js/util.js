@@ -8,6 +8,10 @@
                 type: type, //GET or POST
                 dataType: dataType, //html or json
                 processData: true,
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
                 data: data,
                 url: url,
                 statusCode: processResponse(successCallback, failureCallback),

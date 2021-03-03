@@ -60,4 +60,7 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="package-lock.json" />
+  </ItemGroup>
 </Project>

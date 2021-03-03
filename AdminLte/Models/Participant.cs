@@ -17,6 +17,7 @@ namespace AdminLte.Models
         public DateTime? FinishedAt { get; set; }
         public bool IsCanRetake { get; set; }
         public int MaxRetake { get; set; }
+        public virtual ICollection<ParticipantAnswerSheet> ParticipantAnswerSheets { get; set; }
     }
 
     public enum ParticipantAnswerSheetEnum
@@ -31,6 +32,18 @@ namespace AdminLte.Models
         public Participant Participant { get; set; }
         public ParticipantAnswerSheetEnum State { get; set; }
         public string Data { get; set; }
+        public bool IsFinish { get; set; }
+        public virtual ICollection<ParticipantAnswerSheetSection> ParticipantAnswerSheetSections { get; set; }
+
+    }
+
+    public class ParticipantAnswerSheetSection
+    {
+        [Key]
+        public int ID { get; set; }
+        public ParticipantAnswerSheet ParticipantAnswerSheet { get; set; }
+        public Section Section { get; set; }
+        public bool IsFinish { get; set; }
 
     }
 
@@ -40,7 +53,7 @@ namespace AdminLte.Models
         public int ID { get; set; }
         public ParticipantAnswerSheet ParticipantAnswerSheet { get; set; }
         public int SuggestedAnswerID { get; set; }
-        public int MatrixRowAnserID { get; set; }
+        public int MatrixRowAnswerID { get; set; }
         public int QuestionSquence { get; set; }
         public bool IsSkipped { get; set; }
         public MatrixValueType AnswerType { get; set; }
@@ -49,6 +62,7 @@ namespace AdminLte.Models
         public float NumericalBoxValue { get; set; }
         public float AnswerWeight { get; set; }
         public float AnswerScore { get; set; }
+        public Question Question { get; set; }
     }
 
     public class ParticipantSectionScore

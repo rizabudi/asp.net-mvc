@@ -48,6 +48,7 @@ namespace AdminLte.Data
         public DbSet<ParticipantUser> ParticipantUsers { get; set; }
         public DbSet<Participant> Participants { get; set; }
         public DbSet<ParticipantAnswerSheet> ParticipantAnswerSheets { get; set; }
+        public DbSet<ParticipantAnswerSheetSection> ParticipantAnswerSheetSections { get; set; }
         public DbSet<ParticipantAnswerSheetLine> ParticipantAnswerSheetLines { get; set; }
         public DbSet<ParticipantSectionScore> ParticipantSectionScores { get; set; }
         public DbSet<ParticipantHorizontalDimentionScore> ParticipantHorizontalDimentionScores { get; set; }
