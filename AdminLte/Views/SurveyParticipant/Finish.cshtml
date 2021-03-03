@@ -1,5 +1,24 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Survei Selesai";
+    Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
 }
+
+<div class="module form-modal">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Survei Telah Selesai</h3>
+            <div class="card-tools">
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <center>
+                <img src="~/img/img_close.gif" style="width:50%" />
+
+                <br />
+                <a href="~/survey-participant/survey-participant" id="close_form" class="btn btn-default">Kembali Ke Daftar Survei</a>
+            </center>
+        </div>
+        <!-- /.card-body -->
+    </div>
+</div>

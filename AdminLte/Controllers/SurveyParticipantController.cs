@@ -27,21 +27,31 @@ namespace AdminLte.Controllers
             var userId = user.Id;
 
             var participants = await _db.Participants
-                .Include(x=>x.ParticipantUser)
-                .Include(x=>x.QuestionPackage)
-                .Include(x=>x.Schedule)
+                .Include(x => x.ParticipantUser)
+                .Include(x => x.QuestionPackage)
+                .Include(x => x.Schedule)
                 .Include(x => x.Schedule.Assesment)
                 .Include(x => x.Schedule.Entity)
+                .Include(x => x.ParticipantAnswerSheets)
                 .Where(x => x.ParticipantUser.UserId == userId)
-                .OrderBy(x=>x.Schedule.Start)
+                .OrderBy(x => x.Schedule.Start)
                 .ToListAsync();
 
             return View(participants);
         }
 
+
+        [HttpGet("survey-participant/start")]
+        [Route("survey-participant/start/{participantID:int}")]
+        public IActionResult Start(int participantID, int take = 0)
+        {
+            ViewData["take"] = take;
+            return View(participantID);
+        }
+
         [HttpGet("survey-participant/detail")]
         [Route("survey-participant/detail/{participantID:int}")]
-        public async Task<IActionResult> DetailAsync(int participantID, int mode = 0, int id = 0)
+        public async Task<IActionResult> DetailAsync(int participantID, int mode = 0, int id = 0, int take = 0)
         {
             var user = await _userManager.GetUserAsync(User);
             var userId = user.Id;
@@ -62,14 +72,31 @@ namespace AdminLte.Controllers
             }
 
             ParticipantAnswerSheet participantAnswerSheet = participant.ParticipantAnswerSheets.FirstOrDefault(x => !x.IsFinish);
-            if (participantAnswerSheet == null)
+            if (participantAnswerSheet == null && take == 1)
             {
+                var sheets = participant.ParticipantAnswerSheets.Where(x => x.IsFinish).Count();
+                if(sheets > 0)
+                {
+                    if(!participant.IsCanRetake)
+                    { 
+                        return View("~/Views/SurveyParticipant/Finish.cshtml");
+                    } else if(participant.IsCanRetake && sheets > participant.MaxRetake)
+                    {
+                        return View("~/Views/SurveyParticipant/Finish.cshtml");
+                    }
+                }
+
                 participantAnswerSheet = new ParticipantAnswerSheet();
                 participantAnswerSheet.Participant = participant;
                 participantAnswerSheet.IsFinish = false;
 
                 _db.ParticipantAnswerSheets.Add(participantAnswerSheet);
                 _db.SaveChanges();
+            }
+
+            if(participantAnswerSheet == null)
+            {
+                return View("~/Views/SurveyParticipant/Finish.cshtml");
             }
 
             ViewData["Title"] = participant.QuestionPackage.Assesment.Name + " - " + participant.QuestionPackage.Name;
@@ -91,15 +118,17 @@ namespace AdminLte.Controllers
             var indexs = new Dictionary<Section, List<List<Question>>>();
             foreach (Section sct in sections)
             {
-                ParticipantAnswerSheetSection newParticipantAnswerSheetSection = participantAnswerSheet.ParticipantAnswerSheetSections.FirstOrDefault(x => x.Section.ID == sct.ID);
-                if(newParticipantAnswerSheetSection == null)
+                ParticipantAnswerSheetSection newParticipantAnswerSheetSection = null;
+                if (participantAnswerSheet.ParticipantAnswerSheetSections != null)
+                {
+                    newParticipantAnswerSheetSection = participantAnswerSheet.ParticipantAnswerSheetSections.FirstOrDefault(x => x.Section.ID == sct.ID);
+                }
+                if (newParticipantAnswerSheetSection == null)
                 {
                     newParticipantAnswerSheetSection = new ParticipantAnswerSheetSection();
                     newParticipantAnswerSheetSection.IsFinish = false;
                     newParticipantAnswerSheetSection.Section = sct;
                     newParticipantAnswerSheetSection.ParticipantAnswerSheet = participantAnswerSheet;
-
-                    participantAnswerSheet.ParticipantAnswerSheetSections.Add(newParticipantAnswerSheetSection);
 
                     _db.ParticipantAnswerSheetSections.Add(newParticipantAnswerSheetSection);
                     _db.SaveChanges();
@@ -129,6 +158,7 @@ namespace AdminLte.Controllers
                 indexs.Add(sct, list);
             }
 
+            participantAnswerSheet = await _db.ParticipantAnswerSheets.FirstOrDefaultAsync(x => x.ID == participantAnswerSheet.ID);
             ParticipantAnswerSheetSection participantAnswerSheetSection = participantAnswerSheet.ParticipantAnswerSheetSections.FirstOrDefault(x => !x.IsFinish);
             Section section = null;
 
@@ -216,7 +246,9 @@ namespace AdminLte.Controllers
                 if (participantAnswerSheetLines.Length > 0)
                 {
                     Question question = await _db.Questions.FirstOrDefaultAsync(x => x.ID == participantAnswerSheetLines.First().Question.ID);
-                    ParticipantAnswerSheet participantAnswerSheet = await _db.ParticipantAnswerSheets.FirstOrDefaultAsync(x => x.ID == participantAnswerSheetLines.First().ParticipantAnswerSheet.ID);
+                    ParticipantAnswerSheet participantAnswerSheet = await _db.ParticipantAnswerSheets
+                            .Include(x=>x.Participant)
+                            .FirstOrDefaultAsync(x => x.ID == participantAnswerSheetLines.First().ParticipantAnswerSheet.ID);
 
                     var oldAnswers = await _db.ParticipantAnswerSheetLines.Where(x => x.ParticipantAnswerSheet.ID == participantAnswerSheet.ID && x.Question.ID == question.ID).ToListAsync();
                     _db.ParticipantAnswerSheetLines.RemoveRange(oldAnswers);
@@ -228,10 +260,71 @@ namespace AdminLte.Controllers
 
                         _db.ParticipantAnswerSheetLines.Add(participantAnswerSheetLine);
                     }
+
+                    if(participantAnswerSheet.Participant.StartedAt == null)
+                    {
+                        participantAnswerSheet.Participant.StartedAt = new DateTime();
+                        _db.Participants.Update(participantAnswerSheet.Participant);
+                    }
                 }
+
+
                 _db.SaveChanges();
 
                 return Json(new { success = true, message = "Jawaban berhasil disimpan" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Json(new { success = false, message = "Terjadi kesalahan. Err : " + ex.Message });
+            }
+        }
+
+        [HttpPost("[action]")]
+        [Route("survey-participant/finish")]
+        public async Task<IActionResult> Finish(int ID)
+        {
+            try
+            {
+                var participantAnswerSheet = await _db.ParticipantAnswerSheets
+                    .Include(x=>x.ParticipantAnswerSheetSections)
+                    .Include(x=>x.Participant)
+                    .FirstOrDefaultAsync(x => x.ID == ID);
+                if(participantAnswerSheet != null)
+                {
+                    var participantAnswerSheetSection = participantAnswerSheet.ParticipantAnswerSheetSections
+                            .Where(x => !x.IsFinish)
+                            .FirstOrDefault();
+
+                    if(participantAnswerSheetSection != null)
+                    {
+                        participantAnswerSheetSection.IsFinish = true;
+                        _db.ParticipantAnswerSheetSections.Update(participantAnswerSheetSection);
+                        _db.SaveChanges();
+                    }
+
+                    participantAnswerSheetSection = participantAnswerSheet.ParticipantAnswerSheetSections
+                            .Where(x => !x.IsFinish)
+                            .FirstOrDefault();
+
+                    if(participantAnswerSheetSection == null)
+                    {
+                        participantAnswerSheet.IsFinish = true;
+                        _db.ParticipantAnswerSheets.Update(participantAnswerSheet);
+
+                        participantAnswerSheet.Participant.FinishedAt = new DateTime();
+                        _db.Participants.Update(participantAnswerSheet.Participant);
+
+                        _db.SaveChanges();
+                    }
+
+                    return Json(new { success = true, message = "Data berhasil disimpan" });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Data tidak ditemukan" });
+                }
+
             }
             catch (Exception ex)
             {

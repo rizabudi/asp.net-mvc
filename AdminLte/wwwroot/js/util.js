@@ -8,6 +8,26 @@
                 type: type, //GET or POST
                 dataType: dataType, //html or json
                 processData: true,
+                data: data,
+                url: url,
+                statusCode: processResponse(successCallback, failureCallback),
+                complete: function () {
+                }
+            });
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    scope.requestJson = function (url, type, dataType, successCallback, failureCallback, data) {
+        try {
+            if (data === undefined || data === null) {
+                data = {};
+            }
+            $.ajax({
+                type: type, //GET or POST
+                dataType: dataType, //html or json
+                processData: true,
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -22,6 +42,7 @@
             console.error(e)
         }
     }
+
 
     scope.alert = function (msg) {
         $.notify(msg);

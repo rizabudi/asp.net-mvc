@@ -1,12 +1,14 @@
 var SurveyParticipantDetail = /** @class */ (function () {
     function SurveyParticipantDetail() {
         this.urlSave = '/survey-participant/save';
+        this.urlFinish = '/survey-participant/finish';
         this.init();
     }
     SurveyParticipantDetail.prototype.init = function () {
         var _this = this;
         try {
-            $(document).on("click", ".btn-edit", function (e) {
+            $(document).on("click", "#finish-section", function (e) {
+                _this.finish();
             });
 
             $(document).on("change", ".select-sequence", function (e) {
@@ -65,6 +67,12 @@ var SurveyParticipantDetail = /** @class */ (function () {
                     }
                     values.push(subElem.val());
                 })
+                $(".select-simple").each(function () {
+                    var subElem = $(this);
+                    if (subElem.val() == "") {
+                        error += "Respon baris ke " + subElem.data("sequence") + " belum diisi<br/>";
+                    }
+                })
 
                 if (error != "") {
                     Util.error(error)
@@ -77,10 +85,10 @@ var SurveyParticipantDetail = /** @class */ (function () {
                     total += parseInt(subElem.val());
                 })
 
-                //if (total != 25) {
-                //    Util.error("Total nilai harus 25")
-                //    return false;
-                //}
+                if (values.length > 0 && total != 25) {
+                    Util.error("Total nilai harus 25")
+                    return false;
+                }
 
                 error = "";
                 for (var i = 0; i < ranks.length; i++) {
@@ -117,7 +125,7 @@ var SurveyParticipantDetail = /** @class */ (function () {
         try {
             var data = this.create();
             console.log(data);
-            Util.request(this.urlSave, 'post', 'json', function (response) {
+            Util.requestJson(this.urlSave, 'post', 'json', function (response) {
                 if (response != null) {
                     if (response.success) {
                         Util.success(response.message);
@@ -144,6 +152,37 @@ var SurveyParticipantDetail = /** @class */ (function () {
                 }
             }, function () {
             }, JSON.stringify(data));
+        }
+        catch (e) {
+            console.error(e);
+            Util.error(e);
+        }
+    };
+    SurveyParticipantDetail.prototype.finish = function () {
+        var _this = this;
+        try {
+            var data = {
+                ID: parseInt($('#ParticipantAnswerSheet').val())
+            };
+            console.log(data);
+            Util.request(this.urlFinish, 'post', 'json', function (response) {
+                if (response != null) {
+                    if (response.success) {
+                        Util.success(response.message);
+                        setTimeout(function () {
+                            window.location.href = "/survey-participant/detail/" + $('#ParticipantID').val() + "?mode=0";
+                        }, 1000)
+                    }
+                    else {
+                        Util.error(response.message);
+                    }
+                }
+                else {
+                    Util.error('Failed to get data #T7G985. Please try again.');
+                    console.error('Failed to get data #T7G985. Please try again.');
+                }
+            }, function () {
+            }, data);
         }
         catch (e) {
             console.error(e);
@@ -187,6 +226,23 @@ var SurveyParticipantDetail = /** @class */ (function () {
                     QuestionSquence: col,
                     MatrixRowAnswerID: row,
                     NumericalBoxValue: parseFloat(val)
+                });
+            })
+            $(".select-simple").each(function () {
+                var elem = $(this);
+                var row = elem.data("row");
+                var val = elem.val();
+                lines.push({
+                    ParticipantAnswerSheet: {
+                        ID: parseInt($('#ParticipantAnswerSheet').val())
+                    },
+                    Question: {
+                        ID: parseInt($('#Question').val())
+                    },
+                    AnswerType: 1,
+                    QuestionSquence: parseInt(val),
+                    MatrixRowAnswerID: row,
+                    SuggestedAnswerID: parseInt(val)
                 });
             })
             var data = lines;

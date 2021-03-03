@@ -1,19 +1,25 @@
-﻿@{
-    ViewData["Title"] = "Survei Selesai";
+﻿@model int 
+@{
+    ViewData["Title"] = "Mulai Pengisian Survei";
     Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
+
+    int take = (int)ViewData["take"];
 }
 
 <div class="module form-modal">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Survei Telah Selesai</h3>
+            <h3 class="card-title">Pengisian Survei</h3>
             <div class="card-tools">
             </div>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
             <center>
-                <img src="~/img/img_close.gif" style="width:50%" />
+                <img src="~/img/img_open.gif" style="width:50%" />
+                <br />
+                <br />
+                <a href="~/survey-participant/detail/@Model?take=@take" id="close_form" class="btn btn-primary">Mulai Isi Survei</a>
             </center>
         </div>
         <!-- /.card-body -->

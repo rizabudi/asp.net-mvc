@@ -81,15 +81,17 @@
                                         {
                                             @foreach (Question ques in quess)
                                             {
+                                                var active = questionAnswered.Contains(ques) ? "active" : "";
+                                                var disabled = active == "" ? "disabled" : "";
                                                 @if (part != null && part.ID == ques.Section.ID && (questionAnswered.Contains(ques) || isFirst))
                                                 {
-                                                    <li class="paginate_button page-item active">
+                                                    <li class="paginate_button page-item @active">
                                                         <a style="width:45px;padding:0.25rem;text-align:center" href="~/survey-participant/detail/@Model.Participant.ID?mode=1&id=@ques.ID" data-question="@ques.ID" tabindex="0" class="page-link">@ques.Sequence</a>
                                                     </li>
                                                 }
                                                 else
                                                 {
-                                                    <li class="paginate_button page-item disabled">
+                                                    <li class="paginate_button page-item @active @disabled">
                                                         <a style="width:45px;padding:0.25rem;text-align:center" href="#" data-question="@ques.ID" tabindex="0" class="page-link">@ques.Sequence</a>
                                                     </li>
                                                 }
@@ -179,7 +181,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            @if (question.Attachment != "")
+                            @if (question.Attachment != null && question.Attachment != "")
                             {
                                 <img style="width:100%" src="https://app.lp3t.abdil.my.id/uploads/@question.Attachment" />
                                 <br />
@@ -189,7 +191,7 @@
                             <input type="hidden" id="Question" value="@question.ID" />
                             <input type="hidden" id="ParticipantAnswerSheet" value="@Model.ID" />
                             <input type="hidden" id="ParticipantID" value="@participantID" />
-                            @if (questionNext != null && question.Section.ID == question.Section.ID)
+                            @if (questionNext != null && questionNext.Section.ID == question.Section.ID)
                             {
                                 <input type="hidden" id="QuestionNext" value="@questionNext.ID" />
                             }else
@@ -238,11 +240,11 @@
                                         {
                                             @if (question.QuestionType == QuestionType.MATRIX && question.MatrixSubType == MatrixSubType.CUSTOM)
                                             {
-                                                <th style="width:85px;text-align:center">@qa.Value</th>
+                                                <th style="width:100px;text-align:center">@qa.Value</th>
                                             }
                                             else if (question.QuestionType == QuestionType.MATRIX && question.MatrixSubType == MatrixSubType.SIMPLE)
                                             {
-                                                <th style="width:225px;text-align:center">Respon</th>
+                                                <th style="width:250px;text-align:center">Respon</th>
                                                 break;
                                             }
                                         }
@@ -294,12 +296,25 @@
                                             }
                                             else if (question.QuestionType == QuestionType.MATRIX && question.MatrixSubType == MatrixSubType.SIMPLE)
                                             {
+                                                var answer = answers.Where(x => x.MatrixRowAnswerID == qa.ID).FirstOrDefault();
+                                                var sugestionID = 0;
+                                                if(answer != null)
+                                                {
+                                                    sugestionID = answer.SuggestedAnswerID;
+                                                }
                                                 <td>
-                                                    <select class="form-control">
+                                                    <select id="sequence_@qa.ID" name="sequence_@qa.ID" data-row="@qa.ID" data-sequence="@qa.Sequence" class="select-simple form-control">
                                                         <option value=""></option>
                                                         @foreach (QuestionAnswer qa1 in questionAnswer.OrderBy(x => x.Sequence))
                                                         {
-                                                            <option value="@qa1.Value">@qa1.Value</option>
+                                                            if (qa1.ID == sugestionID)
+                                                            {
+                                                                <option value="@qa1.ID" selected>@qa1.Value</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@qa1.ID">@qa1.Value</option>
+                                                            }
                                                         }
                                                     </select>
                                                 </td>
@@ -334,7 +349,49 @@
 
     @if(mode == 3)
     {
+        <div class="col-md-12">
+            <div class="module form-modal">
+                <div class="card">
+                    @if (part == null)
+                    {
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Data Tidak Ditemukan
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <h2>Data Tidak Ditemukan</h2>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>Bagian @part.Sequence Selesai</span>
+                            </h3>
+                            <div class="card-tools">
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
 
+                            <input type="hidden" id="ParticipantID" value="@participantID" />
+                            <input type="hidden" id="ParticipantAnswerSheet" value="@Model.ID" />
+
+                            Bagian @part.Sequence telah selesai. <br />
+                            Anda dapat melakukan review kembali terhadap respon-respon anda di Bagian ini sebelum melanjutkan ke Bagian selanjutnya.
+
+                            <br />
+                            <br />
+                            <a href="~/survey-participant/detail/@Model.Participant.ID?mode=1&id=0" id="close_form" class="btn btn-default"><i class="fa fa-sync"></i>&nbsp;Review Kembali</a>
+                            <button id="finish-section" class="btn btn-primary">Lanjutkan Ke Bagian Selanjutnya&nbsp;<i class="fa fa-step-forward"></i></button>
+                            <br />
+                        </div>
+                        <!-- /.card-body -->
+                    }
+                </div>
+            </div>
+        </div>
     }
 
     @if (question != null && mode == 1)

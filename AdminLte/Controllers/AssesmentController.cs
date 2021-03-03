@@ -21,7 +21,7 @@ namespace AdminLte.Controllers
         public async Task<IActionResult> GetAll(int page = 1)
         {
             try
-            {
+            { 
                 var data = await _db.Assesments
                     .OrderBy(x=>x.Name)
                     .Skip((page-1)*10)
