@@ -18,7 +18,7 @@ namespace AdminLte.Controllers
         }
 
         [HttpGet("participant/table-data-view")]
-        public async Task<IActionResult> GetAll(int page = 1, int scheduleID = 0)
+        public async Task<IActionResult> GetAll(int page = 1, int scheduleID = 0, int finish = 0)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace AdminLte.Controllers
                     .Include(x => x.ParticipantUser.Department)
                     .Include(x => x.QuestionPackage)
                     .Include(x => x.QuestionPackage.Assesment)
-                    .Where(x => x.Schedule.ID == scheduleID)
+                    .Where(x => x.Schedule.ID == scheduleID && (finish == 1 ? x.FinishedAt != null : (finish == 2 ? x.StartedAt != null && x.FinishedAt == null : true)))
                     .OrderBy(x=>x.ParticipantUser.Name)
                     .Skip((page-1)*10)
                     .Take(10)
@@ -55,7 +55,8 @@ namespace AdminLte.Controllers
                             "Departemen : " + row.ParticipantUser.Department.Name,
                             row.QuestionPackage.Assesment.Name + " - " + row.QuestionPackage.Name,
                             row.IsCanRetake ? "Iya, " + row.MaxRetake + " Kali" : "Tidak",
-                            ""
+                            row.StartedAt != null ? "HTML:Mulai : " + row.StartedAt.Value.ToString("yyyy-MM-dd HH:mm") + "<br/>" +
+                            (row.FinishedAt != null ? "Selesai : " + row.FinishedAt.Value.ToString("yyyy-MM-dd HH:mm") : "") : ""
                         }
                     });
                 }
@@ -73,11 +74,12 @@ namespace AdminLte.Controllers
         }
 
         [HttpGet("participant/table-paging-view")]
-        public IActionResult GetPaging(int page = 1)
+        public IActionResult GetPaging(int page = 1, int scheduleID = 0, int finish = 0)
         {
             try
             {
-                var total = _db.Participants.Count();
+                var total = _db.Participants
+                    .Where(x => x.Schedule.ID == scheduleID && (finish == 1 ? x.FinishedAt != null : (finish == 2 ? x.StartedAt != null && x.FinishedAt == null : true))).Count();
                 ViewData["Total"] = total;
                 ViewData["Page"] = page;
 
@@ -152,7 +154,7 @@ namespace AdminLte.Controllers
 
         [HttpGet("participant")]
         [Route("participant/{scheduleID:int}")]
-        public async Task<IActionResult> IndexAsync(int scheduleID)
+        public async Task<IActionResult> IndexAsync(int scheduleID, int finish = 0)
         {
             var schedule = await _db.Schedules.FirstOrDefaultAsync(x => x.ID == scheduleID);
 
@@ -160,8 +162,17 @@ namespace AdminLte.Controllers
             {
                 return Redirect("/home/errors/404");
             }
-
             ViewData["Title"] = "Daftar Peserta | " + schedule.Name;
+            if (finish == 1)
+            {
+                ViewData["Title"] = "Daftar Peserta Selesai | " + schedule.Name;
+            }
+            else if (finish == 2)
+            {
+                ViewData["Title"] = "Daftar Peserta Belum Selesai | " + schedule.Name;
+            }
+
+            ViewData["Title"] = "Daftar Peserta " + (finish == 1 ? "Selesai" : "") + " | " + schedule.Name;
 
             List<ColumnModel> ColumnModels = new List<ColumnModel>();
             ColumnModels.Add(new ColumnModel { Label = "Peserta", Name = "ParticipantUser", Style = "width: 35%; min-width: 350px" });
@@ -174,6 +185,11 @@ namespace AdminLte.Controllers
             ViewData["Values"] = new Dictionary<string, string>()
             {
                 {"Schedule", scheduleID.ToString()},
+                {"Finish", finish.ToString()}
+            };
+            ViewData["BreadCrump"] = new Dictionary<string, string>()
+            {
+                {"Penjadwalan Peserta", "/schedule"}
             };
 
             return View("~/Views/Shared/_Index.cshtml");

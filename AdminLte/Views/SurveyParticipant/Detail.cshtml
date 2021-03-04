@@ -251,7 +251,7 @@
                                     </tr>
                                 </thead>
                                 @{ var no = 1; }
-                                @foreach (QuestionAnswer qa in questionAnswerMatrix.OrderBy(x => x.Sequence))
+                                @foreach (QuestionAnswer qa in questionAnswerMatrix.OrderBy(x => question.IsRandomAnswer ? new Random().Next() : x.Sequence))
                                 {
                                     <tbody>
                                         <tr>
@@ -271,11 +271,11 @@
                                                     <td>
                                                         @if (qa1.MatrixValue == MatrixValueType.NUMERICAL_BOX)
                                                         {
-                                                            <input data-sequence="@qa.Sequence" data-col="@qa1.ID" data-row="@qa.ID" id="numerical_@elemID" name="numerical_@elemID" style="text-align:center" value="@numericalValue" type="number" class="numerical-box numerical-box-@qa1.ID form-control" />
+                                                            <input data-sequence="@no" data-col="@qa1.ID" data-row="@qa.ID" id="numerical_@elemID" name="numerical_@elemID" style="text-align:center" value="@numericalValue" type="number" class="numerical-box numerical-box-@qa1.ID form-control" />
                                                         }
                                                         else if (qa.MatrixValue == MatrixValueType.SEQUENCE)
                                                         {  
-                                                            <select data-sequence="@qa.Sequence" data-col="@qa1.ID" data-row="@qa.ID" id="sequence_@elemID" name="sequence_@elemID" class="select-sequence select-sequence-@qa1.ID form-control">
+                                                            <select data-sequence="@no" data-col="@qa1.ID" data-row="@qa.ID" id="sequence_@elemID" name="sequence_@elemID" class="select-sequence select-sequence-@qa1.ID form-control">
                                                                 <option value=""></option>
                                                                 @for(int i = 1; i <= 5; i++)
                                                                 {
@@ -303,7 +303,7 @@
                                                     sugestionID = answer.SuggestedAnswerID;
                                                 }
                                                 <td>
-                                                    <select id="sequence_@qa.ID" name="sequence_@qa.ID" data-row="@qa.ID" data-sequence="@qa.Sequence" class="select-simple form-control">
+                                                    <select id="sequence_@qa.ID" name="sequence_@qa.ID" data-row="@qa.ID" data-sequence="@no" class="select-simple form-control">
                                                         <option value=""></option>
                                                         @foreach (QuestionAnswer qa1 in questionAnswer.OrderBy(x => x.Sequence))
                                                         {

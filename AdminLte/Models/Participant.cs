@@ -33,6 +33,8 @@ namespace AdminLte.Models
         public ParticipantAnswerSheetEnum State { get; set; }
         public string Data { get; set; }
         public bool IsFinish { get; set; }
+        public DateTime? StartedAt { get; set; }
+        public DateTime? FinishedAt { get; set; }
         public virtual ICollection<ParticipantAnswerSheetSection> ParticipantAnswerSheetSections { get; set; }
 
     }
@@ -63,6 +65,7 @@ namespace AdminLte.Models
         public float AnswerWeight { get; set; }
         public float AnswerScore { get; set; }
         public Question Question { get; set; }
+        public DateTime? SubmitAt { get; set; }
     }
 
     public class ParticipantSectionScore

@@ -257,14 +257,21 @@ namespace AdminLte.Controllers
                     {
                         participantAnswerSheetLine.Question = question;
                         participantAnswerSheetLine.ParticipantAnswerSheet = participantAnswerSheet;
+                        participantAnswerSheetLine.SubmitAt = DateTime.Now;
 
                         _db.ParticipantAnswerSheetLines.Add(participantAnswerSheetLine);
                     }
 
                     if(participantAnswerSheet.Participant.StartedAt == null)
                     {
-                        participantAnswerSheet.Participant.StartedAt = new DateTime();
+                        participantAnswerSheet.Participant.StartedAt = DateTime.Now;
                         _db.Participants.Update(participantAnswerSheet.Participant);
+                    }
+
+                    if (participantAnswerSheet.StartedAt == null)
+                    {
+                        participantAnswerSheet.StartedAt = DateTime.Now;
+                        _db.ParticipantAnswerSheets.Update(participantAnswerSheet);
                     }
                 }
 
@@ -310,9 +317,10 @@ namespace AdminLte.Controllers
                     if(participantAnswerSheetSection == null)
                     {
                         participantAnswerSheet.IsFinish = true;
+                        participantAnswerSheet.FinishedAt = DateTime.Now;
                         _db.ParticipantAnswerSheets.Update(participantAnswerSheet);
 
-                        participantAnswerSheet.Participant.FinishedAt = new DateTime();
+                        participantAnswerSheet.Participant.FinishedAt = DateTime.Now;
                         _db.Participants.Update(participantAnswerSheet.Participant);
 
                         _db.SaveChanges();

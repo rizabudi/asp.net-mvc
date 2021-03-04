@@ -37,6 +37,8 @@ namespace AdminLte.Controllers
                 foreach(var row in data)
                 {
                     var participants = row.Participants.Count();
+                    var participantsFinish = row.Participants.Where(x=>x.FinishedAt != null).Count();
+                    var participantsUnFinish = row.Participants.Where(x => x.StartedAt != null && x.FinishedAt == null).Count();
                     rows.Add(new RowModel { 
                         ID = row.ID, 
                         Value = new string[] { 
@@ -46,7 +48,9 @@ namespace AdminLte.Controllers
                             "HTML:Periode : " + row.Period.Name +  " (" + row.Period.Start.ToString("yyyy-MM-dd") + " s/d " + row.Period.End.ToString("yyyy-MM-dd") + ")" +
                             (row.SubPeriod != null ? "<br/>Sub Periode : " + row.SubPeriod.Name +  " (" + row.SubPeriod.Start.ToString("yyyy-MM-dd") + " s/d " + row.SubPeriod.End.ToString("yyyy-MM-dd") + ")" : ""),
                             row.Start.ToString("yyyy-MM-dd") + " s/d " + row.End.ToString("yyyy-MM-dd"),
-                            "HTML:<a href='/participant/" + row.ID + "'>" + participants + " Peserta</a>"
+                            "HTML:<a href='/participant/" + row.ID + "'>" + participants + " Peserta</a>",
+                            "HTML:<a href='/participant/" + row.ID + "?finish=1'>" + participantsFinish + " Peserta</a>",
+                            "HTML:<a href='/participant/" + row.ID + "?finish=2'>" + participantsUnFinish + " Peserta</a>"
                         }
                     });
                 }
@@ -148,6 +152,8 @@ namespace AdminLte.Controllers
             ColumnModels.Add(new ColumnModel { Label = "Periode", Name = "Period" });
             ColumnModels.Add(new ColumnModel { Label = "Tanggal Mulai & Selesai", Name = "Date" });
             ColumnModels.Add(new ColumnModel { Label = "Daftar Peserta", Name = "Participants" });
+            ColumnModels.Add(new ColumnModel { Label = "Peserta Selesai", Name = "ParticipantsFinished" });
+            ColumnModels.Add(new ColumnModel { Label = "Peserta Belum Selesai", Name = "ParticipantsUnFinished" });
 
             ViewData["Columns"] = ColumnModels;
             ViewData["Script"] = "schedule.js";
