@@ -13,30 +13,42 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            @foreach(Participant participant in Model)
-            {
-                <div class="col-md-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <b>@participant.QuestionPackage.Assesment.Name - @participant.QuestionPackage.Name</b><br />
-                            Entitas : @participant.Schedule.Entity.Name<br/>
-                            Jadwal : @participant.Schedule.Name (@participant.Schedule.Start.ToString("yyyy-MM-dd") s/d @participant.Schedule.End.ToString("yyyy-MM-dd"))
-                        </div>
-                        <div class="card-footer"> 
-                            @if (participant.FinishedAt == null || participant.ParticipantAnswerSheets.Where(x=>!x.IsFinish).Count() > 0)
-                            { 
-                                <a href="~/survey-participant/start/@participant.ID?take=1" style="color:white" class="btn btn-primary">Mulai Survei</a>
-                            }
-                            else if (participant.IsCanRetake && participant.MaxRetake >= participant.ParticipantAnswerSheets.Count())
-                            {
-                                <a href="~/survey-participant/start/@participant.ID?take=1" style="color:white" class="btn btn-primary">Isi Ulang Survei</a>
-                            }
+            <div class="row">
+                @foreach (Participant participant in Model)
+                {
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <b>@participant.QuestionPackage.Assesment.Name - @participant.QuestionPackage.Name</b><br />
+                                Entitas : @participant.Schedule.Entity.Name<br />
+                                Jadwal : @participant.Schedule.Name (@participant.Schedule.Start.ToString("yyyy-MM-dd") s/d @participant.Schedule.End.ToString("yyyy-MM-dd"))
+                            </div>
+                            <div class="card-footer">
+                                @if (participant.FinishedAt == null || participant.ParticipantAnswerSheets.Where(x => !x.IsFinish).Count() > 0)
+                                {
+                                    if (participant.StartedAt == null)
+                                    {
+                                        <a href="~/survey-participant/start/@participant.ID?take=1" style="color:white" class="btn btn-primary">Mulai Survei</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="~/survey-participant/start/@participant.ID?take=1" style="color:white" class="btn btn-primary">Lanjutkan Survei</a>
+                                    }
+                                }
+                                else if (participant.IsCanRetake && participant.MaxRetake >= participant.ParticipantAnswerSheets.Count())
+                                {
+                                    <a href="~/survey-participant/start/@participant.ID?take=1" style="color:white" class="btn btn-primary">Isi Ulang Survei</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-default">Survei Telah Selesai</a>
+                                }
+                            </div>
                         </div>
                     </div>
-                    
-                </div>
                 }
             </div>
         <!-- /.card-body -->
+        </div>
     </div>
 </div>

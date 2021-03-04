@@ -2,16 +2,19 @@
     int Total = (int)ViewData["Total"];
     int Page = (int)ViewData["Page"];
 
+    int Size = 10;
+
     int Start = (Page - 1) * 10 + 1;
     int End = (Start + 10) > Total ? Total : (Start - 1 + 10);
 
     var Pages = new List<int>();
+    var Temp = Page;
     var MaxPage = Math.Ceiling(Total / 10.0);
-    if (Page % 10 == 0 && Page > 0)
+    if (Temp % Size == 0 && Temp > 0)
     {
-        Page = Page - 1;
+        Temp = Temp - 1;
     }
-    for (var i = (Page - (Page % 10) + 1); i <= MaxPage && i <= (Page - (Page % 10) + 10); i++)
+    for (var i = (Temp - (Temp % Size) + 1); i <= MaxPage && i <= (Temp - (Temp % Size) + Size); i++)
     {
         Pages.Add(i);
     }
@@ -21,13 +24,13 @@
     }
 
     var DisablePrevious = "";
-    if(Page <= 10)
+    if(Pages.First() == MaxPage)
     {
         DisablePrevious = "disabled";
     }
 
     var DisableNext = "";
-    if ((Total - (Pages.Last() * 10)) < 10 || (Total - (Pages.Last() * 10)) % 10 != 0)
+    if ((Total - (Pages.Last() * 10)) < 10)
     {
         DisableNext = "disabled";
     }
@@ -52,7 +55,10 @@
                 </li>
             }
             <li class="paginate_button page-item next @DisableNext" id="example2_next">
-                <a href="#" aria-controls="example2" data-dt-idx="@Pages.Last()+1" tabindex="0" class="page-link">Next</a>
+                @{
+                    var nextPage = Pages.Last() + 1;
+                }
+                <a href="#" aria-controls="example2" data-dt-idx="@nextPage" tabindex="0" class="page-link">Next</a>
             </li>
         </ul>
     </div>

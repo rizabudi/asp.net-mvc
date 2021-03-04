@@ -62,7 +62,7 @@ var SurveyParticipantDetail = /** @class */ (function () {
                 })
                 $(".numerical-box").each(function () {
                     var subElem = $(this);
-                    if (subElem.val() == "") {
+                    if (subElem.val() == "" || subElem.val() == "0") {
                         error += "Nilai baris ke " + subElem.data("sequence") + " belum diisi<br/>";
                     }
                     values.push(subElem.val());

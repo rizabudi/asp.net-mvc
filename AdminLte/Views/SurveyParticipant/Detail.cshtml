@@ -271,7 +271,7 @@
                                                     <td>
                                                         @if (qa1.MatrixValue == MatrixValueType.NUMERICAL_BOX)
                                                         {
-                                                            <input data-sequence="@no" data-col="@qa1.ID" data-row="@qa.ID" id="numerical_@elemID" name="numerical_@elemID" style="text-align:center" value="@numericalValue" type="number" class="numerical-box numerical-box-@qa1.ID form-control" />
+                                                            <input data-sequence="@no" data-col="@qa1.ID" data-row="@qa.ID" id="numerical_@elemID" name="numerical_@elemID" style="text-align:center" value="@numericalValue" type="number" min="0" max="21" class="numerical-box numerical-box-@qa1.ID form-control" />
                                                         }
                                                         else if (qa.MatrixValue == MatrixValueType.SEQUENCE)
                                                         {  
