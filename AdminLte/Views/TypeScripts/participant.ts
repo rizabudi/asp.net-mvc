@@ -56,7 +56,7 @@
                 console.error('Failed to get data. Please try again');
                 Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page, 'GET', 'html', (response) => {
+            Util.request(this.urlGetPaging + "?page=" + page + "&scheduleID=" + $("#Schedule").val(), 'GET', 'html', (response) => {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
