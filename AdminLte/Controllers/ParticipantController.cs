@@ -35,7 +35,7 @@ namespace AdminLte.Controllers
                     .Include(x => x.ParticipantUser.Department)
                     .Include(x => x.QuestionPackage)
                     .Include(x => x.QuestionPackage.Assesment)
-                    .Where(x => x.Schedule.ID == scheduleID && (finish == 1 ? x.FinishedAt != null : (finish == 2 ? x.StartedAt != null && x.FinishedAt == null : true)))
+                    .Where(x => x.Schedule.ID == scheduleID && (finish == 1 ? x.FinishedAt != null : (finish == 2 ? x.StartedAt != null && x.FinishedAt == null : (finish == 3 ? x.StartedAt == null && x.FinishedAt == null : true))))
                     .OrderBy(x=>x.ParticipantUser.Name)
                     .Skip((page-1)*10)
                     .Take(10)
@@ -81,7 +81,7 @@ namespace AdminLte.Controllers
             try
             {
                 var total = _db.Participants
-                    .Where(x => x.Schedule.ID == scheduleID && (finish == 1 ? x.FinishedAt != null : (finish == 2 ? x.StartedAt != null && x.FinishedAt == null : true))).Count();
+                    .Where(x => x.Schedule.ID == scheduleID && (finish == 1 ? x.FinishedAt != null : (finish == 2 ? x.StartedAt != null && x.FinishedAt == null : (finish == 3 ? x.StartedAt == null && x.FinishedAt == null : true)))).Count();
                 ViewData["Total"] = total;
                 ViewData["Page"] = page;
 
@@ -172,6 +172,10 @@ namespace AdminLte.Controllers
             else if (finish == 2)
             {
                 ViewData["Title"] = "Daftar Peserta Belum Selesai | " + schedule.Name;
+            }
+            else if (finish == 3)
+            {
+                ViewData["Title"] = "Daftar Peserta Belum Mengerjakan | " + schedule.Name;
             }
 
             ViewData["Title"] = "Daftar Peserta " + (finish == 1 ? "Selesai" : "") + " | " + schedule.Name;
