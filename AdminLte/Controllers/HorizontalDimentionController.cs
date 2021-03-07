@@ -1,5 +1,6 @@
 ﻿using AdminLte.Data;
 using AdminLte.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace AdminLte.Controllers
 {
+    [Authorize(Roles = "Pengguna Khusus")]
     public class HorizontalDimentionController : Controller
     {
         private readonly PostgreDbContext _db;

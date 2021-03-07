@@ -1,5 +1,6 @@
 ﻿using AdminLte.Data;
 using AdminLte.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace AdminLte.Controllers
 {
+    [Authorize(Roles = "Pengguna Khusus")]
     public class ParticipantController : Controller
     {
         private readonly PostgreDbContext _db;
@@ -49,10 +51,10 @@ namespace AdminLte.Controllers
                         {
                             "HTML:<b>" + row.ParticipantUser.EmployeeNumber + " - " + row.ParticipantUser.Name + "</b><br/>" +
                             "Entitas : " + row.ParticipantUser.Entity.Name + "<br/>" +
-                            "Posisi : " + row.ParticipantUser.Position.Name + "<br/>" +
-                            "Fungsi : " + row.ParticipantUser.CompanyFunction.Name + "<br/>" +
-                            "Divisi : " + row.ParticipantUser.Divition.Name + "<br/>" +
-                            "Departemen : " + row.ParticipantUser.Department.Name,
+                            "Posisi : " + (row.ParticipantUser.Position == null ? "-" : row.ParticipantUser.Position.Name) + "<br/>" +
+                            "Fungsi : " + (row.ParticipantUser.CompanyFunction == null ? "-" : row.ParticipantUser.CompanyFunction.Name) + "<br/>" +
+                            "Divisi : " + (row.ParticipantUser.Divition == null ? "-" : row.ParticipantUser.Divition.Name) + "<br/>" +
+                            "Departemen : " + (row.ParticipantUser.Department == null ? "-" : row.ParticipantUser.Department.Name),
                             row.QuestionPackage.Assesment.Name + " - " + row.QuestionPackage.Name,
                             row.IsCanRetake ? "Iya, " + row.MaxRetake + " Kali" : "Tidak",
                             row.StartedAt != null ? "HTML:Mulai : " + row.StartedAt.Value.ToString("yyyy-MM-dd HH:mm") + "<br/>" +
@@ -256,6 +258,32 @@ namespace AdminLte.Controllers
                 Console.WriteLine(ex.Message);
                 return Json(new { success = false, message = "Terjadi kesalahan. Err : " + ex.Message });
             }
+        }
+
+        public async Task<IActionResult> ReportAsync(int id)
+        {
+            var participantAnswerSheet = _db.ParticipantAnswerSheets
+                .Where(x => x.Participant.ID == id && x.IsFinish)
+                .OrderByDescending(x=>x.FinishedAt)
+                .LastOrDefault();
+
+            if(participantAnswerSheet == null)
+            {
+                return View();
+            }
+
+            var answers = await _db.ParticipantAnswerSheetLines
+                .Include(x=>x.Question)
+                .ThenInclude(x=>x.Section)
+                .Where(x => x.ParticipantAnswerSheet.ID == participantAnswerSheet.ID)
+                .ToListAsync();
+
+            var sections = answers.Select(x => x.Question.Section);
+            foreach(Section section in sections)
+            {
+            }
+
+            return View();
         }
     }
 }

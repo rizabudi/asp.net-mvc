@@ -9,16 +9,22 @@
         { "Nama Karyawan", Model.Name },
         { "Email", Model.Email },
         { "No Telp", Model.Phone },
-        { "Username", Model.User.UserName },
+        //{ "Username", Model.User.UserName },
     };
     var forms2 = new Dictionary<string, string>
     {
         { "Entitas", Model.Entity.Name },
-        { "Posisi", Model.Position.Name },
-        { "Fungsi", Model.CompanyFunction.Name },
-        { "Divisi", Model.Divition.Name },
-        { "Departemen", Model.Department.Name },
+        { "Posisi", Model.Position == null ? "-" : Model.Position.Name },
+        { "Fungsi", Model.CompanyFunction == null ? "-" : Model.CompanyFunction.Name },
+        { "Divisi", Model.Divition == null ? "-" : Model.Divition.Name },
+        { "Departemen", Model.Department == null ? "-" : Model.Department.Name },
     };
+
+    var isEdit = (bool)ViewData["IsEdit"] ? "1" : "0";
+}
+
+@section scripts {
+    <script src="~/Views/TypeScripts/profile.js"></script>
 }
 
 <div class="module form-modal">
@@ -31,6 +37,7 @@
         <!-- /.card-header -->
         <div class="card-body">
             <form class="form-horizontal row col-md-12">
+                <input type="hidden" id="IsEdit" value="@isEdit"/>
                 <div class="col-md-6">
                     @foreach (string key in forms1.Keys)
                     {
@@ -56,5 +63,31 @@
             </form>
         </div>
         <!-- /.card-body -->
+        <div class="card-footer">
+            <button id="edit" type="button" class="btn btn-primary">Perbarui Profil</button>
+        </div>
     </div>
 </div>
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Tambah Data</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button id="close_form" type="button" class="btn btn-default">Close</button>
+                <button id="save_form" type="button" class="btn btn-primary">Simpan</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

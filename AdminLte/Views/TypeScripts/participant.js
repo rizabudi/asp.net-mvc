@@ -48,14 +48,14 @@ var Participant = /** @class */ (function () {
     };
     Participant.prototype.initTable = function (page) {
         try {
-            Util.request(this.urlGetData + "?page=" + page + "&scheduleID=" + $("#Schedule").val(), 'GET', 'html', function (response) {
+            Util.request(this.urlGetData + "?page=" + page + "&scheduleID=" + $("#Schedule").val() + "&finish=" + $("#Finish").val(), 'GET', 'html', function (response) {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
                 console.error('Failed to get data. Please try again');
                 Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page + "&scheduleID=" + $("#Schedule").val(), 'GET', 'html', function (response) {
+            Util.request(this.urlGetPaging + "?page=" + page + "&scheduleID=" + $("#Schedule").val() + "&finish=" + $("#Finish").val(), 'GET', 'html', function (response) {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {

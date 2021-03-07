@@ -11,22 +11,25 @@
             var textRequired = "";
             var numberRequired = "";
             var selectRequired = "";
-            if(isRequired)
+            if (isRequired)
             {
                 textRequired = "text-required";
                 numberRequired = "number-required";
                 selectRequired = "select-required";
             }
         }
+        @{
+            var required = FormModel.IsRequired ? " (*)" : "";
+        }
         @if(FormModel.InputType == AdminLte.Models.InputType.WYSIWYG || FormModel.FormPosition == FormPosition.FULL)
         {
             offset1 = "col-md-12";
-            <label for="@FormModel.Name" class="col-sm-12 col-form-label">@FormModel.Label</label>
+            <label for="@FormModel.Name" class="col-sm-12 col-form-label">@FormModel.Label @required</label>
         }
         else if (FormModel.InputType != AdminLte.Models.InputType.YESNO)
         {
             offset = "";
-            <label for="@FormModel.Name" class="col-sm-3 col-form-label">@FormModel.Label</label>
+    <label for="@FormModel.Name" class="col-sm-3 col-form-label">@FormModel.Label @required</label>
         }
         else
         {
@@ -35,7 +38,14 @@
         <div class="@offset @offset1">
             @if (FormModel.InputType == AdminLte.Models.InputType.TEXT)
             {
-                <input type="text" class="form-control @textRequired" data-label="@FormModel.Label" id="@FormModel.Name" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
+                if(FormModel.IsDisable)
+                {
+                    <input type="text" class="form-control @textRequired" data-label="@FormModel.Label" id="@FormModel.Name" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value" readonly>
+                }
+                else
+                {
+                    <input type="text" class="form-control @textRequired" data-label="@FormModel.Label" id="@FormModel.Name" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
+                }
             }
             else @if (FormModel.InputType == AdminLte.Models.InputType.TEXTAREA)
             {

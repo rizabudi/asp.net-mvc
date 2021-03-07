@@ -1,5 +1,6 @@
 ﻿using AdminLte.Data;
 using AdminLte.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace AdminLte.Controllers
 {
+    [Authorize(Roles = "Pengguna Khusus")]
     public class ScheduleController : Controller
     {
         private readonly PostgreDbContext _db;
@@ -39,6 +41,7 @@ namespace AdminLte.Controllers
                     var participants = row.Participants.Count();
                     var participantsFinish = row.Participants.Where(x=>x.FinishedAt != null).Count();
                     var participantsUnFinish = row.Participants.Where(x => x.StartedAt != null && x.FinishedAt == null).Count();
+                    var participantsNotFinish = row.Participants.Where(x => x.StartedAt == null && x.FinishedAt == null).Count();
                     rows.Add(new RowModel { 
                         ID = row.ID, 
                         Value = new string[] { 
@@ -48,9 +51,10 @@ namespace AdminLte.Controllers
                             "HTML:Periode : " + row.Period.Name +  " (" + row.Period.Start.ToString("yyyy-MM-dd") + " s/d " + row.Period.End.ToString("yyyy-MM-dd") + ")" +
                             (row.SubPeriod != null ? "<br/>Sub Periode : " + row.SubPeriod.Name +  " (" + row.SubPeriod.Start.ToString("yyyy-MM-dd") + " s/d " + row.SubPeriod.End.ToString("yyyy-MM-dd") + ")" : ""),
                             row.Start.ToString("yyyy-MM-dd") + " s/d " + row.End.ToString("yyyy-MM-dd"),
-                            "HTML:<a href='/participant/" + row.ID + "'>" + participants + " Peserta</a>",
-                            "HTML:<a href='/participant/" + row.ID + "?finish=1'>" + participantsFinish + " Peserta</a>",
-                            "HTML:<a href='/participant/" + row.ID + "?finish=2'>" + participantsUnFinish + " Peserta</a>"
+                            "HTML:<a href='/participant/" + row.ID + "'><b>" + participants + "</b> <i class='fa fa-sm fa-users'></i></a>",
+                            "HTML:Selesai : <a href='/participant/" + row.ID + "?finish=1'>" + participantsFinish + " <i class='fa fa-sm fa-users'></i></a><br/>" +
+                            "Mengerjakan : <a href='/participant/" + row.ID + "?finish=2'>" + participantsUnFinish + " <i class='fa fa-sm fa-users'></i></a><br/>" +
+                            "Belum Mengerjakan : <a href='/participant/" + row.ID + "?finish=3'>" + participantsNotFinish + " <i class='fa fa-sm fa-users'></i></a>"
                         }
                     });
                 }
@@ -146,14 +150,13 @@ namespace AdminLte.Controllers
         {
             ViewData["Title"] = "Penjadwalan Peserta";
             List<ColumnModel> ColumnModels = new List<ColumnModel>();
-            ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name", Style = "width: 15%; min-width: 200px" });
+            ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name", Style = "width: 15%; min-width: 150px" });
             ColumnModels.Add(new ColumnModel { Label = "Entitas", Name = "Entity" });
             ColumnModels.Add(new ColumnModel { Label = "Jenis Survey", Name = "Name" });
             ColumnModels.Add(new ColumnModel { Label = "Periode", Name = "Period" });
             ColumnModels.Add(new ColumnModel { Label = "Tanggal Mulai & Selesai", Name = "Date" });
             ColumnModels.Add(new ColumnModel { Label = "Daftar Peserta", Name = "Participants" });
-            ColumnModels.Add(new ColumnModel { Label = "Peserta Selesai", Name = "ParticipantsFinished" });
-            ColumnModels.Add(new ColumnModel { Label = "Peserta Belum Selesai", Name = "ParticipantsUnFinished" });
+            ColumnModels.Add(new ColumnModel { Label = "Statistik", Name = "Statistic", Style = "width: 15%; min-width: 225px" });
 
             ViewData["Columns"] = ColumnModels;
             ViewData["Script"] = "schedule.js";

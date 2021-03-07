@@ -55,6 +55,12 @@
     <None Update="Views\TypeScripts\backend-user - Copy.js.map">
       <DependentUpon>backend-user.js.map</DependentUpon>
     </None>
+    <None Update="Views\TypeScripts\profile - Copy.js">
+      <DependentUpon>profile.js</DependentUpon>
+    </None>
+    <None Update="Views\TypeScripts\profile - Copy.js.map">
+      <DependentUpon>profile.js.map</DependentUpon>
+    </None>
     <None Update="Views\TypeScripts\survey - Copy.js.map">
       <DependentUpon>survey.js.map</DependentUpon>
     </None>

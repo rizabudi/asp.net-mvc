@@ -35,5 +35,6 @@ namespace AdminLte.Models
         public Dictionary<string, string> Options { get; set; }
         public FormPosition FormPosition { get; set; } = FormPosition.LEFT;
         public bool IsRequired { get; set; }
+        public bool IsDisable { get; set; }
     }
 }

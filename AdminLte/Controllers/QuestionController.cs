@@ -1,5 +1,6 @@
 ﻿using AdminLte.Data;
 using AdminLte.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace AdminLte.Controllers
 {
+    [Authorize(Roles = "Pengguna Khusus")]
     public class QuestionController : Controller
     {
         private readonly PostgreDbContext _db;

@@ -1,5 +1,6 @@
 ﻿using AdminLte.Data;
 using AdminLte.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace AdminLte.Controllers
 {
+    [Authorize(Roles = "Pengguna Khusus")]
     public class EntityController : Controller
     {
         private readonly PostgreDbContext _db;
@@ -75,10 +77,11 @@ namespace AdminLte.Controllers
                     entityFromDb = await _db.Entities.FirstOrDefaultAsync(e => e.ID == id);
                 }
                 List<FormModel> FormModels = new List<FormModel>();
-                var entities = await _db.Entities
+                var entityList = await _db.Entities
                     .Where(x=>x.ID != id && (id == 0 ? true : x.Level < entityFromDb.Level))
                     .OrderBy(x => x.Name)
-                    .ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+                    .ToListAsync();
+                var entities = Entity.getEntities(entityList, 0, 0);
 
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = entityFromDb == null ? "0" : entityFromDb.ID.ToString() });
                 FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = entityFromDb == null ? "" : entityFromDb.Name, IsRequired = true });

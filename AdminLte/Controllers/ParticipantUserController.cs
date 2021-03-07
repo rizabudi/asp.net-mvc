@@ -1,5 +1,6 @@
 ﻿using AdminLte.Data;
 using AdminLte.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace AdminLte.Controllers
 {
+    [Authorize(Roles = "Pengguna Khusus")]
     public class ParticipantUserController : Controller
     {
         private readonly PostgreDbContext _db;
@@ -110,7 +112,8 @@ namespace AdminLte.Controllers
                         .FirstOrDefaultAsync(e => e.UserId == id);
                 }
 
-                var entities = await _db.Entities.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+                var entityList = await _db.Entities.OrderBy(x => x.Name).ToListAsync();
+                var entities = Entity.getEntities(entityList, 0, 0);
                 var positions = await _db.Position.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
                 var departments = await _db.Departments.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
                 var divitions = await _db.Divitions.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
@@ -122,8 +125,9 @@ namespace AdminLte.Controllers
                 FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.Name, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Email", Name = "Email", InputType = InputType.EMAIL, Value = userFromDb == null ? "" : userFromDb.Email });
                 FormModels.Add(new FormModel { Label = "Telp", Name = "Phone", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.Phone });
+                
                 FormModels.Add(new FormModel { Label = "Entitas", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = userFromDb == null ? "" : userFromDb.Entity.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
-                FormModels.Add(new FormModel { Label = "Posisi", Name = "Position", InputType = InputType.DROPDOWN, Options = positions, Value = userFromDb == null ? "" : userFromDb.Entity.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Posisi", Name = "Position", InputType = InputType.DROPDOWN, Options = positions, Value = userFromDb == null ? "" : userFromDb.Position.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
                 FormModels.Add(new FormModel { Label = "Fungsi", Name = "CompanyFunction", InputType = InputType.DROPDOWN, Options = functions, Value = userFromDb == null ? "" : userFromDb.CompanyFunction.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
                 FormModels.Add(new FormModel { Label = "Divisi", Name = "Divition", InputType = InputType.DROPDOWN, Options = divitions, Value = userFromDb == null ? "" : userFromDb.Divition.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
                 FormModels.Add(new FormModel { Label = "Departemen", Name = "Department", InputType = InputType.DROPDOWN, Options = departments, Value = userFromDb == null ? "" : userFromDb.Department.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
@@ -174,8 +178,11 @@ namespace AdminLte.Controllers
             try
             {
                 ParticipantUser userFromDb = await _db.ParticipantUsers
-                    .Include(x=>x.Entity)
-                    .Include(x=>x.User)
+                    .Include(x => x.Entity)
+                    .Include(x => x.Position)
+                    .Include(x => x.Divition)
+                    .Include(x => x.Department)
+                    .Include(x => x.CompanyFunction)
                     .FirstOrDefaultAsync(e => e.UserId == participantUser.UserId);
 
                 if (userFromDb == null)
@@ -187,10 +194,38 @@ namespace AdminLte.Controllers
                         await _userManager.AddToRoleAsync(user, "Pengguna Umum");
 
                         participantUser.Entity = await _db.Entities.FirstOrDefaultAsync(e => e.ID == participantUser.Entity.ID);
-                        participantUser.Position = await _db.Position.FirstOrDefaultAsync(e => e.ID == participantUser.Position.ID);
-                        participantUser.Divition = await _db.Divitions.FirstOrDefaultAsync(e => e.ID == participantUser.Divition.ID);
-                        participantUser.Department = await _db.Departments.FirstOrDefaultAsync(e => e.ID == participantUser.Department.ID);
-                        participantUser.CompanyFunction = await _db.CompanyFunctions.FirstOrDefaultAsync(e => e.ID == participantUser.CompanyFunction.ID);
+                        if (participantUser.Position != null && participantUser.Position.ID != -1)
+                        {
+                            participantUser.Position = await _db.Position.FirstOrDefaultAsync(e => e.ID == participantUser.Position.ID);
+                        }
+                        else
+                        {
+                            participantUser.Divition = null;
+                        }
+                        if (participantUser.Divition != null && participantUser.Divition.ID != -1)
+                        {
+                            participantUser.Divition = await _db.Divitions.FirstOrDefaultAsync(e => e.ID == participantUser.Divition.ID);
+                        }
+                        else
+                        {
+                            participantUser.Divition = null;
+                        }
+                        if (participantUser.Department != null && participantUser.Department.ID != -1)
+                        {
+                            participantUser.Department = await _db.Departments.FirstOrDefaultAsync(e => e.ID == participantUser.Department.ID);
+                        }
+                        else
+                        {
+                            participantUser.Department = null;
+                        }
+                        if (participantUser.CompanyFunction != null && participantUser.CompanyFunction.ID != -1)
+                        {
+                            participantUser.CompanyFunction = await _db.CompanyFunctions.FirstOrDefaultAsync(e => e.ID == participantUser.CompanyFunction.ID);
+                        }
+                        else
+                        {
+                            participantUser.CompanyFunction = null;
+                        }
 
                         participantUser.User = user;
                         _db.ParticipantUsers.Add(participantUser);
@@ -212,10 +247,38 @@ namespace AdminLte.Controllers
                 else
                 {
                     userFromDb.Entity = await _db.Entities.FirstOrDefaultAsync(e => e.ID == participantUser.Entity.ID);
-                    userFromDb.Position = await _db.Position.FirstOrDefaultAsync(e => e.ID == participantUser.Position.ID);
-                    userFromDb.Divition = await _db.Divitions.FirstOrDefaultAsync(e => e.ID == participantUser.Divition.ID);
-                    userFromDb.Department = await _db.Departments.FirstOrDefaultAsync(e => e.ID == participantUser.Department.ID);
-                    userFromDb.CompanyFunction = await _db.CompanyFunctions.FirstOrDefaultAsync(e => e.ID == participantUser.CompanyFunction.ID);
+                    if (participantUser.Position != null && participantUser.Position.ID != -1)
+                    {
+                        userFromDb.Position = await _db.Position.FirstOrDefaultAsync(e => e.ID == participantUser.Position.ID);
+                    }
+                    else
+                    {
+                        userFromDb.Divition = null;
+                    }
+                    if (participantUser.Divition != null && participantUser.Divition.ID != -1)
+                    {
+                        userFromDb.Divition = await _db.Divitions.FirstOrDefaultAsync(e => e.ID == participantUser.Divition.ID);
+                    }
+                    else
+                    {
+                        userFromDb.Divition = null;
+                    }
+                    if (participantUser.Department != null && participantUser.Department.ID != -1)
+                    {
+                        userFromDb.Department = await _db.Departments.FirstOrDefaultAsync(e => e.ID == participantUser.Department.ID);
+                    }
+                    else
+                    {
+                        userFromDb.Department = null;
+                    }
+                    if (participantUser.CompanyFunction != null && participantUser.CompanyFunction.ID != -1)
+                    {
+                        userFromDb.CompanyFunction = await _db.CompanyFunctions.FirstOrDefaultAsync(e => e.ID == participantUser.CompanyFunction.ID);
+                    }
+                    else
+                    {
+                        userFromDb.CompanyFunction = null;
+                    }
 
                     if (participantUser.User.PasswordHash != null)
                     {

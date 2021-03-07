@@ -10,8 +10,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using AdminLte.Models;
+using AdminLte.Data;
 
 namespace AdminLte.Areas.Identity.Pages.Account
 {
@@ -21,14 +23,17 @@ namespace AdminLte.Areas.Identity.Pages.Account
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly PostgreDbContext _db;
 
         public LoginModel(SignInManager<User> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            PostgreDbContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _db = db;
         }
 
         [BindProperty]
@@ -82,7 +87,14 @@ namespace AdminLte.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var user = await _userManager.GetUserAsync(User);
+                    var participantUser = await _db.ParticipantUsers.Include(x=>x.User).FirstOrDefaultAsync(x => x.User.UserName == Input.Username);
                     _logger.LogInformation("User logged in.");
+
+                    if(participantUser != null)
+                    {
+                        return LocalRedirect(Url.Content("~/profile?isEdit=true"));
+                    }
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

@@ -52,21 +52,21 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     @*<li class="nav-item ">
-                        <a asp-controller="Home" asp-action="Privacy" class="nav-link @Url.MakeActiveClass("home","privacy")">
-                            <i class="nav-icon fas fa-lock"></i>
-                            <p>
-                                Privacy
-                            </p>
-                        </a>
-                    </li>
-                    <li class="nav-item ">
-                        <a asp-controller="Employee" asp-action="Index" class="nav-link @Url.MakeActiveClass("employee","index")">
-                            <i class="nav-icon fas fa-users"></i>
-                            <p>
-                                Employees
-                            </p>
-                        </a>
-                    </li>*@
+                            <a asp-controller="Home" asp-action="Privacy" class="nav-link @Url.MakeActiveClass("home","privacy")">
+                                <i class="nav-icon fas fa-lock"></i>
+                                <p>
+                                    Privacy
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a asp-controller="Employee" asp-action="Index" class="nav-link @Url.MakeActiveClass("employee","index")">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    Employees
+                                </p>
+                            </a>
+                        </li>*@
 
                     @if (User.IsInRole("Pengguna Khusus"))
                     {
@@ -227,6 +227,21 @@
                             </a>
                         </li>
                     }
+                    <li class="nav-item">
+                        <a style="cursor:pointer" id="logout" class="nav-link">
+                            <i class="fas fa-sign-out-alt nav-icon"></i>
+                            <p>Logout</p>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a asp-area="Identity" asp-page="/Account/Login" class="nav-link">
+                            <i class="fas fa-sign-in-alt nav-icon"></i>
+                            <p>Login</p>
+                        </a>
+                    </li>
                 }
 
             </ul>
