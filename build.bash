@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-#export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1001/bus
-systemctl  stop adminlte
+systemctl stop adminlte
+sleep 5
 rm -rf AdminLte/{obj,bin}
-#unlink dist/wwwroot/uploads
 rm -rf dist
 pushd AdminLte
 dotnet publish --configuration Release
@@ -13,4 +12,4 @@ cp -r AdminLte/bin/Release/netcoreapp3.1/publish dist
 cp -r AdminLte/Views dist/
 rm -rf dist/wwwroot/uploads
 ln -s /srv/uploads dist/wwwroot/uploads
-systemctl  start adminlte
+systemctl start adminlte
