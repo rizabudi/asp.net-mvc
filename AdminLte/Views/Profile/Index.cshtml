@@ -9,11 +9,15 @@
         { "Nama Karyawan", Model.Name },
         { "Email", Model.Email },
         { "No Telp", Model.Phone },
+        { "Jenis Kelamin", Model.Sex ? "Laki-laki" : "Perempuan" },
+        { "Tanggal Lahir", Model.BirthDate == null ? "-" : Model.BirthDate.Value.ToString("yyyy-MM-dd") },
+        { "Durasi Kerja", (Model.WorkDuration == null ? "0" : "1") + " Tahun" },
         //{ "Username", Model.User.UserName },
     };
     var forms2 = new Dictionary<string, string>
     {
-        { "Entitas", Model.Entity.Name },
+        { "Entitas", Model.Entity == null ? "-" : Model.Entity.Name },
+        { "Level Jabatan", Model.JobLevel == null ? "-" : Model.JobLevel.Name },
         { "Posisi", Model.Position == null ? "-" : Model.Position.Name },
         { "Fungsi", Model.CompanyFunction == null ? "-" : Model.CompanyFunction.Name },
         { "Divisi", Model.Divition == null ? "-" : Model.Divition.Name },

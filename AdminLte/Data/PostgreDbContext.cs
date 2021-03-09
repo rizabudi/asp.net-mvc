@@ -26,10 +26,11 @@ namespace AdminLte.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<Divition> Divitions { get; set; }
         public DbSet<Entity> Entities { get; set; }
+        public DbSet<JobLevel> JobLevels { get; set; }
+        public DbSet<Position> Position { get; set; }
 
         // QUESTION
         public DbSet<Assesment> Assesments { get; set; }
-        public DbSet<Position> Position { get; set; }
         public DbSet<Period> Periods { get; set; }
         public DbSet<SubPeriod> SubPeriods { get; set; }
         public DbSet<Schedule> Schedules { get; set; }

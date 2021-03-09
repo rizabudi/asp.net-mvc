@@ -38,14 +38,14 @@
 
 <div class="col-sm-12 col-md-5">
     <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
-        Showing @Start to @End of @Total entries
+        Menampilkan @Start.ToString("N0") sampai @End.ToString("N0") dari @Total.ToString("N0") data
     </div>
 </div>
 <div class="col-sm-12 col-md-7">
     <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
         <ul class="pagination">
             <li class="paginate_button page-item previous @DisablePrevious" id="example2_previous">
-                <a href="#" aria-controls="example2" data-dt-idx="@Pages.Last()-1" tabindex="0" class="page-link">Previous</a>
+                <a href="#" aria-controls="example2" data-dt-idx="@Pages.Last()-1" tabindex="0" class="page-link">Sebelumnya</a>
             </li>
             @foreach (int temp in Pages)
             {
@@ -58,7 +58,7 @@
                 @{
                     var nextPage = Pages.Last() + 1;
                 }
-                <a href="#" aria-controls="example2" data-dt-idx="@nextPage" tabindex="0" class="page-link">Next</a>
+                <a href="#" aria-controls="example2" data-dt-idx="@nextPage" tabindex="0" class="page-link">Selanjutnya</a>
             </li>
         </ul>
     </div>

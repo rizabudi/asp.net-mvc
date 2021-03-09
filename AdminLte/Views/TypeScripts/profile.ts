@@ -70,6 +70,9 @@
                 Name: $('#Name').val(),
                 Email: $('#Email').val(),
                 Phone: $('#Phone').val(),
+                Sex: $('#Sex').val() == "1",
+                BirthDate: $('#BirthDate').find("input").val(),
+                WorkDuration: $('#WorkDuration').val(),
                 Entity: {
                     ID: $("#Entity").val()
                 },
@@ -84,6 +87,9 @@
                 },
                 Department: {
                     ID: $("#Department").val()
+                },
+                JobLevel: {
+                    ID: $("#JobLevel").val()
                 }
             };
             return data;
@@ -98,7 +104,14 @@
                 $('#modal-default .modal-title').html("Lengkapi Identitas Anda");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
-                (<any>$("#modal-default")).modal("show")
+                (<any>$("#modal-default")).modal("show");
+                var date = new Date();
+                date.setFullYear(date.getFullYear() - 17);
+                (<any>$('#BirthDate')).datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    maxDate: date,
+                    date: new Date($('#BirthDate').find("input").val().toString())
+                })
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });

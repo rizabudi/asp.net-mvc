@@ -32,6 +32,7 @@ namespace AdminLte.Controllers
                 .Include(x => x.CompanyFunction)
                 .Include(x => x.Divition)
                 .Include(x => x.Department)
+                .Include(x => x.JobLevel)
                 .FirstOrDefaultAsync(x => x.UserId == user.Id);
 
             if(participantUser == null)
@@ -58,6 +59,7 @@ namespace AdminLte.Controllers
                         .Include(x => x.CompanyFunction)
                         .Include(x => x.Divition)
                         .Include(x => x.Department)
+                        .Include(x => x.JobLevel)
                         .FirstOrDefaultAsync(x => x.UserId == user.Id);
                 }
                 List<FormModel> FormModels = new List<FormModel>();
@@ -68,14 +70,23 @@ namespace AdminLte.Controllers
                 var departments = await _db.Departments.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
                 var divitions = await _db.Divitions.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
                 var functions = await _db.CompanyFunctions.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+                var jobLevels = await _db.JobLevels.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+                var sexs = new Dictionary<string, string> {
+                    {"1", "Laki-laki"},
+                    {"0", "Perempuan"},
+                };
 
                 FormModels.Add(new FormModel { Label = "UserId", Name = "UserId", InputType = InputType.HIDDEN, Value = participantUserFromDb == null ? "" : user.Id.ToString() });
                 FormModels.Add(new FormModel { Label = "No Karyawan", Name = "EmployeeNumber", InputType = InputType.TEXT, Value = participantUserFromDb == null ? "" : participantUserFromDb.EmployeeNumber, IsRequired = true, IsDisable = true });
                 FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = participantUserFromDb == null ? "" : participantUserFromDb.Name, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Email", Name = "Email", InputType = InputType.EMAIL, Value = participantUserFromDb == null ? "" : participantUserFromDb.Email, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "No Telp", Name = "Phone", InputType = InputType.TEXT, Value = participantUserFromDb == null ? "" : participantUserFromDb.Phone, IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Jenis Kelamin", Name = "Sex", InputType = InputType.DROPDOWN, Options = sexs, Value = participantUserFromDb == null ? "" : participantUserFromDb.Sex ? "1": "0", IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Tanggal Lahir", Name = "BirthDate", InputType = InputType.DATE, Value = participantUserFromDb == null || participantUserFromDb.BirthDate == null ? "" : participantUserFromDb.BirthDate.Value.ToString("yyyy-MM-dd"), IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Durasi Kerja (Tahun)", Name = "WorkDuration", InputType = InputType.NUMBER, Value = participantUserFromDb == null || participantUserFromDb.WorkDuration == null ? "" : participantUserFromDb.WorkDuration.Value.ToString(), IsRequired = true });
 
-                FormModels.Add(new FormModel { Label = "Entitas", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = participantUserFromDb == null ? "" : participantUserFromDb.Entity.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Entitas", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = participantUserFromDb == null || participantUserFromDb.Entity == null ? "" : participantUserFromDb.Entity.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Level Jabatan", Name = "JobLevel", InputType = InputType.DROPDOWN, Options = jobLevels, Value = participantUserFromDb == null || participantUserFromDb.JobLevel == null ? "" : participantUserFromDb.JobLevel.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
                 FormModels.Add(new FormModel { Label = "Posisi", Name = "Position", InputType = InputType.DROPDOWN, Options = positions, Value = participantUserFromDb == null || participantUserFromDb.Position == null ? "" : participantUserFromDb.Position.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
                 FormModels.Add(new FormModel { Label = "Fungsi", Name = "CompanyFunction", InputType = InputType.DROPDOWN, Options = functions, Value = participantUserFromDb == null || participantUserFromDb.CompanyFunction == null ? "" : participantUserFromDb.CompanyFunction.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
                 FormModels.Add(new FormModel { Label = "Divisi", Name = "Divition", InputType = InputType.DROPDOWN, Options = divitions, Value = participantUserFromDb == null || participantUserFromDb.Divition == null ? "" : participantUserFromDb.Divition.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
@@ -104,8 +115,8 @@ namespace AdminLte.Controllers
                     .Include(x => x.Divition)
                     .Include(x => x.Department)
                     .Include(x => x.CompanyFunction)
+                    .Include(x => x.JobLevel)
                     .FirstOrDefaultAsync(e => e.UserId == participantUser.UserId);
-
 
                 userFromDb.Entity = await _db.Entities.FirstOrDefaultAsync(e => e.ID == participantUser.Entity.ID);
                 if (participantUser.Position != null && participantUser.Position.ID != -1)
@@ -114,7 +125,7 @@ namespace AdminLte.Controllers
                 }
                 else
                 {
-                    userFromDb.Divition = null;
+                    userFromDb.Position = null;
                 }
                 if (participantUser.Divition != null && participantUser.Divition.ID != -1)
                 {
@@ -140,10 +151,21 @@ namespace AdminLte.Controllers
                 {
                     userFromDb.CompanyFunction = null;
                 }
+                if (participantUser.JobLevel != null && participantUser.JobLevel.ID != -1)
+                {
+                    userFromDb.JobLevel = await _db.JobLevels.FirstOrDefaultAsync(e => e.ID == participantUser.JobLevel.ID);
+                }
+                else
+                {
+                    userFromDb.JobLevel = null;
+                }
 
                 userFromDb.Name = participantUser.Name;
                 userFromDb.Email = participantUser.Email;
                 userFromDb.Phone = participantUser.Phone;
+                userFromDb.BirthDate = participantUser.BirthDate;
+                userFromDb.WorkDuration = participantUser.WorkDuration;
+                userFromDb.Sex = participantUser.Sex;
 
                 _db.ParticipantUsers.Update(userFromDb);
                 _db.SaveChanges();

@@ -29,7 +29,7 @@
         else if (FormModel.InputType != AdminLte.Models.InputType.YESNO)
         {
             offset = "";
-    <label for="@FormModel.Name" class="col-sm-3 col-form-label">@FormModel.Label @required</label>
+            <label for="@FormModel.Name" class="col-sm-3 col-form-label">@FormModel.Label @required</label>
         }
         else
         {
@@ -54,6 +54,15 @@
             else @if (FormModel.InputType == AdminLte.Models.InputType.HIDDEN)
             {
                 <input type="hidden" class="form-control" id="@FormModel.Name" data-label="@FormModel.Label" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
+            }
+            else @if (FormModel.InputType == AdminLte.Models.InputType.DATE)
+            {
+                <div class="input-group date" id="@FormModel.Name" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#@FormModel.Name" value="@FormModel.Value"/>
+                    <div class="input-group-append" data-target="#@FormModel.Name" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
             }
             else @if (FormModel.InputType == AdminLte.Models.InputType.PASSWORD)
             {

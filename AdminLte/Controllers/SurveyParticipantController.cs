@@ -45,8 +45,31 @@ namespace AdminLte.Controllers
 
         [HttpGet("survey-participant/start")]
         [Route("survey-participant/start/{participantID:int}")]
-        public IActionResult Start(int participantID, int take = 0)
+        public async Task<IActionResult> StartAsync(int participantID, int take = 0)
         {
+            var user = await _userManager.GetUserAsync(User);
+            var participantUser = await _db.ParticipantUsers
+                .Include(x => x.Entity)
+                .Include(x => x.Position)
+                .Include(x => x.CompanyFunction)
+                .Include(x => x.Divition)
+                .Include(x => x.Department)
+                .Include(x => x.JobLevel)
+                .FirstOrDefaultAsync(x => x.UserId == user.Id);
+
+            if (participantUser == null)
+            {
+                return Redirect("/home/errors/404");
+            }
+
+            if (participantUser.BirthDate == null || 
+                participantUser.Entity == null || 
+                participantUser.JobLevel == null || 
+                participantUser.WorkDuration == null)
+            {
+                return Redirect("/profile?isEdit=true");
+            }
+
             ViewData["take"] = take;
             return View(participantID);
         }

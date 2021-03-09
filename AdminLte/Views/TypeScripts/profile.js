@@ -73,6 +73,9 @@ var Profile = /** @class */ (function () {
                 Name: $('#Name').val(),
                 Email: $('#Email').val(),
                 Phone: $('#Phone').val(),
+                Sex: $('#Sex').val() == "1",
+                BirthDate: $('#BirthDate').find("input").val(),
+                WorkDuration: $('#WorkDuration').val(),
                 Entity: {
                     ID: $("#Entity").val()
                 },
@@ -87,6 +90,9 @@ var Profile = /** @class */ (function () {
                 },
                 Department: {
                     ID: $("#Department").val()
+                },
+                JobLevel: {
+                    ID: $("#JobLevel").val()
                 }
             };
             return data;
@@ -103,6 +109,13 @@ var Profile = /** @class */ (function () {
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
+                var date = new Date();
+                date.setFullYear(date.getFullYear() - 17);
+                $('#BirthDate').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    maxDate: date,
+                    date: new Date($('#BirthDate').find("input").val().toString())
+                });
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });

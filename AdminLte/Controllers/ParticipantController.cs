@@ -33,6 +33,7 @@ namespace AdminLte.Controllers
                     .Include(x => x.ParticipantUser.CompanyFunction)
                     .Include(x => x.ParticipantUser.Divition)
                     .Include(x => x.ParticipantUser.Department)
+                    .Include(x => x.ParticipantUser.JobLevel)
                     .Include(x => x.QuestionPackage)
                     .Include(x => x.QuestionPackage.Assesment)
                     .Where(x => x.Schedule.ID == scheduleID && (finish == 1 ? x.FinishedAt != null : (finish == 2 ? x.StartedAt != null && x.FinishedAt == null : (finish == 3 ? x.StartedAt == null && x.FinishedAt == null : true))))
@@ -50,11 +51,12 @@ namespace AdminLte.Controllers
                         Value = new string[]
                         {
                             "HTML:<b>" + row.ParticipantUser.EmployeeNumber + " - " + row.ParticipantUser.Name + "</b><br/>" +
-                            "Entitas : " + row.ParticipantUser.Entity.Name + "<br/>" +
+                            "Entitas : " + (row.ParticipantUser.Entity == null ? "-" : row.ParticipantUser.Entity.Name) + "<br/>" +
                             "Posisi : " + (row.ParticipantUser.Position == null ? "-" : row.ParticipantUser.Position.Name) + "<br/>" +
                             "Fungsi : " + (row.ParticipantUser.CompanyFunction == null ? "-" : row.ParticipantUser.CompanyFunction.Name) + "<br/>" +
                             "Divisi : " + (row.ParticipantUser.Divition == null ? "-" : row.ParticipantUser.Divition.Name) + "<br/>" +
-                            "Departemen : " + (row.ParticipantUser.Department == null ? "-" : row.ParticipantUser.Department.Name),
+                            "Departemen : " + (row.ParticipantUser.Department == null ? "-" : row.ParticipantUser.Department.Name) + "<br/>" +
+                            "Level Jabatan : " + (row.ParticipantUser.JobLevel == null ? "-" : row.ParticipantUser.JobLevel.Name),
                             row.QuestionPackage.Assesment.Name + " - " + row.QuestionPackage.Name,
                             row.IsCanRetake ? "Iya, " + row.MaxRetake + " Kali" : "Tidak",
                             row.StartedAt != null ? "HTML:Mulai : " + row.StartedAt.Value.ToString("yyyy-MM-dd HH:mm") + "<br/>" +

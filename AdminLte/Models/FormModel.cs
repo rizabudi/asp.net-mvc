@@ -8,6 +8,7 @@ namespace AdminLte.Models
     public enum InputType
     {
         TEXT,
+        DATE,
         TEXTAREA,
         EMAIL,
         PASSWORD,

@@ -1,14 +1,14 @@
-var ParticipantUser = /** @class */ (function () {
-    function ParticipantUser() {
-        this.urlGetData = "/participant-user/table-data-view";
-        this.urlGetPaging = "/participant-user/table-paging-view";
-        this.urlGetForm = "/participant-user/form-view";
-        this.urlSave = '/participant-user/save';
-        this.urlDelete = '/participant-user/delete';
+var JobLevel = /** @class */ (function () {
+    function JobLevel() {
+        this.urlGetData = "/job-level/table-data-view";
+        this.urlGetPaging = "/job-level/table-paging-view";
+        this.urlGetForm = "/job-level/form-view";
+        this.urlSave = '/job-level/save';
+        this.urlDelete = '/job-level/delete';
         this.currentPage = 1;
         this.init();
     }
-    ParticipantUser.prototype.init = function () {
+    JobLevel.prototype.init = function () {
         var _this = this;
         try {
             this.initTable(this.currentPage);
@@ -21,12 +21,12 @@ var ParticipantUser = /** @class */ (function () {
                 _this.initTable(idx);
             });
             $(document).on("click", ".btn-delete", function (e) {
-                var id = $(e.currentTarget).data('id-strng');
+                var id = $(e.currentTarget).data('id');
                 var data = { id: id };
                 _this.delete(data);
             });
             $(document).on("click", ".btn-edit", function (e) {
-                var id = $(e.currentTarget).data('id-strng');
+                var id = $(e.currentTarget).data('id');
                 var data = { id: id };
                 _this.edit(data);
             });
@@ -37,7 +37,7 @@ var ParticipantUser = /** @class */ (function () {
             Util.error(e);
         }
     };
-    ParticipantUser.prototype.initTable = function (page) {
+    JobLevel.prototype.initTable = function (page) {
         try {
             Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', function (response) {
                 $('#table_list tbody').empty();
@@ -59,7 +59,7 @@ var ParticipantUser = /** @class */ (function () {
             Util.error(e);
         }
     };
-    ParticipantUser.prototype.add = function () {
+    JobLevel.prototype.add = function () {
         try {
             Util.request(this.urlGetForm, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Tambah Data");
@@ -75,7 +75,7 @@ var ParticipantUser = /** @class */ (function () {
             Util.error(e);
         }
     };
-    ParticipantUser.prototype.initForm = function () {
+    JobLevel.prototype.initForm = function () {
         var _this = this;
         try {
             $('#save_form').click(function () {
@@ -91,7 +91,7 @@ var ParticipantUser = /** @class */ (function () {
             Util.error(e);
         }
     };
-    ParticipantUser.prototype.save = function () {
+    JobLevel.prototype.save = function () {
         var _this = this;
         try {
             if (!Util.formCheck()) {
@@ -121,36 +121,11 @@ var ParticipantUser = /** @class */ (function () {
             Util.error(e);
         }
     };
-    ParticipantUser.prototype.create = function () {
+    JobLevel.prototype.create = function () {
         try {
             var data = {
-                UserId: $('#UserId').val(),
-                Name: $('#Name').val(),
-                Email: $('#Email').val(),
-                Phone: $('#Phone').val(),
-                EmployeeNumber: $('#EmployeeNumber').val(),
-                User: {
-                    UserName: $("#UserName").val(),
-                    PasswordHash: $("#Password").val(),
-                },
-                Entity: {
-                    ID: $("#Entity").val()
-                },
-                Position: {
-                    ID: $("#Position").val()
-                },
-                CompanyFunction: {
-                    ID: $("#CompanyFunction").val()
-                },
-                Divition: {
-                    ID: $("#Divition").val()
-                },
-                Department: {
-                    ID: $("#Department").val()
-                },
-                JobLevel: {
-                    ID: $("#JobLevel").val()
-                }
+                ID: $('#ID').val(),
+                Name: $('#Name').val()
             };
             return data;
         }
@@ -159,7 +134,7 @@ var ParticipantUser = /** @class */ (function () {
             Util.error(e);
         }
     };
-    ParticipantUser.prototype.delete = function (data) {
+    JobLevel.prototype.delete = function (data) {
         var _this = this;
         try {
             if (confirm("Apa anda yaking menghapus data ini ?") == true) {
@@ -181,7 +156,7 @@ var ParticipantUser = /** @class */ (function () {
             Util.error(e);
         }
     };
-    ParticipantUser.prototype.edit = function (data) {
+    JobLevel.prototype.edit = function (data) {
         try {
             Util.request(this.urlGetForm + "?id=" + data.id, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Ubah Data");
@@ -196,9 +171,9 @@ var ParticipantUser = /** @class */ (function () {
             console.error(e);
         }
     };
-    return ParticipantUser;
+    return JobLevel;
 }());
 $(document).ready(function () {
-    new ParticipantUser();
+    new JobLevel();
 });
-//# sourceMappingURL=participant-user.js.map
+//# sourceMappingURL=job-level.js.map

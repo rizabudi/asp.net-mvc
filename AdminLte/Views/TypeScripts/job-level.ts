@@ -1,9 +1,9 @@
-﻿class ParticipantUser {
-    private urlGetData = "/participant-user/table-data-view";
-    private urlGetPaging = "/participant-user/table-paging-view";
-    private urlGetForm = "/participant-user/form-view";
-    private urlSave = '/participant-user/save';
-    private urlDelete = '/participant-user/delete';
+﻿class JobLevel {
+    private urlGetData = "/job-level/table-data-view";
+    private urlGetPaging = "/job-level/table-paging-view";
+    private urlGetForm = "/job-level/form-view";
+    private urlSave = '/job-level/save';
+    private urlDelete = '/job-level/delete';
 
     private currentPage = 1;
 
@@ -22,12 +22,12 @@
                 this.initTable(idx);
             });
             $(document).on("click", ".btn-delete", (e) => {
-                const id = $(e.currentTarget).data('id-strng');
+                const id = $(e.currentTarget).data('id');
                 const data = { id: id };
                 this.delete(data);
             });
             $(document).on("click", ".btn-edit", (e) => {
-                const id = $(e.currentTarget).data('id-strng');
+                const id = $(e.currentTarget).data('id');
                 const data = { id: id };
                 this.edit(data);
             });
@@ -118,33 +118,8 @@
     private create() {
         try {
             const data = {
-                UserId: $('#UserId').val(),
-                Name: $('#Name').val(),
-                Email: $('#Email').val(),
-                Phone: $('#Phone').val(),
-                EmployeeNumber: $('#EmployeeNumber').val(),
-                User: {
-                    UserName: $("#UserName").val(),
-                    PasswordHash: $("#Password").val(),
-                },
-                Entity: {
-                    ID: $("#Entity").val()
-                },
-                Position: {
-                    ID: $("#Position").val()
-                },
-                CompanyFunction: {
-                    ID: $("#CompanyFunction").val()
-                },
-                Divition: {
-                    ID: $("#Divition").val()
-                },
-                Department: {
-                    ID: $("#Department").val()
-                },
-                JobLevel: {
-                    ID: $("#JobLevel").val()
-                }
+                ID: $('#ID').val(),
+                Name: $('#Name').val()
             };
             return data;
         } catch (e) {
@@ -188,5 +163,5 @@
 }
 
 $(document).ready(function () {
-    new ParticipantUser();
+    new JobLevel();
 });
