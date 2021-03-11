@@ -28,7 +28,7 @@
                 <form id="account" method="post">
                     <span asp-validation-for="Input.Username" class="text-danger small"></span>
                     <div class="input-group mb-3">
-                        <input asp-for="Input.Username" class="form-control" placeholder="username" />
+                        <input autocomplete="off" asp-for="Input.Username" class="form-control" placeholder="username" />
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -37,7 +37,7 @@
                     </div>
                     <span asp-validation-for="Input.Password" class="text-danger small"></span>
                     <div class="input-group mb-3">
-                        <input asp-for="Input.Password" class="form-control" placeholder="password" />
+                        <input autocomplete="off" asp-for="Input.Password" class="form-control" placeholder="password" />
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>

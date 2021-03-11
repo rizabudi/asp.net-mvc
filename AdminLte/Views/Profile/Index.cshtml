@@ -11,7 +11,7 @@
         { "No Telp", Model.Phone },
         { "Jenis Kelamin", Model.Sex ? "Laki-laki" : "Perempuan" },
         { "Tanggal Lahir", Model.BirthDate == null ? "-" : Model.BirthDate.Value.ToString("yyyy-MM-dd") },
-        { "Durasi Kerja", (Model.WorkDuration == null ? "0" : "1") + " Tahun" },
+        { "Durasi Kerja", (Model.WorkDuration == null ? "0" : Model.WorkDuration.ToString()) + " Tahun" },
         //{ "Username", Model.User.UserName },
     };
     var forms2 = new Dictionary<string, string>

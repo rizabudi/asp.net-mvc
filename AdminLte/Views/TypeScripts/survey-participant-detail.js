@@ -7,7 +7,9 @@ var SurveyParticipantDetail = /** @class */ (function () {
     SurveyParticipantDetail.prototype.init = function () {
         var _this = this;
         try {
+
             $(document).on("click", "#finish-section", function (e) {
+                $("#finish-section").attr("disabled", "disabled");
                 _this.finish();
             });
 
@@ -49,6 +51,7 @@ var SurveyParticipantDetail = /** @class */ (function () {
             })
 
             $(document).on("click", "#submit-answer", function (e) {
+                $("#submit-answer").attr("disabled", "disabled");
 
                 var error = "";
                 var ranks = [];
@@ -87,6 +90,7 @@ var SurveyParticipantDetail = /** @class */ (function () {
 
                 if (values.length > 0 && total != 25) {
                     Util.error("Total nilai harus 25")
+                    $("#submit-answer").removeAttr("disabled");
                     return false;
                 }
 
@@ -110,6 +114,7 @@ var SurveyParticipantDetail = /** @class */ (function () {
 
                 if (error != "") {
                     Util.error(error)
+                    $("#submit-answer").removeAttr("disabled");
                     return false;
                 }
                 _this.save();
@@ -118,6 +123,7 @@ var SurveyParticipantDetail = /** @class */ (function () {
         catch (e) {
             console.error(e);
             Util.error(e);
+            $("#submit-answer").removeAttr("disabled");
         }
     };
     SurveyParticipantDetail.prototype.save = function () {
@@ -144,11 +150,13 @@ var SurveyParticipantDetail = /** @class */ (function () {
                     }
                     else {
                         Util.error(response.message);
+                        $("#submit-answer").removeAttr("disabled");
                     }
                 }
                 else {
                     Util.error('Failed to get data #T7G985. Please try again.');
                     console.error('Failed to get data #T7G985. Please try again.');
+                    $("#submit-answer").removeAttr("disabled");
                 }
             }, function () {
             }, JSON.stringify(data));
@@ -156,6 +164,7 @@ var SurveyParticipantDetail = /** @class */ (function () {
         catch (e) {
             console.error(e);
             Util.error(e);
+            $("#submit-answer").removeAttr("disabled");
         }
     };
     SurveyParticipantDetail.prototype.finish = function () {
@@ -175,11 +184,13 @@ var SurveyParticipantDetail = /** @class */ (function () {
                     }
                     else {
                         Util.error(response.message);
+                        $("#finish-section").removeAttr("disabled");
                     }
                 }
                 else {
                     Util.error('Failed to get data #T7G985. Please try again.');
                     console.error('Failed to get data #T7G985. Please try again.');
+                    $("#finish-section").removeAttr("disabled");
                 }
             }, function () {
             }, data);
@@ -187,6 +198,7 @@ var SurveyParticipantDetail = /** @class */ (function () {
         catch (e) {
             console.error(e);
             Util.error(e);
+            $("#finish-section").removeAttr("disabled");
         }
     };
     SurveyParticipantDetail.prototype.create = function () {

@@ -10,6 +10,9 @@
             $(document).on("click", "#edit", (e) => {
                 this.edit();
             });
+            $(document).on("keydown", "#WorkDuration", (e) => {
+                return e.keyCode !== 190
+            });
             this.initForm();
 
             if ($("#IsEdit").val() == "1")
@@ -112,6 +115,8 @@
                     maxDate: date,
                     date: new Date($('#BirthDate').find("input").val().toString())
                 })
+                $('#WorkDuration').attr("step", 1);
+                $('#WorkDuration').attr("pattern", "[0-9]");
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });

@@ -183,7 +183,7 @@
                         <div class="card-body">
                             @if (question.Attachment != null && question.Attachment != "")
                             {
-                                <img style="width:100%" src="https://app.lp3t.abdil.my.id/uploads/@question.Attachment" />
+                                <img style="width:100%" src="~/uploads/@question.Attachment" />
                                 <br />
                             }
                             @Html.Raw(question.Description)

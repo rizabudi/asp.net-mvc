@@ -10,6 +10,9 @@ var Profile = /** @class */ (function () {
             $(document).on("click", "#edit", function (e) {
                 _this.edit();
             });
+            $(document).on("keydown", "#WorkDuration", function (e) {
+                return e.keyCode !== 190;
+            });
             this.initForm();
             if ($("#IsEdit").val() == "1") {
                 this.edit();
@@ -116,6 +119,8 @@ var Profile = /** @class */ (function () {
                     maxDate: date,
                     date: new Date($('#BirthDate').find("input").val().toString())
                 });
+                $('#WorkDuration').attr("step", 1);
+                $('#WorkDuration').attr("pattern", "[0-9]");
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });

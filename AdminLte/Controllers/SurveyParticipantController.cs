@@ -300,7 +300,6 @@ namespace AdminLte.Controllers
                     }
                 }
 
-
                 _db.SaveChanges();
 
                 return Json(new { success = true, message = "Jawaban berhasil disimpan" });

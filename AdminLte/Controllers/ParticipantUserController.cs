@@ -378,5 +378,49 @@ namespace AdminLte.Controllers
                 return Json(new { success = false, message = "Terjadi kesalahan. Err : " + ex.Message });
             }
         }
+
+        [AllowAnonymous]
+        [HttpPost("participant-user/reset-password")]
+        public async Task<IActionResult> ResetPassword(string userId = "")
+        {
+            var usersFromDb = await _db.Users
+                    //.Include(x => x.Entity)
+                    //.Include(x => x.Position)
+                    //.Include(x => x.Divition)
+                    //.Include(x => x.Department)
+                    //.Include(x => x.CompanyFunction)
+                    //.Include(x => x.JobLevel)
+                    //.Include(x => x.User)
+                    .Where(x => (userId == "" ? true : x.Id == userId) && x.PasswordHash == "AQAAAAEAACcQAAAAEOkPVm5poX0hld51eV+l7J2d6srBsqMLmciEn3pu2AwipKipW8GQKK+oGep257IYOQ==")
+                    .ToListAsync();
+
+            var errors = new List<string>();
+            foreach(User user in usersFromDb)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await _userManager.ResetPasswordAsync(user, token, user.UserName + "@Pertamina");
+                if (result.Succeeded)
+                {
+                }
+                else
+                {
+                    var msg = "";
+                    foreach (var error in result.Errors)
+                    {
+                        msg += error.Description + "<br/>";
+                    }
+                    errors.Add(user.UserName + " : " + msg);
+                }
+            }
+
+            if(errors.Count > 0)
+            {
+                return Json(new { success = false, message = "Terjadi kesalahan. Err : " + errors.Count });
+            }
+            else
+            {
+                return Json(new { success = false, message = "Berhasil" });
+            }
+        }
     }
 }
