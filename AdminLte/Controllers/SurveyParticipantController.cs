@@ -114,8 +114,17 @@ namespace AdminLte.Controllers
                 participantAnswerSheet = new ParticipantAnswerSheet();
                 participantAnswerSheet.Participant = participant;
                 participantAnswerSheet.IsFinish = false;
+                participantAnswerSheet.FinishedAt = null;
+                participantAnswerSheet.StartedAt = DateTime.Now;
 
                 _db.ParticipantAnswerSheets.Add(participantAnswerSheet);
+
+                if(participant.FinishedAt != null)
+                {
+                    participant.FinishedAt = null;
+                    _db.Participants.Update(participant);
+                }
+
                 _db.SaveChanges();
             }
 
