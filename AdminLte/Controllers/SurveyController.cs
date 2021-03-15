@@ -42,7 +42,8 @@ namespace AdminLte.Controllers
                         Value = new string[] { 
                             row.Assesment.Name,
                             row.Name,
-                            "HTML:<a href='/survey-question/" + row.ID + "'>" + questions + " Soal</a>"
+                            "HTML:<a href='/survey-question/" + row.ID + "'><i class='fa fa-question'></i> " + questions + " Soal</a>",
+                            "HTML:<a href='/survey/result/" + row.ID + "'><i class='fa fa-file'></i> Hasil Survei</a>"
                         }
                     });
                 }
@@ -114,6 +115,7 @@ namespace AdminLte.Controllers
             ColumnModels.Add(new ColumnModel { Label = "Jenis Survei", Name = "Assesment", Style = "width: 15%; min-width: 200px" });
             ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name" });
             ColumnModels.Add(new ColumnModel { Label = "Daftar Soal", Name = "Questions" });
+            ColumnModels.Add(new ColumnModel { Label = "Hasil Survei", Name = "Result" });
 
             ViewData["Columns"] = ColumnModels;
             ViewData["Script"] = "survey.js";
@@ -174,6 +176,96 @@ namespace AdminLte.Controllers
                 Console.WriteLine(ex.Message);
                 return Json(new { success = false, message = "Terjadi kesalahan. Err : " + ex.Message });
             }
+        }
+
+
+        [HttpGet("survey/result")]
+        [Route("survey/result/{surveyID:int}")]
+        public async Task<IActionResult> ResultAsync(int surveyID)
+        {
+            var questionPackage = await _db.QuestionPackages.FirstOrDefaultAsync(x => x.ID == surveyID);
+
+            if(questionPackage == null)
+            {
+                return Redirect("/home/errors/404");
+            }
+
+            var participants = await _db.Participants
+                .Include(x=>x.ParticipantUser)
+                .Where(x => x.FinishedAt != null && x.QuestionPackage.ID == surveyID)
+                .OrderBy(x=>x.ParticipantUser.Name)
+                .ToListAsync();
+
+            var questions = await _db.QuestionPackageLines
+                .Include(x=>x.Question)
+                .ThenInclude(x=>x.QuestionAnswerMatrixs)
+                .Include(x => x.Question.Section)
+                .Where(x => x.QuestionPackage.ID == surveyID)
+                .Select(x=>x.Question)
+                .ToListAsync();
+
+            var verticalDimentions = await _db.VerticalDimentions
+                .Include(x=>x.Section)
+                .Include(x=>x.SubVerticalDimentions)
+                .ToListAsync();
+
+            var horizontalDimentions = await _db.HorizontalDimentions
+                .Include(x => x.Section)
+                .ToListAsync();
+
+            var vwCulturePerRows = await _db.VwCulturePerRow
+                .ToListAsync();
+            var vwPerformancePerRows = await _db.VwPerformancePerRow
+                .ToListAsync();
+            var vwEngagementPerRows = await _db.VwEngagementPerRow
+                .ToListAsync();
+
+            var answerCultures = new Dictionary<int, List<VwCulturePerRow>>();
+            foreach (VwCulturePerRow row in vwCulturePerRows)
+            {
+                var id = row.ParticipantID;
+                if (!answerCultures.ContainsKey(id))
+                {
+                    answerCultures.Add(id, new List<VwCulturePerRow>());
+                }
+                answerCultures[id].Add(row);
+            }
+
+            var answerPerformances = new Dictionary<int, List<VwPerformancePerRow>>();
+            foreach (VwPerformancePerRow row in vwPerformancePerRows)
+            {
+                var id = row.ParticipantID;
+                if (!answerPerformances.ContainsKey(id))
+                {
+                    answerPerformances.Add(id, new List<VwPerformancePerRow>());
+                }
+                answerPerformances[id].Add(row);
+            }
+
+            var answerEngagements = new Dictionary<int, List<VwEngagementPerRow>>();
+            foreach (VwEngagementPerRow row in vwEngagementPerRows)
+            {
+                var id = row.ParticipantID;
+                if (!answerEngagements.ContainsKey(id))
+                {
+                    answerEngagements.Add(id, new List<VwEngagementPerRow>());
+                }
+                answerEngagements[id].Add(row);
+            }
+
+            ViewData["Survey"] = questionPackage;
+            ViewData["Participants"] = participants;
+            ViewData["VerticalDimentions"] = verticalDimentions;
+            ViewData["HorizontalDimentions"] = horizontalDimentions;
+            ViewData["Questions"] = questions;
+            ViewData["AnswerCultures"] = answerCultures;
+            ViewData["AnswerPerformances"] = answerPerformances;
+            ViewData["AnswerEngagements"] = answerEngagements;
+
+            ViewData["SideBarCollapse"] = true;
+
+
+            return View();
         }
     }
 }

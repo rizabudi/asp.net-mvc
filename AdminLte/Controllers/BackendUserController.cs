@@ -96,7 +96,8 @@ namespace AdminLte.Controllers
                         .FirstOrDefaultAsync(e => e.UserId == id);
                 }
 
-                var entities = await _db.Entities.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+                var entityList = await _db.Entities.OrderBy(x => x.Name).ToListAsync();
+                var entities = Entity.getEntities(entityList, 0, 0);
 
                 List<FormModel> FormModels = new List<FormModel>();
                 FormModels.Add(new FormModel { Label = "UserId", Name = "UserId", InputType = InputType.HIDDEN, Value = userFromDb == null ? "" : userFromDb.UserId });

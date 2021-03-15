@@ -329,6 +329,7 @@ namespace AdminLte.Controllers
                 var participantAnswerSheet = await _db.ParticipantAnswerSheets
                     .Include(x=>x.ParticipantAnswerSheetSections)
                     .Include(x=>x.Participant)
+                    .ThenInclude(x=>x.ParticipantAnswerSheets)
                     .FirstOrDefaultAsync(x => x.ID == ID);
                 if(participantAnswerSheet != null)
                 {
@@ -350,8 +351,18 @@ namespace AdminLte.Controllers
                     if(participantAnswerSheetSection == null)
                     {
                         participantAnswerSheet.IsFinish = true;
+                        participantAnswerSheet.IsLast = true;
                         participantAnswerSheet.FinishedAt = DateTime.Now;
                         _db.ParticipantAnswerSheets.Update(participantAnswerSheet);
+
+                        foreach(ParticipantAnswerSheet participantAnswerSheet1 in participantAnswerSheet.Participant.ParticipantAnswerSheets)
+                        {
+                            if(participantAnswerSheet1.ID != participantAnswerSheet.ID)
+                            {
+                                participantAnswerSheet1.IsFinish = false;
+                                _db.ParticipantAnswerSheets.Update(participantAnswerSheet1);
+                            }
+                        }
 
                         participantAnswerSheet.Participant.FinishedAt = DateTime.Now;
                         _db.Participants.Update(participantAnswerSheet.Participant);

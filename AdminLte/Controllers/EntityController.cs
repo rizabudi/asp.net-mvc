@@ -24,16 +24,21 @@ namespace AdminLte.Controllers
         {
             try
             {
-                var data = await _db.Entities
-                    .OrderBy(x=>x.Name)
-                    .Skip((page-1)*10)
-                    .Take(10)
-                    .ToListAsync();
+                //var data = await _db.Entities
+                //    .OrderBy(x=>x.Name)
+                //    .Skip((page-1)*10)
+                //    .Take(10)
+                //    .ToListAsync();
+
+
+                var entityList = await _db.Entities.OrderBy(x => x.Name).ToListAsync();
+                var entities = Entity.getEntities(entityList, 0, 0);
+                var data = entities.Skip((page - 1) * 10).Take(10).ToList();
 
                 var rows = new List<RowModel>();
                 foreach(var row in data)
                 {
-                    rows.Add(new RowModel { ID = row.ID, Value = new string[] { row.Name, row.Level.ToString(), row.ParentEntity != null ? row.ParentEntity.Name : "-" }});
+                    rows.Add(new RowModel { ID = int.Parse(row.Key), Value = new string[] { row.Value }});
                 }
 
                 ViewData["Rows"] = rows;
@@ -104,9 +109,9 @@ namespace AdminLte.Controllers
         {
             ViewData["Title"] = "Entitas";
             List<ColumnModel> ColumnModels = new List<ColumnModel>();
-            ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name", Style = "width: 15%; min-width: 200px" });
-            ColumnModels.Add(new ColumnModel { Label = "Level", Name = "Level" });
-            ColumnModels.Add(new ColumnModel { Label = "Entitas Induk", Name = "ParentEntity" });
+            ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name", Style = "width: 55%; min-width: 550px" });
+            //ColumnModels.Add(new ColumnModel { Label = "Level", Name = "Level" });
+            //ColumnModels.Add(new ColumnModel { Label = "Entitas Induk", Name = "ParentEntity" });
 
             ViewData["Columns"] = ColumnModels;
             ViewData["Script"] = "entity.js";

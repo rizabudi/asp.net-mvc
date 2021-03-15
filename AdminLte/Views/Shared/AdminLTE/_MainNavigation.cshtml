@@ -71,8 +71,8 @@
                     @if (User.IsInRole("Pengguna Khusus"))
                     {
 
-                        <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "assesment","section","horizontaldimention","verticaldimention","SubVerticalDimention","entity","position","divition","function","department","period", "subperiod", "question", "questionanswer" },"index")">
-                            <a href="#" class="nav-link @Url.MakeActiveClass(new List<string> { "assesment","section","horizontaldimention","verticaldimention","SubVerticalDimention","entity","position","divition","function","department","period", "subperiod", "question", "questionanswer" },"index")">
+                        <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "assesment", "section", "horizontaldimention", "verticaldimention", "SubVerticalDimention", "entity", "position", "divition", "function", "department", "period", "subperiod", "question", "questionanswer" }, "index")">
+                            <a href="#" class="nav-link @Url.MakeActiveClass(new List<string> { "assesment", "section", "horizontaldimention", "verticaldimention", "SubVerticalDimention", "entity", "position", "divition", "function", "department", "period", "subperiod", "question", "questionanswer" }, "index")">
                                 <i class="nav-icon fas fa-folder"></i>
                                 <p>
                                     Master Data
@@ -81,31 +81,31 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a asp-controller="Assesment" asp-action="Index" class="nav-link @Url.MakeActiveClass("assesment","index")">
+                                    <a asp-controller="Assesment" asp-action="Index" class="nav-link @Url.MakeActiveClass("assesment", "index")">
                                         <i class="fas fa-list nav-icon"></i>
                                         <p>Jenis Survei</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-controller="Section" asp-action="Index" class="nav-link @Url.MakeActiveClass("section","index")">
+                                    <a asp-controller="Section" asp-action="Index" class="nav-link @Url.MakeActiveClass("section", "index")">
                                         <i class="fas fa-list nav-icon"></i>
                                         <p>Konstruk</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-controller="VerticalDimention" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "verticaldimention", "SubVerticalDimention" },"index")">
+                                    <a asp-controller="VerticalDimention" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "verticaldimention", "SubVerticalDimention" }, "index")">
                                         <i class="fas fa-list nav-icon"></i>
                                         <p>Dimensi Vertikal</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-controller="HorizontalDimention" asp-action="Index" class="nav-link @Url.MakeActiveClass("horizontaldimention","index")">
+                                    <a asp-controller="HorizontalDimention" asp-action="Index" class="nav-link @Url.MakeActiveClass("horizontaldimention", "index")">
                                         <i class="fas fa-list nav-icon"></i>
                                         <p>Dimensi Horizontal</p>
                                     </a>
                                 </li>
-                                <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "entity","position","divition","function","department" },"index")">
-                                    <a href="#" class="nav-link @Url.MakeActiveClass(new List<string> { "entity","position","divition","function","department" },"index")">
+                                <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "entity", "position", "divition", "function", "department" }, "index")">
+                                    <a href="#" class="nav-link @Url.MakeActiveClass(new List<string> { "entity", "position", "divition", "function", "department" }, "index")">
                                         <i class="nav-icon fas fa-building"></i>
                                         <p>
                                             Struktur Organisasi
@@ -114,37 +114,37 @@
                                     </a>
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a asp-controller="Entity" asp-action="Index" class="nav-link @Url.MakeActiveClass("entity","index")">
+                                            <a asp-controller="Entity" asp-action="Index" class="nav-link @Url.MakeActiveClass("entity", "index")">
                                                 <i class="fas fa-list nav-icon"></i>
                                                 <p>Entitas</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a asp-controller="Position" asp-action="Index" class="nav-link @Url.MakeActiveClass("Position","index")">
+                                            <a asp-controller="Position" asp-action="Index" class="nav-link @Url.MakeActiveClass("Position", "index")">
                                                 <i class="fas fa-list nav-icon"></i>
                                                 <p>Posisi</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a asp-controller="Divition" asp-action="Index" class="nav-link @Url.MakeActiveClass("Divition","index")">
+                                            <a asp-controller="Divition" asp-action="Index" class="nav-link @Url.MakeActiveClass("Divition", "index")">
                                                 <i class="fas fa-list nav-icon"></i>
                                                 <p>Divisi</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a asp-controller="Function" asp-action="Index" class="nav-link @Url.MakeActiveClass("Function","index")">
+                                            <a asp-controller="Function" asp-action="Index" class="nav-link @Url.MakeActiveClass("Function", "index")">
                                                 <i class="fas fa-list nav-icon"></i>
                                                 <p>Fungsi</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a asp-controller="Department" asp-action="Index" class="nav-link @Url.MakeActiveClass("Department","index")">
+                                            <a asp-controller="Department" asp-action="Index" class="nav-link @Url.MakeActiveClass("Department", "index")">
                                                 <i class="fas fa-list nav-icon"></i>
                                                 <p>Departemen</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a asp-controller="JobLevel" asp-action="Index" class="nav-link @Url.MakeActiveClass("JobLevel","index")">
+                                            <a asp-controller="JobLevel" asp-action="Index" class="nav-link @Url.MakeActiveClass("JobLevel", "index")">
                                                 <i class="fas fa-list nav-icon"></i>
                                                 <p>Level Jabatan</p>
                                             </a>
@@ -152,13 +152,13 @@
                                     </ul>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-controller="Period" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "Period", "SubPeriod" },"index")">
+                                    <a asp-controller="Period" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "Period", "SubPeriod" }, "index")">
                                         <i class="fas fa-clock nav-icon"></i>
                                         <p>Periode</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-controller="Question" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "Question", "QuestionAnswer" },"index")">
+                                    <a asp-controller="Question" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "Question", "QuestionAnswer" }, "index")">
                                         <i class="fas fa-question nav-icon"></i>
                                         <p>Pertanyaan</p>
                                     </a>
@@ -166,7 +166,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Survey" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "Survey", "SurveyQuestion" },"index")">
+                            <a asp-controller="Survey" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "Survey", "SurveyQuestion" }, new List<string> { "index", "result" })">
                                 <i class="fas fa-file-signature nav-icon"></i>
                                 <p>Daftar Survei</p>
                             </a>

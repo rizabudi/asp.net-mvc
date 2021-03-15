@@ -1,0 +1,303 @@
+﻿@{
+    var participants = (List<Participant>)ViewData["Participants"];
+    var verticalDimentions = (List<VerticalDimention>)ViewData["VerticalDimentions"];
+    var horizontalDimentions = (List<HorizontalDimention>)ViewData["HorizontalDimentions"];
+    var questions = (List<Question>)ViewData["Questions"];
+    var answerEngagement = (Dictionary<int, List<VwEngagementPerRow>>)ViewData["AnswerEngagements"];
+
+    var no = 1;
+}
+
+<div class="card">
+    <div class="card-body">
+        <ul class="nav nav-tabs" id="result-engagement-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="engagement-answer-tab" data-toggle="pill" href="#engagement-answer" role="tab" aria-controls="engagement-answer" aria-selected="true">Hasil Jawaban</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="engagement-resume-tab" data-toggle="pill" href="#engagement-resume" role="tab" aria-controls="engagement-resume" aria-selected="false">Ringkasan</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="engagement-report-tab" data-toggle="pill" href="#engagement-report" role="tab" aria-controls="engagement-report" aria-selected="false">Laporan</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="result-engagement-tabContent">
+            <div class="tab-pane fade show active" id="engagement-answer" role="tabpanel" aria-labelledby="engagement-answer-tab">
+                <div style="overflow:scroll; max-height:550px">
+                    <table class="table table-striped table-scrollable table-bordered table-hover table-checkable order-column">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" width="25px">No</th>
+                                <th rowspan="2" width="150px">Subject</th>
+                                <th>Dimensi</th>
+                                @foreach (HorizontalDimention horizontalDimention in horizontalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                {
+                                    <th colspan="20">
+                                        @horizontalDimention.Name
+                                    </th>
+                                }
+                            </tr>
+                            <tr>
+                                <th>Item</th>
+                                @foreach (Question question in questions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                {
+                                    var i = 1;
+                                    foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs)
+                                    {
+                                        <th>
+                                            @i
+                                        </th>
+                                        i++;
+                                    }
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                no = 1;
+                            }
+                            @foreach (var participant in participants)
+                            {
+                                <tr>
+                                    <td>@no</td>
+                                    <td>@participant.ParticipantUser.Name</td>
+                                    @if (!answerEngagement.ContainsKey(participant.ID))
+                                    {
+                                        no++;
+                                        continue;
+                                    }
+                                    @{
+                                        var answer = answerEngagement[participant.ID];
+                                    }
+                                    @foreach (Question question in questions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                    {
+                                        foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs)
+                                        {
+                                            var asw = answer.FirstOrDefault(x => x.MatrixRowAnswerID == qa.ID && x.QuestionID == question.ID);
+                                            var value = asw == null ? "-" : asw.nilai.ToString();
+                                            <td>
+                                                @value
+                                            </td>
+                                        }
+                                    }
+                                </tr>
+                                no++;
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2">Total</th>
+                                @{
+                                    var answers = answerEngagement.SelectMany(x => x.Value);
+                                }
+                                @foreach (Question question in questions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                {
+                                    foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs)
+                                    {
+                                        var asw = answers.Where(x => x.MatrixRowAnswerID == qa.ID && x.QuestionID == question.ID).Average(x=>x.nilai);
+                                        <th>
+                                            @asw.ToString("0.00")
+                                        </th>
+                                    }
+                                }
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="engagement-resume" role="tabpanel" aria-labelledby="engagement-resume-tab">
+                <div style="overflow:scroll; max-height:550px">
+                    <table class="table table-striped table-scrollable table-bordered table-hover table-checkable order-column">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" width="25px">No</th>
+                                <th rowspan="2" width="150px">Subject</th>
+                                <th colspan="4">
+                                    Skor Subjek
+                                </th>
+                                <th colspan="4">
+                                    Indeks Subjek
+                                </th>
+                                <th rowspan="2" width="150px">Index Engagement Subjek</th>
+                            </tr>
+                            <tr>
+                                @foreach (HorizontalDimention hd in horizontalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                {
+                                    <th>
+                                        @hd.Name
+                                    </th>
+                                }
+                                @foreach (HorizontalDimention hd in horizontalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                {
+                                    <th>
+                                        @hd.Name
+                                    </th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                no = 1;
+                            }
+                            @foreach (var participant in participants)
+                            {
+                                <tr>
+                                    <td>@no</td>
+                                    <td>@participant.ParticipantUser.Name</td>
+                                    @if (!answerEngagement.ContainsKey(participant.ID))
+                                    {
+                                        no++;
+                                        continue;
+                                    }
+                                    @{
+                                        var answer = answerEngagement[participant.ID];
+                                    }
+                                    @foreach (HorizontalDimention hd in horizontalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                    {
+                                        <td align="right">
+                                            @{
+                                                var skore = answer.Where(x => x.HorizontalDimentionID == hd.ID).Average(x => x.nilai);
+                                            }
+                                            @skore.ToString("0.00")
+                                        </td>
+                                    }
+                                    @foreach (HorizontalDimention hd in horizontalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                    {
+                                        <td align="right">
+                                            @{
+                                                var index = answer.Where(x => x.HorizontalDimentionID == hd.ID).Average(x => x.nilai) * 100 / 6;
+                                            }
+                                            @index.ToString("0.00")
+                                        </td>
+                                    }
+                                    <td>
+                                        @{
+                                            var total1 = answer.Average(x => x.nilai) * 100 / 6;
+                                        }
+                                        @total1.ToString("0.00")
+                                    </td>
+                                </tr>
+                                no++;
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2">Total</th>
+                                @{
+                                    var answers1 = answerEngagement.SelectMany(x => x.Value);
+                                }
+                                <th colspan="4"></th>
+                                @foreach (HorizontalDimention hd in horizontalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                {
+                                    <th align="right">
+                                        @{
+                                            var skore = answers1
+                                                .Where(x => x.HorizontalDimentionID == hd.ID)
+                                                .GroupBy(x => x.ParticipantID)
+                                                .Average(x => x.Average(x => x.nilai) * 100 / 6);
+                                        }
+                                        @skore.ToString("0.00")
+                                    </th>
+                                }
+                                <th align="right">
+                                    @{
+                                        var total = answers1
+                                            .GroupBy(x => x.ParticipantID)
+                                            .Average(x => x.Average(x => x.nilai) * 100 / 6);
+                                    }
+                                    @total.ToString("0.00")
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="engagement-report" role="tabpanel" aria-labelledby="engagement-report-tab">
+                <table class="table table-striped table-scrollable table-bordered table-hover table-checkable order-column">
+                    <thead>
+                        <tr>
+                            <td width="50px">No</td>
+                            <td>Index</td>
+                            <th width="150px">Nilai</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Index Engagement</td>
+                            <td align="right">
+                                @{
+                                    var total2 = answers
+                                        .GroupBy(x => x.ParticipantID)
+                                        .Average(x => x.Average(x => x.nilai) * 100 / 6);
+                                }
+                                @total2.ToString("0.000")
+                            </td>
+                        </tr>
+                        @{ no = 1; }
+                        @foreach (HorizontalDimention hd in horizontalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                        {
+                            no++;
+                            <tr>
+                                <td>@no</td>
+                                <td>-- Index @hd.Name</td>
+                                <td align="right">
+                                    @{
+                                        var skore = answers1
+                                            .Where(x => x.HorizontalDimentionID == hd.ID)
+                                            .GroupBy(x => x.ParticipantID)
+                                            .Average(x => x.Average(x => x.nilai) * 100 / 6);
+                                    }
+                                    @skore.ToString("0.000")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <hr />
+
+                <h4>
+                    Faktor Penyebab Engagement (diurutkan dari yang tertinggi)
+                </h4>
+                <table class="table table-striped table-scrollable table-bordered table-hover table-checkable order-column">
+                    <thead>
+                        <tr>
+                            <td width="50px">No</td>
+                            <td>Faktor</td>
+                            <th width="150px">Skor</th>
+                            <th width="150px">Index</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ no = 0; }
+                        @foreach (VerticalDimention sd in verticalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                        {
+                            foreach (SubVerticalDimention svd in sd.SubVerticalDimentions)
+                            {
+                                no++;
+                                <tr>
+                                    <td>@no</td>
+                                    <td>@svd.Name</td>
+                                    <td align="right">
+                                        @{
+                                            var skore = answers1
+                                                .Where(x=>x.SubVerticalDimentionID == svd.ID)
+                                                .Average(x => x.nilai);
+                                            var index = skore * 100 / 6;
+                                        }
+                                        @skore.ToString("0.000")
+                                    </td>
+                                    <td align="right">
+                                        @index.ToString("0.000")
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
