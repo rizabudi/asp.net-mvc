@@ -240,7 +240,7 @@
                                                         .Sum(x => x.bobotxnilai);
                                                     var index = (skore - 39) * 100 / 76;
                                                 }
-                                                @index.ToString("0.000")
+                                                @index.ToString("0.00")
                                             </td>
                                         }
                                         <td align="right">
@@ -249,7 +249,7 @@
                                                     .GroupBy(x => x.SubVerticalDimentionID)
                                                     .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
                                             }
-                                            @subtotal.ToString("0.000")
+                                            @subtotal.ToString("0.00")
                                         </td>
                                     }
                                     <td>
@@ -258,7 +258,7 @@
                                                 .GroupBy(x => x.SubVerticalDimentionID)
                                                 .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
                                         }
-                                        @subtotal1.ToString("0.000")
+                                        @subtotal1.ToString("0.00")
                                     </td>
                                 </tr>
                                 no++;
@@ -281,7 +281,7 @@
                                                     .GroupBy(x=>x.ParticipantID)
                                                     .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
                                             }
-                                            @subtotal.ToString("0.000")
+                                            @subtotal.ToString("0.00")
                                         </th>
                                     }
                                     <th>
@@ -290,7 +290,7 @@
                                                 .GroupBy(x => new { x.ParticipantID, x.SubVerticalDimentionID })
                                                 .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
                                         }
-                                        @subtotal1.ToString("0.000")
+                                        @subtotal1.ToString("0.00")
                                     </th>
                                 }
                                 <th>
@@ -299,7 +299,7 @@
                                             .GroupBy(x => new { x.ParticipantID, x.SubVerticalDimentionID })
                                             .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
                                     }
-                                    @total.ToString("0.000")
+                                    @total.ToString("0.00")
                                 </th>
                             </tr>
                         </tfoot>
@@ -325,7 +325,7 @@
                                         .GroupBy(x => new { x.ParticipantID, x.SubVerticalDimentionID })
                                         .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
                                 }
-                                @total1.ToString("0.000")
+                                @total1.ToString("0.00")
                             </td>
                         </tr>
                         @{ no = 1; }
@@ -341,7 +341,7 @@
                                             .GroupBy(x => new { x.ParticipantID, x.SubVerticalDimentionID })
                                             .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
                                     }
-                                    @subtotal.ToString("0.000")
+                                    @subtotal.ToString("0.00")
                                 </td>
                             </tr>
                             foreach (SubVerticalDimention svd in vd.SubVerticalDimentions)
@@ -356,7 +356,7 @@
                                                 .GroupBy(x => x.ParticipantID)
                                                 .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
                                         }
-                                        @subtotal1.ToString("0.000")
+                                        @subtotal1.ToString("0.00")
                                     </td>
                                 </tr>
                             }

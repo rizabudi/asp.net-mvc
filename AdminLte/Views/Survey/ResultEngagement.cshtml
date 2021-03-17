@@ -28,7 +28,6 @@
                         <thead>
                             <tr>
                                 <th rowspan="2" width="25px">No</th>
-                                <th rowspan="2" width="150px">Subject</th>
                                 <th>Dimensi</th>
                                 @foreach (HorizontalDimention horizontalDimention in horizontalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
                                 {
@@ -38,7 +37,7 @@
                                 }
                             </tr>
                             <tr>
-                                <th>Item</th>
+                                <th>Subjek / Item</th>
                                 @foreach (Question question in questions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
                                 {
                                     var i = 1;
@@ -231,7 +230,7 @@
                                         .GroupBy(x => x.ParticipantID)
                                         .Average(x => x.Average(x => x.nilai) * 100 / 6);
                                 }
-                                @total2.ToString("0.000")
+                                @total2.ToString("0.00")
                             </td>
                         </tr>
                         @{ no = 1; }
@@ -248,7 +247,7 @@
                                             .GroupBy(x => x.ParticipantID)
                                             .Average(x => x.Average(x => x.nilai) * 100 / 6);
                                     }
-                                    @skore.ToString("0.000")
+                                    @skore.ToString("0.00")
                                 </td>
                             </tr>
                         }
@@ -286,10 +285,10 @@
                                                 .Average(x => x.nilai);
                                             var index = skore * 100 / 6;
                                         }
-                                        @skore.ToString("0.000")
+                                        @skore.ToString("0.00")
                                     </td>
                                     <td align="right">
-                                        @index.ToString("0.000")
+                                        @index.ToString("0.00")
                                     </td>
                                 </tr>
                             }
