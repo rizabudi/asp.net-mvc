@@ -636,6 +636,7 @@ namespace AdminLte.Controllers
 
                     sheet1.Cells[row, 1, row, 2].Merge = true;
                     sheet1.Cells[row, 1, row, 2].Value = "Rata-rata";
+                    sheet1.Cells[row, 1, row, 82].Style.Font.Bold = true;
 
                     col = 3;
                     foreach (Question question in questions)
