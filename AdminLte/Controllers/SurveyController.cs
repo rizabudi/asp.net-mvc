@@ -783,6 +783,9 @@ namespace AdminLte.Controllers
                         }
                     }
 
+                    var cells = sheet4.Cells[1, 1, row, 4];
+                    cells.AutoFilter = true;
+
                     package.Save();
                 }
 
