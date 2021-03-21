@@ -20,6 +20,9 @@
             <li class="nav-item">
                 <a class="nav-link" id="engagement-report-tab" data-toggle="pill" href="#engagement-report" role="tab" aria-controls="engagement-report" aria-selected="false">Laporan</a>
             </li>
+            <li class="nav-item">
+                <a target="_blank" class="nav-link" href="/survey/download/2/2"><i class="fa fa-download"></i> Download Excel</a>
+            </li>
         </ul>
         <div class="tab-content" id="result-engagement-tabContent">
             <div class="tab-pane fade show active" id="engagement-answer" role="tabpanel" aria-labelledby="engagement-answer-tab">
@@ -85,7 +88,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th colspan="2">Total</th>
+                                <th colspan="2">Rata-rata</th>
                                 @{
                                     var answers = answerEngagement.SelectMany(x => x.Value);
                                 }
@@ -269,29 +272,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @{ no = 0; }
-                        @foreach (VerticalDimention sd in verticalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                        @{
+                            no = 0;
+                            var summaries = answers1.GroupBy(x => x.SubVerticalDimentionID)
+                                .ToDictionary(x => x.Key, y => y.Average(z => z.nilai))
+                                .OrderByDescending(x => x.Value);
+                            var subVerticalDimentions = verticalDimentions.SelectMany(x => x.SubVerticalDimentions)
+                                .ToDictionary(x => x.ID, y => y.Name);
+                        }
+                        @foreach (var summary in summaries)
                         {
-                            foreach (SubVerticalDimention svd in sd.SubVerticalDimentions)
-                            {
-                                no++;
-                                <tr>
-                                    <td>@no</td>
-                                    <td>@svd.Name</td>
-                                    <td align="right">
-                                        @{
-                                            var skore = answers1
-                                                .Where(x=>x.SubVerticalDimentionID == svd.ID)
-                                                .Average(x => x.nilai);
-                                            var index = skore * 100 / 6;
-                                        }
-                                        @skore.ToString("0.00")
-                                    </td>
-                                    <td align="right">
-                                        @index.ToString("0.00")
-                                    </td>
-                                </tr>
-                            }
+                            no++;
+                            <tr>
+                                <td>@no</td>
+                                <td>@subVerticalDimentions[summary.Key]</td>
+                                <td align="right">
+                                    @{
+                                        var skore = summary.Value;
+                                        var index = skore * 100 / 6;
+                                    }
+                                    @skore.ToString("0.00")
+                                </td>
+                                <td align="right">
+                                    @index.ToString("0.00")
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
