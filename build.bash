@@ -4,6 +4,7 @@ systemctl stop adminlte
 sleep 5
 rm -rf AdminLte/{obj,bin}
 rm -rf dist
+git pull origin master
 pushd AdminLte
 dotnet publish --configuration Release
 popd
