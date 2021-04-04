@@ -182,8 +182,8 @@ namespace AdminLte.Controllers
 
 
         [HttpGet("survey/result")]
-        [Route("survey/result/{surveyID:int}")]
-        public async Task<IActionResult> ResultAsync(int surveyID)
+        [Route("survey/result/{surveyID:int}/{tab:int?}")]
+        public async Task<IActionResult> ResultAsync(int surveyID, int tab = 0, int entity = 0)
         {
             var questionPackage = await _db.QuestionPackages.FirstOrDefaultAsync(x => x.ID == surveyID);
 
@@ -255,6 +255,57 @@ namespace AdminLte.Controllers
                 answerEngagements[id].Add(row);
             }
 
+            var entityList = await _db.Entities.OrderBy(x => x.Name).ToListAsync();
+            var entities = Entity.getEntities(entityList, 0, 0);
+
+            var cultureData = await _db.VwCulturePerVerticalDimention
+                .Include(x => x.VerticalDimention)
+                .Where(x => 
+                    x.Participant.QuestionPackage.ID == surveyID &&
+                    (entity == 0 || x.Participant.ParticipantUser.Entity.ID == entity)
+                 )
+                .ToListAsync();
+
+            var dashboardCulture = cultureData
+                .GroupBy(x => x.VerticalDimention)
+                .ToDictionary(x=>x.Key, y=>y.Average(z=>z.indexvaluesubject));
+
+            var engagementData = await _db.VwEngagementPerHorizontalDimention
+                .Include(x => x.HorizontalDimention)
+                .Where(x =>
+                    x.Participant.QuestionPackage.ID == surveyID &&
+                    (entity == 0 || x.Participant.ParticipantUser.Entity.ID == entity)
+                 )
+                .ToListAsync();
+
+            var dashboardEngagement = engagementData
+                .GroupBy(x => x.HorizontalDimention)
+                .ToDictionary(x => x.Key, y => y.Average(z => z.indexsituasi));
+
+            var engagementData1 = await _db.VwEngagementPerSubVerticalDimention
+                .Include(x => x.SubVerticalDimention)
+                .Where(x =>
+                    x.Participant.QuestionPackage.ID == surveyID &&
+                    (entity == 0 || x.Participant.ParticipantUser.Entity.ID == entity)
+                 )
+                .ToListAsync();
+
+            var dashboardEngagement1 = engagementData1
+                .GroupBy(x => x.SubVerticalDimention)
+                .ToDictionary(x => x.Key, y => y.Average(z => z.indexsituasi));
+
+            var performanceData = await _db.VwPerformancePerVerticalDimention
+                .Include(x => x.VerticalDimention)
+                .Where(x =>
+                    x.Participant.QuestionPackage.ID == surveyID &&
+                    (entity == 0 || x.Participant.ParticipantUser.Entity.ID == entity)
+                 )
+                .ToListAsync();
+
+            var dashboardPerformance = performanceData
+                .GroupBy(x => x.VerticalDimention)
+                .ToDictionary(x => x.Key, y => y.Average(z => (z.indexvaluesubject * 100)/6));
+
             ViewData["Survey"] = questionPackage;
             ViewData["Participants"] = participants;
             ViewData["VerticalDimentions"] = verticalDimentions;
@@ -263,9 +314,15 @@ namespace AdminLte.Controllers
             ViewData["AnswerCultures"] = answerCultures;
             ViewData["AnswerPerformances"] = answerPerformances;
             ViewData["AnswerEngagements"] = answerEngagements;
+            ViewData["Entities"] = entities;
+            ViewData["Entity"] = entity;
+            ViewData["Tab"] = tab;
+            ViewData["DashboardCulture"] = dashboardCulture;
+            ViewData["DashboardEngagement"] = dashboardEngagement;
+            ViewData["DashboardEngagement1"] = dashboardEngagement1;
+            ViewData["DashboardPerformance"] = dashboardPerformance;
 
             ViewData["SideBarCollapse"] = true;
-
 
             return View();
         }

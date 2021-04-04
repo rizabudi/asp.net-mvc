@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AdminLte.Models
 {
@@ -34,7 +35,9 @@ namespace AdminLte.Models
         [Key]
         public string id { get; set; }
         public int ParticipantID { get; set; }
+        public Participant Participant { get; set; }
         public int VerticalDimentionID { get; set; }
+        public VerticalDimention VerticalDimention { get; set; }
         public double indexvaluesubject { get; set; }
     }
 
@@ -57,6 +60,17 @@ namespace AdminLte.Models
         public float nilai { get; set; }
     }
 
+    public class VwPerformancePerVerticalDimention
+    {
+        [Key]
+        public string id { get; set; }
+        public int ParticipantID { get; set; }
+        public Participant Participant { get; set; }
+        public int VerticalDimentionID { get; set; }
+        public VerticalDimention VerticalDimention { get; set; }
+        public double indexvaluesubject { get; set; }
+    }
+
     public class VwEngagementPerRow
     {
         [Key]
@@ -68,5 +82,27 @@ namespace AdminLte.Models
         public int SubVerticalDimentionID { get; set; }
         public int HorizontalDimentionID { get; set; }
         public float nilai { get; set; }
+    }
+
+    public class VwEngagementPerHorizontalDimention
+    {
+        [Key]
+        public string id { get; set; }
+        public int ParticipantID { get; set; }
+        public Participant Participant { get; set; }
+        public int HorizontalDimentionID { get; set; }
+        public HorizontalDimention HorizontalDimention { get; set; }
+        public double indexsituasi { get; set; }
+    }
+
+    public class VwEngagementPerSubVerticalDimention
+    {
+        [Key]
+        public string id { get; set; }
+        public int ParticipantID { get; set; }
+        public Participant Participant { get; set; }
+        public int SubVerticalDimentionID { get; set; }
+        public SubVerticalDimention SubVerticalDimention { get; set; }
+        public double indexsituasi { get; set; }
     }
 }

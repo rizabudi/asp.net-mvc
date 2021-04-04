@@ -68,7 +68,4 @@
   <ItemGroup>
     <Content Remove="package-lock.json" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Survey\" />
-  </ItemGroup>
 </Project>
