@@ -2,7 +2,6 @@
 
 var chartAkhlak2 = am4core.create("chart-akhlak2", am4charts.RadarChart);
 
-
 chartAkhlak2.data = JSON.parse($("#radar-akhlak-value").val());
 
 console.log(chartAkhlak2.data);

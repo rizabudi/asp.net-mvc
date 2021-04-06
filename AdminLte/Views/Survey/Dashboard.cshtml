@@ -1,0 +1,41 @@
+﻿@{
+    var survey = (QuestionPackage)ViewData["Survey"];
+
+    ViewData["Title"] = "Dashboard Survei - " + survey.Name;
+    Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
+
+    var resumeCultureSubVerticalDimention = (Dictionary<int, List<VwCulturePerSubVerticalDimention>>)ViewData["ResumeCultureSubVerticalDimention"];
+    var resumeCultureVerticalDimention = (Dictionary<int, List<VwCulturePerVerticalDimention>>)ViewData["ResumeCultureVerticalDimention"];
+    var reportCultureSubVerticalDimention = (Dictionary<int, double>)ViewData["ReportCultureSubVerticalDimention"];
+    var reportCultureVerticalDimention = (Dictionary<int, double>)ViewData["ReportCultureVerticalDimention"];
+    var reportCulture = (Dictionary<int, double>)ViewData["ReportCulture"];
+}
+
+@section Scripts {
+    <script src="~/plugins/amcharts/core.js"></script>
+    <script src="~/plugins/amcharts/charts.js"></script>
+    <script src="~/plugins/amcharts/animated.js"></script>
+    <script src="~/Views/TypeScripts/survey-dashboard-akhlak-gauge.js"></script>
+    <script src="~/Views/TypeScripts/survey-dashboard-akhlak-radar.js"></script>
+    <script src="~/Views/TypeScripts/survey-dashboard-engagement-gauge.js"></script>
+    <script src="~/Views/TypeScripts/survey-dashboard-engagement-radar.js"></script>
+    <script src="~/Views/TypeScripts/survey-dashboard-perfromance-column.js"></script>
+}
+
+<div class="module form-modal">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Hasil Survei</h3>
+            <div class="card-tools">
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            @await Html.PartialAsync("~/Views/Survey/ResultDashboard.cshtml")
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            @*<button id="edit" type="button" class="btn btn-primary">Perbarui Profil</button>*@
+        </div>
+    </div>
+</div>

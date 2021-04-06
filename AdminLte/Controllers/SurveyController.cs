@@ -45,7 +45,7 @@ namespace AdminLte.Controllers
                             row.Assesment.Name,
                             row.Name,
                             "HTML:<a href='/survey-question/" + row.ID + "'><i class='fa fa-question'></i> " + questions + " Soal</a>",
-                            "HTML:<a href='/survey/result/" + row.ID + "'><i class='fa fa-file'></i> Hasil Survei</a>"
+                            "HTML:<a href='/survey/result/" + row.ID + "'><i class='fa fa-file'></i> Hasil Survei</a><br/><a href='/survey/dashboard/" + row.ID + "'><i class='fa fa-chart-area'></i> Dashboard</a>"
                         }
                     });
                 }
@@ -255,12 +255,39 @@ namespace AdminLte.Controllers
                 answerEngagements[id].Add(row);
             }
 
+
+            ViewData["Survey"] = questionPackage;
+            ViewData["Participants"] = participants;
+            ViewData["VerticalDimentions"] = verticalDimentions;
+            ViewData["HorizontalDimentions"] = horizontalDimentions;
+            ViewData["Questions"] = questions;
+            ViewData["AnswerCultures"] = answerCultures;
+            ViewData["AnswerPerformances"] = answerPerformances;
+            ViewData["AnswerEngagements"] = answerEngagements;
+            ViewData["Tab"] = tab;
+
+            ViewData["SideBarCollapse"] = true;
+
+            return View();
+        }
+
+        [HttpGet("survey/dashboard")]
+        [Route("survey/dashboard/{surveyID:int}")]
+        public async Task<IActionResult> DashboardAsync(int surveyID, int entity)
+        {
+            var questionPackage = await _db.QuestionPackages.FirstOrDefaultAsync(x => x.ID == surveyID);
+
+            if (questionPackage == null)
+            {
+                return Redirect("/home/errors/404");
+            }
+
             var entityList = await _db.Entities.OrderBy(x => x.Name).ToListAsync();
             var entities = Entity.getEntities(entityList, 0, 0);
 
             var cultureData = await _db.VwCulturePerVerticalDimention
                 .Include(x => x.VerticalDimention)
-                .Where(x => 
+                .Where(x =>
                     x.Participant.QuestionPackage.ID == surveyID &&
                     (entity == 0 || x.Participant.ParticipantUser.Entity.ID == entity)
                  )
@@ -268,7 +295,7 @@ namespace AdminLte.Controllers
 
             var dashboardCulture = cultureData
                 .GroupBy(x => x.VerticalDimention)
-                .ToDictionary(x=>x.Key, y=>y.Average(z=>z.indexvaluesubject));
+                .ToDictionary(x => x.Key, y => y.Average(z => z.indexvaluesubject));
 
             var engagementData = await _db.VwEngagementPerHorizontalDimention
                 .Include(x => x.HorizontalDimention)
@@ -304,19 +331,11 @@ namespace AdminLte.Controllers
 
             var dashboardPerformance = performanceData
                 .GroupBy(x => x.VerticalDimention)
-                .ToDictionary(x => x.Key, y => y.Average(z => (z.indexvaluesubject * 100)/6));
+                .ToDictionary(x => x.Key, y => y.Average(z => (z.indexvaluesubject * 100) / 6));
 
             ViewData["Survey"] = questionPackage;
-            ViewData["Participants"] = participants;
-            ViewData["VerticalDimentions"] = verticalDimentions;
-            ViewData["HorizontalDimentions"] = horizontalDimentions;
-            ViewData["Questions"] = questions;
-            ViewData["AnswerCultures"] = answerCultures;
-            ViewData["AnswerPerformances"] = answerPerformances;
-            ViewData["AnswerEngagements"] = answerEngagements;
             ViewData["Entities"] = entities;
             ViewData["Entity"] = entity;
-            ViewData["Tab"] = tab;
             ViewData["DashboardCulture"] = dashboardCulture;
             ViewData["DashboardEngagement"] = dashboardEngagement;
             ViewData["DashboardEngagement1"] = dashboardEngagement1;

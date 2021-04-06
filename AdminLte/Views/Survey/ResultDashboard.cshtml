@@ -14,7 +14,7 @@
     var radarEngagementJson = Json.Serialize(engagementData).ToString();
     var gauageEngagementData = dashboardEngagement.Any() ? dashboardEngagement.Average(x => x.Value) : 0;
 
-    if(dashboardPerformance.Any())
+    if (dashboardPerformance.Any())
     {
         dashboardPerformance.Add(new VerticalDimention { Name = "Kinerja Total" }, dashboardPerformance.Average(x => x.Value));
     }
@@ -22,108 +22,125 @@
     var columnPerformanceJson = Json.Serialize(performanceData).ToString();
 }
 
+<div>
+    <form method="get">
+        <div class="form-group row">
+            <label class="col-md-1 col-form-label">Entitas : </label>
+            <div class="col-md-3">
+                <select name="entity" class="form-control">
+                    <option value="0">Pilih</option>
+                    @foreach (string key in entities.Keys)
+                    {
+                        var selected = key == entity.ToString() ? "selected" : "";
+                        if (key == entity.ToString())
+                        {
+                            <option selected value="@key">@entities[key]</option>
+                        }
+                        else
+                        {
+                            <option value="@key">@entities[key]</option>
+                        }
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary col-md-1">Cari</button>
+        </div>
+    </form>
+</div>
+
+<input type="hidden" id="radar-akhlak-value" value="@radarAkhlakJson" />
+<input type="hidden" id="gauge-akhlak-value" value="@gauageAkhlakData" />
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Index Value Akhlak Total</h3>
+            </div>
+            <div class="card-body" style="padding:5px">
+                <div style="width: 100%; height: 45vh;" id="chart-akhlak1"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Index Value Akhlak</h3>
+            </div>
+            <div class="card-body">
+                <div style="width: 100%; height: 41vh;" id="chart-akhlak2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="radar-engagement-value" value="@radarEngagementJson" />
+<input type="hidden" id="gauge-engagement-value" value="@gauageEngagementData" />
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Index Value Engagement Total</h3>
+            </div>
+            <div class="card-body" style="padding:5px">
+                <div style="width: 100%; height: 45vh;" id="chart-engagement1"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Index Value Engagement</h3>
+            </div>
+            <div class="card-body">
+                <div style="width: 100%; height: 41vh;" id="chart-engagement2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="card">
-    <div class="card-body">
-        <div>
-            <form method="get">
-                <div class="form-group row">
-                    <label class="col-md-1 col-form-label">Entitas : </label>
-                    <div class="col-md-3">
-                        <select name="entity" class="form-control">
-                            <option value="0">Pilih</option>
-                            @foreach (string key in entities.Keys)
-                            {
-                                var selected = key == entity.ToString() ? "selected" : "";
-                                if (key == entity.ToString())
-                                {
-                                    <option selected value="@key">@entities[key]</option>
-                                }
-                                else
-                                {
-                                    <option value="@key">@entities[key]</option>
-                                }
-                            }
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary col-md-1">Cari</button>
-                </div>
-            </form>
+    <div class="card-header">
+        <h3 class="card-title">Hasil Engagement</h3>
+    </div>
+    <div class="card-body" style="padding:5px">
+        <div class="row">
+            <table class="table table-striped table-scrollable table-bordered table-hover table-checkable order-column">
+                <thead>
+                    <tr>
+                        <td width="50px">No</td>
+                        <td>Faktor</td>
+                        <th width="150px">Index</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var no = 0;
+                    }
+                    @foreach (var summary in dashboardEngagement1.OrderByDescending(x => x.Value))
+                    {
+                        no++;
+                        <tr>
+                            <td>@no</td>
+                            <td>@summary.Key.Name</td>
+                            <td align="right">
+                                @summary.Value.ToString("0.00")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
+    </div>
+</div>
 
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Akhlak</h3>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <input type="hidden" id="radar-akhlak-value" value="@radarAkhlakJson" />
-                    <input type="hidden" id="gauge-akhlak-value" value="@gauageAkhlakData" />
-                    <div class="col-md-6">
-                        <h5>Index Value Akhlak Total</h5>
-                        <div style="width: 100%; max-height: 450px; height: 75vh;" id="chart-akhlak1"></div>
-                    </div>
-                    <div class="col-md-6">
-                        <h5>Index Value Akhlak</h5>
-                        <div style="width: 100%; max-height: 450px; height: 75vh;" id="chart-akhlak2"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Engagement</h3>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <input type="hidden" id="radar-engagement-value" value="@radarEngagementJson" />
-                    <input type="hidden" id="gauge-engagement-value" value="@gauageEngagementData" />
-                    <div class="col-md-6">
-                        <h5>Index Value Engagement Total</h5>
-                        <div style="width: 100%; max-height: 450px; height: 75vh;" id="chart-engagement1"></div>
-                        <br/>
-                        <h5>Index Value Engagement</h5>
-                        <div style="width: 100%; max-height: 450px; height: 75vh;" id="chart-engagement2"></div>
-                    </div>
-                    <div class="col-md-6">
-                        <table class="table table-striped table-scrollable table-bordered table-hover table-checkable order-column">
-                            <thead>
-                                <tr>
-                                    <td width="50px">No</td>
-                                    <td>Faktor</td>
-                                    <th width="150px">Index</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    var no = 0;
-                                }
-                                @foreach (var summary in dashboardEngagement1.OrderByDescending(x=>x.Value))
-                                {
-                                    no++;
-                                    <tr>
-                                        <td>@no</td>
-                                        <td>@summary.Key.Name</td>
-                                        <td align="right">
-                                            @summary.Value.ToString("0.00")
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Kinerja</h3>
-            </div>
-            <div class="card-body">
-                <input type="hidden" id="column-performance-value" value="@columnPerformanceJson" />
-                <div style="width: 100%; max-height: 450px; height: 75vh;" id="chart-performance"></div>
-            </div>
-        </div>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Kinerja</h3>
+    </div>
+    <div class="card-body" style="padding:5px">
+        <input type="hidden" id="column-performance-value" value="@columnPerformanceJson" />
+        <div style="width: 100%; max-height: 450px; height: 75vh;" id="chart-performance"></div>
     </div>
 </div>

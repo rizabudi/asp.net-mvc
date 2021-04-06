@@ -8,11 +8,6 @@
     var verticalDimentions = (List<VerticalDimention>)ViewData["VerticalDimentions"];
     var questions = (List<Question>)ViewData["Questions"];
     var answerCultures = (Dictionary<int, List<VwCulturePerRow>>)ViewData["AnswerCultures"];
-    var resumeCultureSubVerticalDimention = (Dictionary<int, List<VwCulturePerSubVerticalDimention>>)ViewData["ResumeCultureSubVerticalDimention"];
-    var resumeCultureVerticalDimention = (Dictionary<int, List<VwCulturePerVerticalDimention>>)ViewData["ResumeCultureVerticalDimention"];
-    var reportCultureSubVerticalDimention = (Dictionary<int, double>)ViewData["ReportCultureSubVerticalDimention"];
-    var reportCultureVerticalDimention = (Dictionary<int, double>)ViewData["ReportCultureVerticalDimention"];
-    var reportCulture = (Dictionary<int, double>)ViewData["ReportCulture"];
 
     var tabActive = (int)ViewData["Tab"];
 
@@ -20,18 +15,6 @@
     var tabActive1 = tabActive == 1 ? "show active" : "";
     var tabActive2 = tabActive == 2 ? "show active" : "";
     var tabActive3 = tabActive == 3 ? "show active" : "";
-    var tabActive4 = tabActive == 4 ? "show active" : "";
-}
-
-@section Scripts {
-    <script src="~/plugins/amcharts/core.js"></script>
-    <script src="~/plugins/amcharts/charts.js"></script>
-    <script src="~/plugins/amcharts/animated.js"></script>
-    <script src="~/Views/TypeScripts/survey-dashboard-akhlak-gauge.js"></script>
-    <script src="~/Views/TypeScripts/survey-dashboard-akhlak-radar.js"></script>
-    <script src="~/Views/TypeScripts/survey-dashboard-engagement-gauge.js"></script>
-    <script src="~/Views/TypeScripts/survey-dashboard-engagement-radar.js"></script>
-    <script src="~/Views/TypeScripts/survey-dashboard-perfromance-column.js"></script>
 }
 
 <div class="module form-modal">
@@ -55,9 +38,6 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link @tabActive3" id="performance-tab" data-toggle="pill" href="#performance" role="tab" aria-controls="performance" aria-selected="false">Hasil Kinerja</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @tabActive4" id="dashboard-tab" data-toggle="pill" href="#dashboard" role="tab" aria-controls="performance" aria-selected="false">Dashboard</a>
                 </li>
             </ul>
             <div class="tab-content" id="result-tabContent">
@@ -100,9 +80,6 @@
                 </div>
                 <div class="tab-pane fade @tabActive3" id="performance" role="tabpanel" aria-labelledby="performance-tab">
                     @await Html.PartialAsync("~/Views/Survey/ResultPerformance.cshtml")
-                </div>
-                <div class="tab-pane fade @tabActive4" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
-                    @await Html.PartialAsync("~/Views/Survey/ResultDashboard.cshtml")
                 </div>
             </div>
         </div>

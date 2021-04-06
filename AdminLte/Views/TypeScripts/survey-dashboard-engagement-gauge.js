@@ -85,15 +85,6 @@ for (let grading of data.gradingData) {
     range.endValue = grading.highScore < chartMax ? grading.highScore : chartMax;
     range.grid.strokeOpacity = 0;
     range.stroke = am4core.color(grading.color).lighten(-0.1);
-    range.label.inside = true;
-    range.label.text = grading.title.toUpperCase();
-    range.label.stroke = am4core.color(grading.color).lighten(-0.2);
-    range.label.inside = true;
-    range.label.location = 0.5;
-    range.label.inside = true;
-    range.label.radius = am4core.percent(10);
-    range.label.paddingBottom = -5; // ~half font size
-    range.label.fontSize = "0.9em";
 }
 
 var matchingGrade = lookUpGrade(data.score, data.gradingData);
@@ -104,27 +95,14 @@ var matchingGrade = lookUpGrade(data.score, data.gradingData);
 
 var label = chart.radarContainer.createChild(am4core.Label);
 label.isMeasured = false;
-label.fontSize = "6em";
+label.fontSize = "2em";
 label.x = am4core.percent(50);
-label.paddingBottom = 15;
 label.horizontalCenter = "middle";
 label.verticalCenter = "bottom";
 //label.dataItem = data;
 label.text = data.score.toFixed(1);
 //label.text = "{score}";
 label.fill = am4core.color(matchingGrade.color);
-
-/**
- * Label 2
- */
-
-var label2 = chart.radarContainer.createChild(am4core.Label);
-label2.isMeasured = false;
-label2.fontSize = "2em";
-label2.horizontalCenter = "middle";
-label2.verticalCenter = "bottom";
-label2.text = matchingGrade.title.toUpperCase();
-label2.fill = am4core.color(matchingGrade.color);
 
 
 /**
@@ -144,9 +122,6 @@ hand.events.on("positionchanged", function () {
     label.text = axis2.positionToValue(hand.currentPosition).toFixed(1);
     var value2 = axis.positionToValue(hand.currentPosition);
     var matchingGrade = lookUpGrade(axis.positionToValue(hand.currentPosition), data.gradingData);
-    label2.text = matchingGrade.title.toUpperCase();
-    label2.fill = am4core.color(matchingGrade.color);
-    label2.stroke = am4core.color(matchingGrade.color);
     label.fill = am4core.color(matchingGrade.color);
 })
 
