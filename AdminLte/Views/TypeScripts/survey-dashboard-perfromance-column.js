@@ -6,6 +6,12 @@ chart.data = JSON.parse($("#column-performance-value").val());;
 
 chart.padding(40, 40, 40, 40);
 
+chart.colors.list = [
+	am4core.color("#4DB749"),
+	am4core.color("#175EAC"),
+	am4core.color("#EC1F24")
+];
+
 var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
 categoryAxis.renderer.grid.template.location = 0;
 categoryAxis.dataFields.category = "x";

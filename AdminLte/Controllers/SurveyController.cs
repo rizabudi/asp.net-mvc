@@ -273,7 +273,7 @@ namespace AdminLte.Controllers
 
         [HttpGet("survey/dashboard")]
         [Route("survey/dashboard/{surveyID:int}")]
-        public async Task<IActionResult> DashboardAsync(int surveyID, int entity)
+        public async Task<IActionResult> DashboardAsync(int surveyID, int entity, int section)
         {
             var questionPackage = await _db.QuestionPackages.FirstOrDefaultAsync(x => x.ID == surveyID);
 
@@ -283,7 +283,14 @@ namespace AdminLte.Controllers
             }
 
             var entityList = await _db.Entities.OrderBy(x => x.Name).ToListAsync();
+            var sections = await _db.Sections.OrderBy(x => x.Name).ToListAsync();
             var entities = Entity.getEntities(entityList, 0, 0);
+            var entityData = await _db.Entities.FirstOrDefaultAsync(x=>x.ID == entity);
+            var sectionData = await _db.Sections.FirstOrDefaultAsync(x => x.ID == section);
+            if(sectionData == null)
+            {
+                sectionData = sections.First();
+            }
 
             var cultureData = await _db.VwCulturePerVerticalDimention
                 .Include(x => x.VerticalDimention)
@@ -335,7 +342,9 @@ namespace AdminLte.Controllers
 
             ViewData["Survey"] = questionPackage;
             ViewData["Entities"] = entities;
-            ViewData["Entity"] = entity;
+            ViewData["Entity"] = entityData;
+            ViewData["Sections"] = sections;
+            ViewData["Section"] = sectionData;
             ViewData["DashboardCulture"] = dashboardCulture;
             ViewData["DashboardEngagement"] = dashboardEngagement;
             ViewData["DashboardEngagement1"] = dashboardEngagement1;
