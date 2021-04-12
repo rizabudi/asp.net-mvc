@@ -8,7 +8,7 @@
     var sections = (List<Section>)ViewData["Sections"];
     var section = (Section)ViewData["Section"];
 
-    ViewData["Title"] = "Dashboard Survei - " + survey.Name + " - " + (entity == null ? "ALL" : entity.Name);
+    ViewData["Title"] = "Dashboard Survei - " + survey.Name + " - " + (entity == null ? "ALL" : entity.Name) + " - " + section.Name;
 }
 
 @section Scripts {
