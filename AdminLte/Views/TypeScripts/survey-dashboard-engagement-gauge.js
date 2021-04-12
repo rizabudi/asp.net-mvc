@@ -5,9 +5,13 @@ var data = {
     score: 0,
     gradingData: [
         {
-            title: "Engagement",
-            color: "#ee1f25",
+            color: "#EC1F24",
             lowScore: 0,
+            highScore: 65
+        },
+        {
+            color: "#4DB749",
+            lowScore: 66,
             highScore: 100
         }
     ]

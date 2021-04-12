@@ -1,29 +1,17 @@
 ﻿@{
-    var dashboardCulture = (Dictionary<VerticalDimention, double>)ViewData["DashboardCulture"];
-    var dashboardEngagement = (Dictionary<HorizontalDimention, double>)ViewData["DashboardEngagement"];
-    var dashboardEngagement1 = (Dictionary<SubVerticalDimention, double>)ViewData["DashboardEngagement1"];
-    var dashboardPerformance = (Dictionary<VerticalDimention, double>)ViewData["DashboardPerformance"];
-
-    var akhlakData = dashboardCulture.Select(x => new { @x = x.Key.Name, @y = x.Value });
-    var radarAkhlakJson = Json.Serialize(akhlakData).ToString();
-    var gauageAkhlakData = dashboardCulture.Any() ? dashboardCulture.Average(x => x.Value) : 0;
-
-    var engagementData = dashboardEngagement.Select(x => new { @x = x.Key.Name, @y = x.Value });
-    var radarEngagementJson = Json.Serialize(engagementData).ToString();
-    var gauageEngagementData = dashboardEngagement.Any() ? dashboardEngagement.Average(x => x.Value) : 0;
-
-    if (dashboardPerformance.Any())
-    {
-        dashboardPerformance.Add(new VerticalDimention { Name = "Kinerja Total" }, dashboardPerformance.Average(x => x.Value));
-    }
-    var performanceData = dashboardPerformance.Select(x => new { @x = x.Key.Name, @y = x.Value }).ToList();
-    var columnPerformanceJson = Json.Serialize(performanceData).ToString();
-
     var section = (Section)ViewData["Section"];
 }
 
 @if (section.Construct == Construct.CULTURE)
 {
+    var dashboardCulture = (Dictionary<VerticalDimention, double>)ViewData["DashboardCulture"];
+    var akhlakData = dashboardCulture.Select(x => new { @x = x.Key.Name, @y = x.Value });
+
+    var dashboardCulture1 = (Dictionary<ValueDriverDimention, double>)ViewData["DashboardCulture1"];
+
+    var radarAkhlakJson = Json.Serialize(akhlakData).ToString();
+    var gauageAkhlakData = dashboardCulture.Any() ? dashboardCulture.Average(x => x.Value) : 0;
+
     <input type="hidden" id="radar-akhlak-value" value="@radarAkhlakJson" />
     <input type="hidden" id="gauge-akhlak-value" value="@gauageAkhlakData" />
 
@@ -49,10 +37,34 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        @foreach (ValueDriverDimention key in dashboardCulture1.Keys)
+        {
+            var gauageData = dashboardCulture1[key];
+            <input type="hidden" id="gauge-akhlak-@key" value="@gauageData" />
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Index Value Akhlak @key.ToString()</h3>
+                    </div>
+                    <div class="card-body" style="padding:5px">
+                        <div style="width: 100%; height: 45vh;" id="chart-akhlak-@key"></div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 }
 
 @if (section.Construct == Construct.ENGAGEMENT)
 {
+    var dashboardEngagement = (Dictionary<HorizontalDimention, double>)ViewData["DashboardEngagement"];
+    var dashboardEngagement1 = (Dictionary<SubVerticalDimention, double>)ViewData["DashboardEngagement1"];
+
+    var engagementData = dashboardEngagement.Select(x => new { @x = x.Key.Name, @y = x.Value });
+    var radarEngagementJson = Json.Serialize(engagementData).ToString();
+    var gauageEngagementData = dashboardEngagement.Any() ? dashboardEngagement.Average(x => x.Value) : 0;
+
     <input type="hidden" id="radar-engagement-value" value="@radarEngagementJson" />
     <input type="hidden" id="gauge-engagement-value" value="@gauageEngagementData" />
 
@@ -118,6 +130,14 @@
 
 @if (section.Construct == Construct.PERFORMANCE)
 {
+    var dashboardPerformance = (Dictionary<VerticalDimention, double>)ViewData["DashboardPerformance"];
+    if (dashboardPerformance.Any())
+    {
+        dashboardPerformance.Add(new VerticalDimention { Name = "Kinerja Total" }, dashboardPerformance.Average(x => x.Value));
+    }
+    var performanceData = dashboardPerformance.Select(x => new { @x = x.Key.Name, @y = x.Value }).ToList();
+    var columnPerformanceJson = Json.Serialize(performanceData).ToString();
+
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Hasil Kinerja</h3>

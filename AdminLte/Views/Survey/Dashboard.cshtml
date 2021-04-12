@@ -3,12 +3,6 @@
 
     Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
 
-    var resumeCultureSubVerticalDimention = (Dictionary<int, List<VwCulturePerSubVerticalDimention>>)ViewData["ResumeCultureSubVerticalDimention"];
-    var resumeCultureVerticalDimention = (Dictionary<int, List<VwCulturePerVerticalDimention>>)ViewData["ResumeCultureVerticalDimention"];
-    var reportCultureSubVerticalDimention = (Dictionary<int, double>)ViewData["ReportCultureSubVerticalDimention"];
-    var reportCultureVerticalDimention = (Dictionary<int, double>)ViewData["ReportCultureVerticalDimention"];
-    var reportCulture = (Dictionary<int, double>)ViewData["ReportCulture"];
-
     var entities = (Dictionary<string, string>)ViewData["Entities"];
     var entity = (Entity)ViewData["Entity"];
     var sections = (List<Section>)ViewData["Sections"];
@@ -21,11 +15,21 @@
     <script src="~/plugins/amcharts/core.js"></script>
     <script src="~/plugins/amcharts/charts.js"></script>
     <script src="~/plugins/amcharts/animated.js"></script>
-    <script src="~/Views/TypeScripts/survey-dashboard-akhlak-gauge.js"></script>
-    <script src="~/Views/TypeScripts/survey-dashboard-akhlak-radar.js"></script>
-    <script src="~/Views/TypeScripts/survey-dashboard-engagement-gauge.js"></script>
-    <script src="~/Views/TypeScripts/survey-dashboard-engagement-radar.js"></script>
-    <script src="~/Views/TypeScripts/survey-dashboard-perfromance-column.js"></script>
+
+    @if (section.Construct == Construct.CULTURE)
+    {
+        <script src="~/Views/TypeScripts/survey-dashboard-akhlak-gauge.js"></script>
+        <script src="~/Views/TypeScripts/survey-dashboard-akhlak-radar.js"></script>
+    }
+    else if (section.Construct == Construct.CULTURE)
+    {
+        <script src="~/Views/TypeScripts/survey-dashboard-engagement-gauge.js"></script>
+        <script src="~/Views/TypeScripts/survey-dashboard-engagement-radar.js"></script>
+    }
+    else
+    {
+        <script src="~/Views/TypeScripts/survey-dashboard-perfromance-column.js"></script>
+    }
 }
 
 <div class="module form-modal">
@@ -67,7 +71,7 @@
                                 <option value="0">Pilih</option>
                                 @foreach (string key in entities.Keys)
                                 {
-                                    var selected =(entity != null && key == entity.ID.ToString());
+                                    var selected = (entity != null && key == entity.ID.ToString());
                                     if (selected)
                                     {
                                         <option selected value="@key">@entities[key]</option>

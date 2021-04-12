@@ -24,8 +24,10 @@ namespace AdminLte.Models
         [Key]
         public string id { get; set; }
         public int ParticipantID { get; set; }
+        public Participant Participant { get; set; }
         public int VerticalDimentionID { get; set; }
         public int SubVerticalDimentionID { get; set; }
+        public SubVerticalDimention SubVerticalDimention { get; set; }
         public double skorsituasi { get; set; }
         public double indexsituasi { get; set; }
     }

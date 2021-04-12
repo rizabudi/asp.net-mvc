@@ -292,63 +292,86 @@ namespace AdminLte.Controllers
                 sectionData = sections.First();
             }
 
-            var cultureData = await _db.VwCulturePerVerticalDimention
-                .Include(x => x.VerticalDimention)
-                .Where(x =>
-                    x.Participant.QuestionPackage.ID == surveyID &&
-                    (entity == 0 || x.Participant.ParticipantUser.Entity.ID == entity)
-                 )
-                .ToListAsync();
+            if (sectionData.Construct == Construct.CULTURE)
+            {
+                var cultureData = await _db.VwCulturePerVerticalDimention
+                    .Include(x => x.VerticalDimention)
+                    .Where(x =>
+                        x.Participant.QuestionPackage.ID == surveyID &&
+                        (entity == 0 || x.Participant.ParticipantUser.Entity.ID == entity)
+                     )
+                    .ToListAsync();
 
-            var dashboardCulture = cultureData
-                .GroupBy(x => x.VerticalDimention)
-                .ToDictionary(x => x.Key, y => y.Average(z => z.indexvaluesubject));
+                var dashboardCulture = cultureData
+                    .GroupBy(x => x.VerticalDimention)
+                    .ToDictionary(x => x.Key, y => y.Average(z => z.indexvaluesubject));
 
-            var engagementData = await _db.VwEngagementPerHorizontalDimention
-                .Include(x => x.HorizontalDimention)
-                .Where(x =>
-                    x.Participant.QuestionPackage.ID == surveyID &&
-                    (entity == 0 || x.Participant.ParticipantUser.Entity.ID == entity)
-                 )
-                .ToListAsync();
+                var cultureData1 = await _db.VwCulturePerSubVerticalDimention
+                    .Include(x => x.SubVerticalDimention)
+                    .Where(x =>
+                        x.Participant.QuestionPackage.ID == surveyID &&
+                        (entity == 0 || x.Participant.ParticipantUser.Entity.ID == entity)
+                     )
+                    .ToListAsync();
 
-            var dashboardEngagement = engagementData
-                .GroupBy(x => x.HorizontalDimention)
-                .ToDictionary(x => x.Key, y => y.Average(z => z.indexsituasi));
+                var dashboardCulture1 = cultureData1
+                    .GroupBy(x => x.SubVerticalDimention.ValueDriverDimention)
+                    .ToDictionary(x => x.Key, y => y.Average(z => z.indexsituasi));
 
-            var engagementData1 = await _db.VwEngagementPerSubVerticalDimention
-                .Include(x => x.SubVerticalDimention)
-                .Where(x =>
-                    x.Participant.QuestionPackage.ID == surveyID &&
-                    (entity == 0 || x.Participant.ParticipantUser.Entity.ID == entity)
-                 )
-                .ToListAsync();
+                ViewData["DashboardCulture"] = dashboardCulture;
+                ViewData["DashboardCulture1"] = dashboardCulture1;
+            } 
+            else if(sectionData.Construct == Construct.ENGAGEMENT)
+            {
+                var engagementData = await _db.VwEngagementPerHorizontalDimention
+                    .Include(x => x.HorizontalDimention)
+                    .Where(x =>
+                        x.Participant.QuestionPackage.ID == surveyID &&
+                        (entity == 0 || x.Participant.ParticipantUser.Entity.ID == entity)
+                     )
+                    .ToListAsync();
 
-            var dashboardEngagement1 = engagementData1
-                .GroupBy(x => x.SubVerticalDimention)
-                .ToDictionary(x => x.Key, y => y.Average(z => z.indexsituasi));
+                var dashboardEngagement = engagementData
+                    .GroupBy(x => x.HorizontalDimention)
+                    .ToDictionary(x => x.Key, y => y.Average(z => z.indexsituasi));
 
-            var performanceData = await _db.VwPerformancePerVerticalDimention
-                .Include(x => x.VerticalDimention)
-                .Where(x =>
-                    x.Participant.QuestionPackage.ID == surveyID &&
-                    (entity == 0 || x.Participant.ParticipantUser.Entity.ID == entity)
-                 )
-                .ToListAsync();
+                var engagementData1 = await _db.VwEngagementPerSubVerticalDimention
+                    .Include(x => x.SubVerticalDimention)
+                    .Where(x =>
+                        x.Participant.QuestionPackage.ID == surveyID &&
+                        (entity == 0 || x.Participant.ParticipantUser.Entity.ID == entity)
+                     )
+                    .ToListAsync();
 
-            var dashboardPerformance = performanceData
-                .GroupBy(x => x.VerticalDimention)
-                .ToDictionary(x => x.Key, y => y.Average(z => (z.indexvaluesubject * 100) / 6));
+                var dashboardEngagement1 = engagementData1
+                    .GroupBy(x => x.SubVerticalDimention)
+                    .ToDictionary(x => x.Key, y => y.Average(z => z.indexsituasi));
+
+                ViewData["DashboardEngagement"] = dashboardEngagement;
+                ViewData["DashboardEngagement1"] = dashboardEngagement1;
+            }
+            else if (sectionData.Construct == Construct.PERFORMANCE)
+            {
+                var performanceData = await _db.VwPerformancePerVerticalDimention
+                    .Include(x => x.VerticalDimention)
+                    .Where(x =>
+                        x.Participant.QuestionPackage.ID == surveyID &&
+                        (entity == 0 || x.Participant.ParticipantUser.Entity.ID == entity)
+                     )
+                    .ToListAsync();
+
+                var dashboardPerformance = performanceData
+                    .GroupBy(x => x.VerticalDimention)
+                    .ToDictionary(x => x.Key, y => y.Average(z => (z.indexvaluesubject * 100) / 6));
+
+                ViewData["DashboardPerformance"] = dashboardPerformance;
+            }
 
             ViewData["Survey"] = questionPackage;
             ViewData["Entities"] = entities;
             ViewData["Entity"] = entityData;
             ViewData["Sections"] = sections;
             ViewData["Section"] = sectionData;
-            ViewData["DashboardCulture"] = dashboardCulture;
-            ViewData["DashboardEngagement"] = dashboardEngagement;
-            ViewData["DashboardEngagement1"] = dashboardEngagement1;
-            ViewData["DashboardPerformance"] = dashboardPerformance;
 
             ViewData["SideBarCollapse"] = true;
 

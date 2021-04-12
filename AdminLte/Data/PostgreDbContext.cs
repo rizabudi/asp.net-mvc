@@ -63,6 +63,7 @@ namespace AdminLte.Data
         // VIEWS
         public DbSet<VwCulturePerRow> VwCulturePerRow { get; set; }
         public DbSet<VwCulturePerVerticalDimention> VwCulturePerVerticalDimention { get; set; }
+        public DbSet<VwCulturePerSubVerticalDimention> VwCulturePerSubVerticalDimention { get; set; }
         public DbSet<VwPerformancePerRow> VwPerformancePerRow { get; set; }
         public DbSet<VwEngagementPerRow> VwEngagementPerRow { get; set; }
         public DbSet<VwEngagementPerHorizontalDimention> VwEngagementPerHorizontalDimention { get; set; }
