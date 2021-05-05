@@ -95,7 +95,7 @@ namespace AdminLte.Controllers
         [HttpGet("function")]
         public IActionResult Index()
         {
-            ViewData["Title"] = "Posisi";
+            ViewData["Title"] = "Fungsi";
             List<ColumnModel> ColumnModels = new List<ColumnModel>();
             ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name", Style = "width: 15%; min-width: 200px" });
 

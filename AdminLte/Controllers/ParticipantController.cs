@@ -52,10 +52,10 @@ namespace AdminLte.Controllers
                         {
                             "HTML:<b>" + row.ParticipantUser.EmployeeNumber + " - " + row.ParticipantUser.Name + "</b><br/>" +
                             "Entitas : " + (row.ParticipantUser.Entity == null ? "-" : row.ParticipantUser.Entity.Name) + "<br/>" +
-                            "Posisi : " + (row.ParticipantUser.Position == null ? "-" : row.ParticipantUser.Position.Name) + "<br/>" +
-                            "Fungsi : " + (row.ParticipantUser.CompanyFunction == null ? "-" : row.ParticipantUser.CompanyFunction.Name) + "<br/>" +
-                            "Divisi : " + (row.ParticipantUser.Divition == null ? "-" : row.ParticipantUser.Divition.Name) + "<br/>" +
-                            "Departemen : " + (row.ParticipantUser.Department == null ? "-" : row.ParticipantUser.Department.Name) + "<br/>" +
+                            //"Posisi : " + (row.ParticipantUser.Position == null ? "-" : row.ParticipantUser.Position.Name) + "<br/>" +
+                            //"Fungsi : " + (row.ParticipantUser.CompanyFunction == null ? "-" : row.ParticipantUser.CompanyFunction.Name) + "<br/>" +
+                            //"Divisi : " + (row.ParticipantUser.Divition == null ? "-" : row.ParticipantUser.Divition.Name) + "<br/>" +
+                            //"Departemen : " + (row.ParticipantUser.Department == null ? "-" : row.ParticipantUser.Department.Name) + "<br/>" +
                             "Level Jabatan : " + (row.ParticipantUser.JobLevel == null ? "-" : row.ParticipantUser.JobLevel.Name),
                             row.QuestionPackage.Assesment.Name + " - " + row.QuestionPackage.Name,
                             row.IsCanRetake ? "Iya, " + row.MaxRetake + " Kali" : "Tidak",
