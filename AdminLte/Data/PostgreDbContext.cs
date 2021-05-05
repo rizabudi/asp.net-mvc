@@ -60,5 +60,14 @@ namespace AdminLte.Data
         public DbSet<EntityVerticalDimentionScore> EntityVerticalDimentionScores { get; set; }
         public DbSet<EntitySubVerticalDimentionScore> EntitySubVerticalDimentionScores { get; set; }
 
+        // VIEWS
+        public DbSet<VwCulturePerRow> VwCulturePerRow { get; set; }
+        public DbSet<VwCulturePerVerticalDimention> VwCulturePerVerticalDimention { get; set; }
+        public DbSet<VwCulturePerSubVerticalDimention> VwCulturePerSubVerticalDimention { get; set; }
+        public DbSet<VwPerformancePerRow> VwPerformancePerRow { get; set; }
+        public DbSet<VwEngagementPerRow> VwEngagementPerRow { get; set; }
+        public DbSet<VwEngagementPerHorizontalDimention> VwEngagementPerHorizontalDimention { get; set; }
+        public DbSet<VwEngagementPerSubVerticalDimention> VwEngagementPerSubVerticalDimention { get; set; }
+        public DbSet<VwPerformancePerVerticalDimention> VwPerformancePerVerticalDimention { get; set; }
     }
 }

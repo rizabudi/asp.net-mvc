@@ -1,0 +1,119 @@
+﻿@{
+    var survey = (QuestionPackage)ViewData["Survey"];
+
+    Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
+
+    var entities = (Dictionary<string, string>)ViewData["Entities"];
+    var entity = (Entity)ViewData["Entity"];
+    var sections = (List<Section>)ViewData["Sections"];
+    var section = (Section)ViewData["Section"];
+
+    ViewData["Title"] = "Dashboard Survei - " + survey.Name + " - " + (entity == null ? "ALL" : entity.Name) + " - " + section.Name;
+}
+
+@section Scripts {
+    <script src="~/plugins/amcharts/core.js"></script>
+    <script src="~/plugins/amcharts/charts.js"></script>
+    <script src="~/plugins/amcharts/animated.js"></script>
+
+    @if (section.Construct == Construct.CULTURE)
+    {
+        <script src="~/Views/TypeScripts/survey-dashboard-akhlak-gauge.js"></script>
+        <script src="~/Views/TypeScripts/survey-dashboard-akhlak-radar.js"></script>
+    }
+    else if (section.Construct == Construct.CULTURE)
+    {
+        <script src="~/Views/TypeScripts/survey-dashboard-engagement-gauge.js"></script>
+        <script src="~/Views/TypeScripts/survey-dashboard-engagement-radar.js"></script>
+    }
+    else
+    {
+        <script src="~/Views/TypeScripts/survey-dashboard-perfromance-column.js"></script>
+    }
+}
+
+<div class="module form-modal">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Hasil Survei</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-sm btn-primary" onclick="$('#modal-default').modal('show')">
+                    <i class="fas fa-search"></i> Filter
+                </button>
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            @await Html.PartialAsync("~/Views/Survey/ResultDashboard.cshtml")
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            @*<button id="edit" type="button" class="btn btn-primary">Perbarui Profil</button>*@
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-default">
+    <form method="get">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Filter Dashboard</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <label class="col-md-4 col-form-label">Entitas : </label>
+                        <div class="col-md-8">
+                            <select name="entity" class="form-control">
+                                <option value="0">Pilih</option>
+                                @foreach (string key in entities.Keys)
+                                {
+                                    var selected = (entity != null && key == entity.ID.ToString());
+                                    if (selected)
+                                    {
+                                        <option selected value="@key">@entities[key]</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@key">@entities[key]</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <br />
+                        <br />
+                        <label class="col-md-4 col-form-label">Konstruk : </label>
+                        <div class="col-md-8">
+                            <select name="section" class="form-control">
+                                <option value="0">Pilih</option>
+                                @foreach (Section row in sections)
+                                {
+                                    var selected = (section != null && row.ID == section.ID);
+                                    if (selected)
+                                    {
+                                        <option selected value="@row.ID">@row.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@row.ID">@row.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <br />
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button onclick="$('#modal-default').modal('hide')" type="button" class="btn btn-default">Close</button>
+                    <button type="submit" class="btn btn-primary">Cari</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </form>
+</div>
+<!-- /.modal -->

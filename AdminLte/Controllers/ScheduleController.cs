@@ -100,7 +100,8 @@ namespace AdminLte.Controllers
                     scheduleFromDb = await _db.Schedules.FirstOrDefaultAsync(e => e.ID == id);
                 }
                 var assesments = await _db.Assesments.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
-                var entities = await _db.Entities.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+                var entityList = await _db.Entities.OrderBy(x => x.Name).ToListAsync();
+                var entities = Entity.getEntities(entityList, 0, 0);
                 var periods = await _db.Periods
                     .OrderBy(x => x.Start)
                     .ToDictionaryAsync(x => x.ID.ToString(), y => y.Name + " (" + y.Start.ToString("yyyy-MM-dd") + " s/d " + y.End.ToString("yyyy-MM-dd") + ")");
