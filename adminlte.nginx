@@ -1,0 +1,47 @@
+server {
+    server_name   akhlakcultureindex.com;
+    # This location block fixed my issue.
+    location ~* ^/(css|js|lib|plugins|img|uploads) {
+    #location ~* \.(css|js|ico|png|jpg|jpeg|gif)$ {
+        root /srv/sms/dist/wwwroot;
+	log_not_found on;
+	access_log off;
+    }
+
+    location ~* ^/views/.*\.js {
+	root /srv/sms/dist;
+	log_not_found on;
+	access_log off;
+    }
+
+    location / {
+        proxy_pass         http://localhost:5000;
+        proxy_http_version 1.1;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_set_header   Connection keep-alive;
+        proxy_set_header   Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+    }
+
+
+    listen 443 ssl reuseport; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/akhlakcultureindex.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/akhlakcultureindex.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+server {
+    if ($host = akhlakcultureindex.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    server_name   akhlakcultureindex.com;
+    listen 80;
+    return 404; # managed by Certbot
+
+
+}

@@ -1,0 +1,16 @@
+[Unit]
+Description=AdminLTE ASP.NET app
+
+[Service]
+WorkingDirectory=/srv/sms/dist
+#ExecStart=/srv/sms/dist/AdminLte
+ExecStart=/usr/bin/dotnet /srv/sms/dist/AdminLte.dll
+Restart=always
+RestartSec=5
+KillSignal=SIGINT
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+Environment=DOTNET_CLI_TELEMETRY_OPTOUT=1
+
+[Install]
+WantedBy=multi-user.target
