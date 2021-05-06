@@ -56,10 +56,10 @@ namespace AdminLte.Controllers
                                 row.Sex ? "Laki-laki" : "Perempuan",
                                 row.User.UserName,
                                 row.Entity == null ? "-" : row.Entity.Name,
-                                row.Position == null ? "-" : row.Position.Name,
-                                row.CompanyFunction == null ? "-" : row.CompanyFunction.Name,
-                                row.Divition == null ? "-" : row.Divition.Name,
-                                row.Department == null ? "-" :  row.Department.Name,
+                                //row.Position == null ? "-" : row.Position.Name,
+                                //row.CompanyFunction == null ? "-" : row.CompanyFunction.Name,
+                                //row.Divition == null ? "-" : row.Divition.Name,
+                                //row.Department == null ? "-" :  row.Department.Name,
                                 row.JobLevel == null ? "-" :  row.JobLevel.Name
                             }
                         }
