@@ -255,6 +255,11 @@ namespace AdminLte.Controllers
                 answerEngagements[id].Add(row);
             }
 
+            if (answerCultures.Count == 0 || answerPerformances.Count == 0 || answerEngagements.Count == 0)
+            {
+                return Redirect("/home/errors/404");
+            }
+
 
             ViewData["Survey"] = questionPackage;
             ViewData["Participants"] = participants;
