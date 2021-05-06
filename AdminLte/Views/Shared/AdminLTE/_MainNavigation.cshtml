@@ -71,8 +71,8 @@
                     @if (User.IsInRole("Pengguna Khusus"))
                     {
 
-                        <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "assesment", "section", "horizontaldimention", "verticaldimention", "SubVerticalDimention", "entity", "position", "divition", "function", "department", "period", "subperiod", "question", "questionanswer" }, "index")">
-                            <a href="#" class="nav-link @Url.MakeActiveClass(new List<string> { "assesment", "section", "horizontaldimention", "verticaldimention", "SubVerticalDimention", "entity", "position", "divition", "function", "department", "period", "subperiod", "question", "questionanswer" }, "index")">
+                        <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "assesment", "section", "horizontaldimention", "verticaldimention", "SubVerticalDimention", "entity", "position", "divition", "function", "department", "job-level", "period", "subperiod", "question", "questionanswer" }, "index")">
+                            <a href="#" class="nav-link @Url.MakeActiveClass(new List<string> { "assesment", "section", "horizontaldimention", "verticaldimention", "SubVerticalDimention", "entity", "position", "divition", "function", "department", "job-level", "period", "subperiod", "question", "questionanswer" }, "index")">
                                 <i class="nav-icon fas fa-folder"></i>
                                 <p>
                                     Master Data
@@ -104,8 +104,8 @@
                                         <p>Dimensi Horizontal</p>
                                     </a>
                                 </li>
-                                <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "entity", "position", "divition", "function", "department" }, "index")">
-                                    <a href="#" class="nav-link @Url.MakeActiveClass(new List<string> { "entity", "position", "divition", "function", "department" }, "index")">
+                                <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "entity", "position", "divition", "function", "department", "job-level" }, "index")">
+                                    <a href="#" class="nav-link @Url.MakeActiveClass(new List<string> { "entity", "position", "divition", "function", "department", "job-level" }, "index")">
                                         <i class="nav-icon fas fa-building"></i>
                                         <p>
                                             Struktur Organisasi
