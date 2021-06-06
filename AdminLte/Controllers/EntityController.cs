@@ -24,13 +24,6 @@ namespace AdminLte.Controllers
         {
             try
             {
-                //var data = await _db.Entities
-                //    .OrderBy(x=>x.Name)
-                //    .Skip((page-1)*10)
-                //    .Take(10)
-                //    .ToListAsync();
-
-
                 var entityList = await _db.Entities.OrderBy(x => x.Name).ToListAsync();
                 var entities = Entity.getEntities(entityList, 0, 0);
                 var data = entities.Skip((page - 1) * 10).Take(10).ToList();
@@ -184,6 +177,35 @@ namespace AdminLte.Controllers
             {
                 Console.WriteLine(ex.Message);
                 return Json(new { success = false, message = "Terjadi kesalahan. Err : " + ex.Message });
+            }
+        }
+
+        [HttpGet("entity/select-view")]
+        public async Task<IActionResult> GetForSelects(int entity = 0, int selectedID = 0)
+        {
+            try
+            {
+                var entityList = await _db.Entities.Where(x=>x.ParentEntity.ID == entity)
+                    .OrderBy(x => x.Name)
+                    .ToListAsync();
+                var entities = Entity.getEntities(entityList, 0, 0);
+                var data = entities.Take(10).ToList();
+
+                var rows = new List<RowModel>();
+                foreach (var row in data)
+                {
+                    rows.Add(new RowModel { ID = int.Parse(row.Key), Value = new string[] { row.Value } });
+                }
+
+                ViewData["Rows"] = rows;
+                ViewData["SelectedID"] = selectedID;
+
+                return PartialView("~/Views/Shared/_Select.cshtml");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
             }
         }
     }

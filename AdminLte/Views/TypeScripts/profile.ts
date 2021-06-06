@@ -33,6 +33,14 @@
             $('#close_form').click(() => {
                 (<any>$("#modal-default")).modal("hide")
             });
+            $(document).on("change", "#Entity", (e) => {
+                var entityID = $(e.currentTarget).val();
+                Util.request("/profile/entity-select-view?entity=" + entityID, 'GET', 'html', (response) => {
+                    $('#SubEntity').html(response);
+                }, function () {
+                    Util.error('Failed to get data. Please try again');
+                });
+            });
         } catch (e) {
             console.error(e);
             Util.error(e);
@@ -78,6 +86,9 @@
                 WorkDuration: $('#WorkDuration').val(),
                 Entity: {
                     ID: $("#Entity").val()
+                },
+                SubEntity: {
+                    ID: $("#SubEntity").val()
                 },
                 Position: {
                     ID: $("#Position").val()

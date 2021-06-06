@@ -11,12 +11,13 @@
         { "No Telp", Model.Phone },
         { "Jenis Kelamin", Model.Sex ? "Laki-laki" : "Perempuan" },
         { "Tanggal Lahir", Model.BirthDate == null ? "-" : Model.BirthDate.Value.ToString("yyyy-MM-dd") },
-        { "Masa Kerja", (Model.WorkDuration == null ? "0" : Model.WorkDuration.ToString()) + " Tahun" },
+        { "Masa kerja di PT. Pertamina", (Model.WorkDuration == null ? "0" : Model.WorkDuration.ToString()) + " Tahun" },
         //{ "Username", Model.User.UserName },
     };
     var forms2 = new Dictionary<string, string>
     {
-        { "Entitas", Model.Entity == null ? "-" : Model.Entity.Name },
+        { "Holding/Sub-Holding", Model.Entity == null ? "-" : Model.Entity.Name },
+        { "Direktorat/Fungsi", Model.SubEntity == null ? "-" : Model.SubEntity.Name },
         { "Level Jabatan", Model.JobLevel == null ? "-" : Model.JobLevel.Name },
         //{ "Posisi", Model.Position == null ? "-" : Model.Position.Name },
         //{ "Fungsi", Model.CompanyFunction == null ? "-" : Model.CompanyFunction.Name },

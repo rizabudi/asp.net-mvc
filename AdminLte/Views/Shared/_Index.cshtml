@@ -20,6 +20,9 @@
         <div class="card-header">
             <h3 class="card-title">Daftar Data</h3>
             <div class="card-tools">
+                <button id="search" type="button" class="btn btn-sm btn-primary" style="display: none">
+                    <i class="fas fa-search"></i> Cari
+                </button>
                 <button id="add" type="button" class="btn btn-sm btn-primary">
                     <i class="fas fa-plus"></i> Tambah
                 </button>
@@ -29,9 +32,11 @@
         <div class="card-body">
             <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
                 <div class="row">
-                    <div class="col-sm-12 col-md-6">
+                    <div id="divSearchResult" class="col-sm-12 col-md-6" style="display:none">
+                        <div class="form-group row" id="div_Search">
+                            Hasil Pencarian &nbsp; <div id="span_Search"><b>""</b></div> &nbsp; <a id="clear_search" style="cursor: pointer" title="Hapus Pencarian"><i class="fa fa-times" style="color:red"></i></a>
+                        </div>
                     </div>
-                    <div class="col-sm-12 col-md-6"></div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12" style="overflow-x:auto">
@@ -42,7 +47,11 @@
                                     <th style="width: 5%; min-width: 80px">Action</th>
                                     @foreach (ColumnModel ColumnModel in ColumnModels)
                                     {
-                                        <th style="@ColumnModel.Style"><a class="sortTable" data-sort="Nama" data-order="" data-uri="" href="#" style="color: #000; cursor:pointer;padding-right: 20px;background: url('') no-repeat center right;">@ColumnModel.Label</a></th>
+                                        <th style="@ColumnModel.Style">
+                                            <a class="sortTable sortTableBoth" data-sort="@ColumnModel.Name" data-order="" data-uri="" href="#">
+                                                @ColumnModel.Label
+                                            </a>
+                                        </th>
                                     }
                                     <th></th>
                                 </tr>
@@ -83,11 +92,39 @@
     </div>
     <!-- /.modal -->
 
-    @if(Values != null)
+    <div class="modal fade" id="modal-search">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Cari Data</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row" style="display: " id="div_EmployeeNumber">
+                        <label for="EmployeeNumber" class="col-sm-3 col-form-label">Pencarian </label>
+                        <div class=" col-md-9">
+                            <input type="text" class="form-control " data-label="Pencarian" id="Search" name="Search" placeholder="Pencarian" value="">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button id="close_search_form" type="button" class="btn btn-default">Close</button>
+                    <button id="search_form" type="button" class="btn btn-primary">Cari</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    @if (Values != null)
     {
-        foreach(string key in Values.Keys)
+        foreach (string key in Values.Keys)
         {
-            <input type="hidden" id="@key" name="@key" class="hidden-values" value="@Values[key]"/>
+            <input type="hidden" id="@key" name="@key" class="hidden-values" value="@Values[key]" />
         }
     }
 </div>

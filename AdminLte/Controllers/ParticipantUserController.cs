@@ -24,22 +24,116 @@ namespace AdminLte.Controllers
         }
 
         [HttpGet("participant-user/table-data-view")]
-        public async Task<IActionResult> GetAll(int page = 1)
+        public async Task<IActionResult> GetAll(int page = 1, string search = "", string sort = "", string order = "")
         {
             try
             {
-                var data = await _db.ParticipantUsers
+                var temps = _db.ParticipantUsers
                     .Include(x => x.Entity)
+                    .Include(x => x.SubEntity)
                     .Include(x => x.Divition)
                     .Include(x => x.Department)
                     .Include(x => x.CompanyFunction)
                     .Include(x => x.Position)
                     .Include(x => x.JobLevel)
                     .Include(x=> x.User)
-                    .OrderBy(x=> x.Name)
-                    .Skip((page-1)*10)
-                    .Take(10)
-                    .ToListAsync();
+                    .Where(x=> EF.Functions.ILike(x.EmployeeNumber, $"%{search}%") ||
+                            EF.Functions.ILike(x.Name, $"%{search}%") ||
+                            EF.Functions.ILike(x.Email, $"%{search}%") ||
+                            EF.Functions.ILike(x.Phone, $"%{search}%")
+                     );
+
+                IOrderedQueryable<ParticipantUser> temps2 = null;
+                if (order == null || order == "" || order == "asc")
+                {
+                    if(sort == null || sort == "")
+                    {
+                        temps2 = temps.OrderBy(x => x.Name);
+                    }
+                    else if(sort == "EmployeeNumber")
+                    {
+                        temps2 = temps.OrderBy(x => x.EmployeeNumber);
+                    }
+                    else if (sort == "Name")
+                    {
+                        temps2 = temps.OrderBy(x => x.Name);
+                    }
+                    else if (sort == "Email")
+                    {
+                        temps2 = temps.OrderBy(x => x.Email);
+                    }
+                    else if (sort == "Phone")
+                    {
+                        temps2 = temps.OrderBy(x => x.Phone);
+                    }
+                    else if (sort == "Email")
+                    {
+                        temps2 = temps.OrderBy(x => x.Email);
+                    }
+                    else if (sort == "Sex")
+                    {
+                        temps2 = temps.OrderBy(x => x.Sex);
+                    }
+                    else if (sort == "UserName")
+                    {
+                        temps2 = temps.OrderBy(x => x.User.UserName);
+                    }
+                    else if (sort == "Entity")
+                    {
+                        temps2 = temps.OrderBy(x => x.Entity == null ? "-" : x.Entity.Name);
+                    }
+                    else if (sort == "JobLevel")
+                    {
+                        temps2 = temps.OrderBy(x => x.JobLevel == null ? "-" : x.JobLevel.Name);
+                    }
+                } 
+                else
+                {
+                    if (sort == null || sort == "")
+                    {
+                        temps2 = temps.OrderByDescending(x => x.Name);
+                    }
+                    else if (sort == "EmployeeNumber")
+                    {
+                        temps2 = temps.OrderByDescending(x => x.EmployeeNumber);
+                    }
+                    else if (sort == "Name")
+                    {
+                        temps2 = temps.OrderByDescending(x => x.Name);
+                    }
+                    else if (sort == "Email")
+                    {
+                        temps2 = temps.OrderByDescending(x => x.Email);
+                    }
+                    else if (sort == "Phone")
+                    {
+                        temps2 = temps.OrderByDescending(x => x.Phone);
+                    }
+                    else if (sort == "Email")
+                    {
+                        temps2 = temps.OrderByDescending(x => x.Email);
+                    }
+                    else if (sort == "Sex")
+                    {
+                        temps2 = temps.OrderByDescending(x => x.Sex);
+                    }
+                    else if (sort == "UserName")
+                    {
+                        temps2 = temps.OrderByDescending(x => x.User.UserName);
+                    }
+                    else if (sort == "Entity")
+                    {
+                        temps2 = temps.OrderByDescending(x => x.Entity == null ? "-" : x.Entity.Name);
+                    }
+                    else if (sort == "JobLevel")
+                    {
+                        temps2 = temps.OrderByDescending(x => x.JobLevel == null ? "-" : x.JobLevel.Name);
+                    }
+                }
+
+                var data = await temps2.Skip((page - 1) * 10)
+                        .Take(10)
+                        .ToListAsync();
 
                 var rows = new List<RowModel>();
                 foreach(var row in data)
@@ -56,6 +150,7 @@ namespace AdminLte.Controllers
                                 row.Sex ? "Laki-laki" : "Perempuan",
                                 row.User.UserName,
                                 row.Entity == null ? "-" : row.Entity.Name,
+                                row.SubEntity == null ? "-" : row.SubEntity.Name,
                                 //row.Position == null ? "-" : row.Position.Name,
                                 //row.CompanyFunction == null ? "-" : row.CompanyFunction.Name,
                                 //row.Divition == null ? "-" : row.Divition.Name,
@@ -79,11 +174,16 @@ namespace AdminLte.Controllers
         }
 
         [HttpGet("participant-user/table-paging-view")]
-        public IActionResult GetPaging(int page = 1)
+        public IActionResult GetPaging(int page = 1, string search = "")
         {
             try
             {
-                var total = _db.ParticipantUsers.Count();
+                var total = _db.ParticipantUsers
+                    .Where(x => EF.Functions.ILike(x.EmployeeNumber, $"%{search}%") ||
+                            EF.Functions.ILike(x.Name, $"%{search}%") ||
+                            EF.Functions.ILike(x.Email, $"%{search}%") ||
+                            EF.Functions.ILike(x.Phone, $"%{search}%")
+                     ).Count();
                 ViewData["Total"] = total;
                 ViewData["Page"] = page;
 
@@ -106,6 +206,7 @@ namespace AdminLte.Controllers
                 {
                     userFromDb = await _db.ParticipantUsers
                         .Include(x => x.Entity)
+                        .Include(x => x.SubEntity)
                         .Include(x => x.Divition)
                         .Include(x => x.Department)
                         .Include(x => x.CompanyFunction)
@@ -115,8 +216,21 @@ namespace AdminLte.Controllers
                         .FirstOrDefaultAsync(e => e.UserId == id);
                 }
 
-                var entityList = await _db.Entities.OrderBy(x => x.Name).ToListAsync();
+                var entityList = await _db.Entities
+                    .Where(x=>x.Level <= 1)
+                    .OrderBy(x => x.Name)
+                    .ToListAsync();
                 var entities = Entity.getEntities(entityList, 0, 0);
+                var subEntities = new Dictionary<string, string>();
+                if (userFromDb != null)
+                {
+                    var subEntityList = await _db.Entities
+                        .Where(x => x.ParentEntity.ID == userFromDb.Entity.ID)
+                        .OrderBy(x => x.Name)
+                        .ToListAsync();
+                    subEntities = Entity.getEntities(subEntityList, userFromDb.Entity.ID, userFromDb.Entity.Level + 1);
+                }
+
                 var positions = await _db.Position.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
                 var departments = await _db.Departments.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
                 var divitions = await _db.Divitions.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
@@ -130,7 +244,8 @@ namespace AdminLte.Controllers
                 FormModels.Add(new FormModel { Label = "Email", Name = "Email", InputType = InputType.EMAIL, Value = userFromDb == null ? "" : userFromDb.Email });
                 FormModels.Add(new FormModel { Label = "Telp", Name = "Phone", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.Phone });
                 
-                FormModels.Add(new FormModel { Label = "Entitas", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = userFromDb == null || userFromDb.Entity == null ? "" : userFromDb.Entity.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Holding/Sub-Holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = userFromDb == null || userFromDb.Entity == null ? "" : userFromDb.Entity.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Direktorat/Fungsi", Name = "SubEntity", InputType = InputType.DROPDOWN, Options = subEntities, Value = userFromDb == null || userFromDb.SubEntity == null ? "" : userFromDb.SubEntity.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Posisi", Name = "Position", InputType = InputType.DROPDOWN, Options = positions, Value = userFromDb == null || userFromDb.Position == null ? "" : userFromDb.Position.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Fungsi", Name = "CompanyFunction", InputType = InputType.DROPDOWN, Options = functions, Value = userFromDb == null || userFromDb.CompanyFunction == null ? "" : userFromDb.CompanyFunction.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Divisi", Name = "Divition", InputType = InputType.DROPDOWN, Options = divitions, Value = userFromDb == null || userFromDb.Divition == null ? "" : userFromDb.Divition.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
@@ -163,7 +278,8 @@ namespace AdminLte.Controllers
             ColumnModels.Add(new ColumnModel { Label = "Telp", Name = "Phone" });
             ColumnModels.Add(new ColumnModel { Label = "Jenis Kelamin", Name = "Sex" });
             ColumnModels.Add(new ColumnModel { Label = "User Name", Name = "UserName" });
-            ColumnModels.Add(new ColumnModel { Label = "Entitas", Name = "Entity" });
+            ColumnModels.Add(new ColumnModel { Label = "Holding/Sub-Holding", Name = "Entity" });
+            ColumnModels.Add(new ColumnModel { Label = "Direktorat/Fungsi", Name = "SubEntity" });
             //ColumnModels.Add(new ColumnModel { Label = "Posisi", Name = "Position" });
             //ColumnModels.Add(new ColumnModel { Label = "Fungsi", Name = "CompanyFunction" });
             //ColumnModels.Add(new ColumnModel { Label = "Divisi", Name = "Divition" });
@@ -185,6 +301,7 @@ namespace AdminLte.Controllers
             {
                 ParticipantUser userFromDb = await _db.ParticipantUsers
                     .Include(x => x.Entity)
+                    .Include(x => x.SubEntity)
                     .Include(x => x.Position)
                     .Include(x => x.Divition)
                     .Include(x => x.Department)
@@ -206,6 +323,14 @@ namespace AdminLte.Controllers
                         else
                         {
                             participantUser.Entity = null;
+                        }
+                        if (participantUser.SubEntity != null && participantUser.SubEntity.ID != -1)
+                        {
+                            participantUser.SubEntity = await _db.Entities.FirstOrDefaultAsync(e => e.ID == participantUser.SubEntity.ID);
+                        }
+                        else
+                        {
+                            participantUser.SubEntity = null;
                         }
                         if (participantUser.Position != null && participantUser.Position.ID != -1)
                         {
@@ -274,6 +399,14 @@ namespace AdminLte.Controllers
                     else
                     {
                         userFromDb.Entity = null;
+                    }
+                    if (participantUser.SubEntity != null && participantUser.SubEntity.ID != -1)
+                    {
+                        userFromDb.SubEntity = await _db.Entities.FirstOrDefaultAsync(e => e.ID == participantUser.SubEntity.ID);
+                    }
+                    else
+                    {
+                        userFromDb.SubEntity = null;
                     }
                     if (participantUser.Position != null && participantUser.Position.ID != -1)
                     {

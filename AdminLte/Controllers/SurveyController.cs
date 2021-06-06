@@ -287,7 +287,10 @@ namespace AdminLte.Controllers
                 return Redirect("/home/errors/404");
             }
 
-            var entityList = await _db.Entities.OrderBy(x => x.Name).ToListAsync();
+            var entityList = await _db.Entities
+                    .Where(x => x.Level <= 1)
+                    .OrderBy(x => x.Name)
+                    .ToListAsync();
             var sections = await _db.Sections.OrderBy(x => x.Name).ToListAsync();
             var entities = Entity.getEntities(entityList, 0, 0);
             var entityData = await _db.Entities.FirstOrDefaultAsync(x=>x.ID == entity);

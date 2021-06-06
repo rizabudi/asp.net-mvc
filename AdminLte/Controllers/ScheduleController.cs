@@ -100,7 +100,10 @@ namespace AdminLte.Controllers
                     scheduleFromDb = await _db.Schedules.FirstOrDefaultAsync(e => e.ID == id);
                 }
                 var assesments = await _db.Assesments.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
-                var entityList = await _db.Entities.OrderBy(x => x.Name).ToListAsync();
+                var entityList = await _db.Entities
+                    .Where(x=>x.Level <= 1)
+                    .OrderBy(x => x.Name)
+                    .ToListAsync();
                 var entities = Entity.getEntities(entityList, 0, 0);
                 var periods = await _db.Periods
                     .OrderBy(x => x.Start)
@@ -116,7 +119,7 @@ namespace AdminLte.Controllers
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = scheduleFromDb == null ? "0" : scheduleFromDb.ID.ToString() });
                 FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = scheduleFromDb == null ? "" : scheduleFromDb.Name, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Jenis Survei", Name = "Assesment", InputType = InputType.DROPDOWN, Options = assesments, Value = scheduleFromDb == null ? "" : scheduleFromDb.Assesment.ID.ToString(), IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Entitas", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = scheduleFromDb == null ? "" : scheduleFromDb.Entity.ID.ToString(), IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Holding/Sub-holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = scheduleFromDb == null ? "" : scheduleFromDb.Entity.ID.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Periode", Name = "Period", InputType = InputType.DROPDOWN, Options = periods, Value = scheduleFromDb == null ? "" : scheduleFromDb.Period.ID.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Sub Periode", Name = "SubPeriod", InputType = InputType.DROPDOWN, Options = subPeriods, Value = scheduleFromDb == null || scheduleFromDb.SubPeriod == null ? "" : scheduleFromDb.SubPeriod.ID.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Tanggal Mulai & Selesai", Name = "Date", InputType = InputType.TEXT, Value = scheduleFromDb == null ? "" : scheduleFromDb.Start.ToString("yyyy-MM-dd") + " s/d " + scheduleFromDb.End.ToString("yyyy-MM-dd") });
@@ -152,7 +155,7 @@ namespace AdminLte.Controllers
             ViewData["Title"] = "Penjadwalan Peserta";
             List<ColumnModel> ColumnModels = new List<ColumnModel>();
             ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name", Style = "width: 15%; min-width: 150px" });
-            ColumnModels.Add(new ColumnModel { Label = "Entitas", Name = "Entity" });
+            ColumnModels.Add(new ColumnModel { Label = "Holding/Sub-holding", Name = "Entity" });
             ColumnModels.Add(new ColumnModel { Label = "Jenis Survey", Name = "Name" });
             ColumnModels.Add(new ColumnModel { Label = "Periode", Name = "Period" });
             ColumnModels.Add(new ColumnModel { Label = "Tanggal Mulai & Selesai", Name = "Date" });

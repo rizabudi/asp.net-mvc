@@ -6,20 +6,26 @@
     private urlDelete = '/participant-user/delete';
 
     private currentPage = 1;
+    private search = "";
+    private order = "";
+    private sort = "";
 
     constructor() {
         this.init();
     }
     private init() {
         try {
-            this.initTable(this.currentPage);
+            this.initTable(this.currentPage, this.search);
             $('#add').click(() => {
                 this.add();
+            });
+            $('#search').click(() => {
+                (<any>$("#modal-search")).modal("show")
             });
             $(document).on("click", ".page-link", (e) => {
                 const idx = $(e.currentTarget).data('dt-idx');
                 this.currentPage = idx;
-                this.initTable(idx);
+                this.initTable(idx, this.search);
             });
             $(document).on("click", ".btn-delete", (e) => {
                 const id = $(e.currentTarget).data('id-strng');
@@ -31,24 +37,56 @@
                 const data = { id: id };
                 this.edit(data);
             });
+            $(document).on("click", ".sortTable", (e) => {
+                this.sort = $(e.currentTarget).data("sort");
+                this.order = $(e.currentTarget).data("order");
+
+                $(".sortTableAsc").addClass("sortTableBoth");
+                $(".sortTableAsc").removeClass("sortTableAsc");
+                $(".sortTableDesc").addClass("sortTableBoth");
+                $(".sortTableDesc").removeClass("sortTableDesc");
+
+                if (this.order == "") {
+                    $(e.currentTarget).removeClass("sortTableBoth")
+                    $(e.currentTarget).addClass("sortTableAsc")
+                    $(e.currentTarget).data("order", "asc");
+
+                    this.order = "asc";
+                } else if (this.order == "asc") {
+                    $(e.currentTarget).removeClass("sortTableAsc")
+                    $(e.currentTarget).addClass("sortTableDesc")
+                    $(e.currentTarget).data("order", "desc");
+
+                    this.order = "desc";
+                } else if (this.order == "desc") {
+                    $(e.currentTarget).removeClass("sortTableDesc")
+                    $(e.currentTarget).addClass("sortTableAsc")
+                    $(e.currentTarget).data("order", "asc");
+
+                    this.order = "asc";
+                }
+
+                this.initTable(this.currentPage, this.search)
+            });
 
             this.initForm();
+            $('#search').show();
 
         } catch (e) {
             console.error(e);
             Util.error(e);
         }
     }
-    private initTable(page) {
+    private initTable(page, search) {
         try {
-            Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', (response) => {
+            Util.request(this.urlGetData + "?page=" + page + "&search=" + search + "&order=" + this.order + "&sort=" + this.sort, 'GET', 'html', (response) => {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
                     console.error('Failed to get data. Please try again');
                     Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page, 'GET', 'html', (response) => {
+            Util.request(this.urlGetPaging + "?page=" + page + "&search=" + search, 'GET', 'html', (response) => {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
@@ -82,7 +120,33 @@
             });
             $('#close_form').click(() => {
                 (<any>$("#modal-default")).modal("hide")
-                this.initTable(this.currentPage)
+                this.initTable(this.currentPage, this.search)
+            });
+            $('#search_form').click(() => {
+                (<any>$("#modal-search")).modal("hide")
+                $("#divSearchResult").show();
+                var search = $("#Search").val().toString();
+                this.search = search;
+                $("#span_Search").html("<b>\"" + search + "\"</b>");
+                this.initTable(1, this.search)
+            });
+            $('#close_search_form').click(() => {
+                (<any>$("#modal-search")).modal("hide")
+                this.initTable(this.currentPage, this.search)
+            });
+            $('#clear_search').click(() => {
+                $("#Search").val("");
+                $("#divSearchResult").hide();
+                this.search = "";
+                this.initTable(1, this.search)
+            });
+            $(document).on("change", "#Entity", (e) => {
+                var entityID = $(e.currentTarget).val();
+                Util.request("/entity/select-view?entity=" + entityID, 'GET', 'html', (response) => {
+                    $('#SubEntity').html(response);
+                }, function () {
+                    Util.error('Failed to get data. Please try again');
+                });
             });
         } catch (e) {
             console.error(e);
@@ -100,7 +164,7 @@
                     if (response.success) {
                         Util.success(response.message);
                         (<any>$("#modal-default")).modal("hide")
-                        this.initTable(this.currentPage)
+                        this.initTable(this.currentPage, this.search)
                     } else {
                         Util.error(response.message);
                     }
@@ -130,6 +194,9 @@
                 Entity: {
                     ID: $("#Entity").val()
                 },
+                SubEntity: {
+                    ID: $("#SubEntity").val()
+                },
                 Position: {
                     ID: $("#Position").val()
                 },
@@ -158,7 +225,7 @@
                 Util.request(this.urlDelete, 'post', 'json', (response) => {
                     if (response.success) {
                         Util.success(response.message);
-                        this.initTable(this.currentPage)
+                        this.initTable(this.currentPage, this.search)
                     } else {
                         Util.error(response.message);
                     }

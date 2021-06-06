@@ -6,19 +6,23 @@ var Participant = /** @class */ (function () {
         this.urlSave = '/participant/save';
         this.urlDelete = '/participant/delete';
         this.currentPage = 1;
+        this.search = "";
         this.init();
     }
     Participant.prototype.init = function () {
         var _this = this;
         try {
-            this.initTable(this.currentPage);
+            this.initTable(this.currentPage, this.search);
             $('#add').click(function () {
                 _this.add();
+            });
+            $('#search').click(function () {
+                $("#modal-search").modal("show");
             });
             $(document).on("click", ".page-link", function (e) {
                 var idx = $(e.currentTarget).data('dt-idx');
                 _this.currentPage = idx;
-                _this.initTable(idx);
+                _this.initTable(idx, _this.search);
             });
             $(document).on("click", ".btn-delete", function (e) {
                 var id = $(e.currentTarget).data('id');
@@ -40,22 +44,23 @@ var Participant = /** @class */ (function () {
                 }
             });
             this.initForm();
+            $('#search').show();
         }
         catch (e) {
             console.error(e);
             Util.error(e);
         }
     };
-    Participant.prototype.initTable = function (page) {
+    Participant.prototype.initTable = function (page, search) {
         try {
-            Util.request(this.urlGetData + "?page=" + page + "&scheduleID=" + $("#Schedule").val() + "&finish=" + $("#Finish").val(), 'GET', 'html', function (response) {
+            Util.request(this.urlGetData + "?page=" + page + "&scheduleID=" + $("#Schedule").val() + "&finish=" + $("#Finish").val() + "&search=" + search, 'GET', 'html', function (response) {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
                 console.error('Failed to get data. Please try again');
                 Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page + "&scheduleID=" + $("#Schedule").val() + "&finish=" + $("#Finish").val(), 'GET', 'html', function (response) {
+            Util.request(this.urlGetPaging + "?page=" + page + "&scheduleID=" + $("#Schedule").val() + "&finish=" + $("#Finish").val() + "&search=" + search, 'GET', 'html', function (response) {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
@@ -93,7 +98,25 @@ var Participant = /** @class */ (function () {
             });
             $('#close_form').click(function () {
                 $("#modal-default").modal("hide");
-                _this.initTable(_this.currentPage);
+                _this.initTable(_this.currentPage, _this.search);
+            });
+            $('#search_form').click(function () {
+                $("#modal-search").modal("hide");
+                $("#divSearchResult").show();
+                var search = $("#Search").val().toString();
+                _this.search = search;
+                $("#span_Search").html("<b>\"" + search + "\"</b>");
+                _this.initTable(1, _this.search);
+            });
+            $('#close_search_form').click(function () {
+                $("#modal-search").modal("hide");
+                _this.initTable(_this.currentPage, _this.search);
+            });
+            $('#clear_search').click(function () {
+                $("#Search").val("");
+                $("#divSearchResult").hide();
+                _this.search = "";
+                _this.initTable(1, _this.search);
             });
         }
         catch (e) {
@@ -113,7 +136,7 @@ var Participant = /** @class */ (function () {
                     if (response.success) {
                         Util.success(response.message);
                         $("#modal-default").modal("hide");
-                        _this.initTable(_this.currentPage);
+                        _this.initTable(_this.currentPage, _this.search);
                     }
                     else {
                         Util.error(response.message);
@@ -161,7 +184,7 @@ var Participant = /** @class */ (function () {
                 Util.request(this.urlDelete, 'post', 'json', function (response) {
                     if (response.success) {
                         Util.success(response.message);
-                        _this.initTable(_this.currentPage);
+                        _this.initTable(_this.currentPage, _this.search);
                     }
                     else {
                         Util.error(response.message);

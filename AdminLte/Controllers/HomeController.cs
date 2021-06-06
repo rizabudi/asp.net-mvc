@@ -3,6 +3,7 @@ using AdminLte.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -15,17 +16,26 @@ namespace AdminLte.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly PostgreDbContext _db;
+        public HomeController(ILogger<HomeController> logger, PostgreDbContext db)
         {
             _logger = logger;
+            _db = db;
         }
 
         [AllowAnonymous]
         [HttpGet("home")]
         [HttpGet("")]
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
+            var surveys = await _db.QuestionPackages
+                       .Include(x => x.Assesment)
+                       .Include(x => x.QuestionPackageLines)
+                       .OrderBy(x => x.Assesment.Name)
+                       .ThenBy(x => x.Name)
+                       .ToListAsync();
+
+            ViewData["Surveys"] = surveys;
             return View();
         }
 

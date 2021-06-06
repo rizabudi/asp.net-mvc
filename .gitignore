@@ -231,3 +231,4 @@ Thumbs.db
 appsettings.json
 
 AdminLte/uploads/*
+/AdminLte/CurrentCommit.txt

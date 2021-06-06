@@ -28,6 +28,7 @@ namespace AdminLte.Controllers
             var user = await _userManager.GetUserAsync(User);
             var participantUser = await _db.ParticipantUsers
                 .Include(x=>x.Entity)
+                .Include(x => x.SubEntity)
                 .Include(x => x.Position)
                 .Include(x => x.CompanyFunction)
                 .Include(x => x.Divition)
@@ -55,6 +56,7 @@ namespace AdminLte.Controllers
                 {
                     participantUserFromDb = await _db.ParticipantUsers
                         .Include(x => x.Entity)
+                        .Include(x => x.SubEntity)
                         .Include(x => x.Position)
                         .Include(x => x.CompanyFunction)
                         .Include(x => x.Divition)
@@ -64,8 +66,21 @@ namespace AdminLte.Controllers
                 }
                 List<FormModel> FormModels = new List<FormModel>();
 
-                var entityList = await _db.Entities.OrderBy(x => x.Name).ToListAsync();
+                var entityList = await _db.Entities
+                    .Where(x => x.Level <= 1)
+                    .OrderBy(x => x.Name)
+                    .ToListAsync();
                 var entities = Entity.getEntities(entityList, 0, 0);
+                var subEntities = new Dictionary<string, string>();
+                if (participantUserFromDb != null)
+                {
+                    var subEntityList = await _db.Entities
+                        .Where(x => x.ParentEntity.ID == participantUserFromDb.Entity.ID)
+                        .OrderBy(x => x.Name)
+                        .ToListAsync();
+                    subEntities = Entity.getEntities(subEntityList, participantUserFromDb.Entity.ID, participantUserFromDb.Entity.Level + 1);
+                }
+
                 var positions = await _db.Position.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
                 var departments = await _db.Departments.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
                 var divitions = await _db.Divitions.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
@@ -83,9 +98,10 @@ namespace AdminLte.Controllers
                 FormModels.Add(new FormModel { Label = "No Telp", Name = "Phone", InputType = InputType.TEXT, Value = participantUserFromDb == null ? "" : participantUserFromDb.Phone, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Jenis Kelamin", Name = "Sex", InputType = InputType.DROPDOWN, Options = sexs, Value = participantUserFromDb == null ? "" : participantUserFromDb.Sex ? "1": "0", IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Tanggal Lahir", Name = "BirthDate", InputType = InputType.DATE, Value = participantUserFromDb == null || participantUserFromDb.BirthDate == null ? "" : participantUserFromDb.BirthDate.Value.ToString("yyyy-MM-dd"), IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Masa Kerja (Tahun)", Name = "WorkDuration", InputType = InputType.NUMBER, Value = participantUserFromDb == null || participantUserFromDb.WorkDuration == null ? "" : participantUserFromDb.WorkDuration.Value.ToString(), IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Masa kerja di PT. Pertamina (Tahun)", Name = "WorkDuration", InputType = InputType.NUMBER, Value = participantUserFromDb == null || participantUserFromDb.WorkDuration == null ? "" : participantUserFromDb.WorkDuration.Value.ToString(), IsRequired = true });
 
-                FormModels.Add(new FormModel { Label = "Entitas", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = participantUserFromDb == null || participantUserFromDb.Entity == null ? "" : participantUserFromDb.Entity.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Holding/Sub-holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = participantUserFromDb == null || participantUserFromDb.Entity == null ? "" : participantUserFromDb.Entity.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Direktorat/Fungsi", Name = "SubEntity", InputType = InputType.DROPDOWN, Options = subEntities, Value = participantUserFromDb == null || participantUserFromDb.SubEntity == null ? "" : participantUserFromDb.SubEntity.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Posisi", Name = "Position", InputType = InputType.DROPDOWN, Options = positions, Value = participantUserFromDb == null || participantUserFromDb.Position == null ? "" : participantUserFromDb.Position.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Fungsi", Name = "CompanyFunction", InputType = InputType.DROPDOWN, Options = functions, Value = participantUserFromDb == null || participantUserFromDb.CompanyFunction == null ? "" : participantUserFromDb.CompanyFunction.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Divisi", Name = "Divition", InputType = InputType.DROPDOWN, Options = divitions, Value = participantUserFromDb == null || participantUserFromDb.Divition == null ? "" : participantUserFromDb.Divition.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
@@ -119,6 +135,14 @@ namespace AdminLte.Controllers
                     .FirstOrDefaultAsync(e => e.UserId == participantUser.UserId);
 
                 userFromDb.Entity = await _db.Entities.FirstOrDefaultAsync(e => e.ID == participantUser.Entity.ID);
+                if (participantUser.SubEntity != null && participantUser.SubEntity.ID != -1)
+                {
+                    userFromDb.SubEntity = await _db.Entities.FirstOrDefaultAsync(e => e.ID == participantUser.SubEntity.ID);
+                }
+                else
+                {
+                    userFromDb.SubEntity = null;
+                }
                 if (participantUser.Position != null && participantUser.Position.ID != -1)
                 {
                     userFromDb.Position = await _db.Position.FirstOrDefaultAsync(e => e.ID == participantUser.Position.ID);
@@ -176,6 +200,35 @@ namespace AdminLte.Controllers
             {
                 Console.WriteLine(ex.Message);
                 return Json(new { success = false, message = "Terjadi kesalahan. Err : " + ex.Message });
+            }
+        }
+
+        [HttpGet("profile/entity-select-view")]
+        public async Task<IActionResult> GetForSelects(int entity = 0, int selectedID = 0)
+        {
+            try
+            {
+                var entityList = await _db.Entities.Where(x => x.ParentEntity.ID == entity)
+                    .OrderBy(x => x.Name)
+                    .ToListAsync();
+                var entities = Entity.getEntities(entityList, 0, 0);
+                var data = entities.Take(10).ToList();
+
+                var rows = new List<RowModel>();
+                foreach (var row in data)
+                {
+                    rows.Add(new RowModel { ID = int.Parse(row.Key), Value = new string[] { row.Value } });
+                }
+
+                ViewData["Rows"] = rows;
+                ViewData["SelectedID"] = selectedID;
+
+                return PartialView("~/Views/Shared/_Select.cshtml");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
             }
         }
     }

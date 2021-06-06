@@ -20,7 +20,7 @@ namespace AdminLte.Controllers
         }
 
         [HttpGet("participant/table-data-view")]
-        public async Task<IActionResult> GetAll(int page = 1, int scheduleID = 0, int finish = 0)
+        public async Task<IActionResult> GetAll(int page = 1, int scheduleID = 0, int finish = 0, string search = "")
         {
             try
             {
@@ -29,6 +29,7 @@ namespace AdminLte.Controllers
                     .Include(x=>x.ParticipantUser)
                     .Include(x => x.ParticipantUser.User)
                     .Include(x => x.ParticipantUser.Entity)
+                    .Include(x => x.ParticipantUser.SubEntity)
                     .Include(x => x.ParticipantUser.Position)
                     .Include(x => x.ParticipantUser.CompanyFunction)
                     .Include(x => x.ParticipantUser.Divition)
@@ -36,7 +37,15 @@ namespace AdminLte.Controllers
                     .Include(x => x.ParticipantUser.JobLevel)
                     .Include(x => x.QuestionPackage)
                     .Include(x => x.QuestionPackage.Assesment)
-                    .Where(x => x.Schedule.ID == scheduleID && (finish == 1 ? x.FinishedAt != null : (finish == 2 ? x.StartedAt != null && x.FinishedAt == null : (finish == 3 ? x.StartedAt == null && x.FinishedAt == null : true))))
+                    .Where(x => 
+                        x.Schedule.ID == scheduleID && 
+                        (finish == 1 ? x.FinishedAt != null : (finish == 2 ? x.StartedAt != null && x.FinishedAt == null : (finish == 3 ? x.StartedAt == null && x.FinishedAt == null : true))) && 
+                        (
+                            EF.Functions.ILike(x.ParticipantUser.EmployeeNumber, $"%{search}%") ||
+                            EF.Functions.ILike(x.ParticipantUser.Name, $"%{search}%") ||
+                            EF.Functions.ILike(x.ParticipantUser.Entity.Name, $"%{search}%")
+                        )
+                     )
                     .OrderBy(x=>x.ParticipantUser.Name)
                     .Skip((page-1)*10)
                     .Take(10)
@@ -51,7 +60,8 @@ namespace AdminLte.Controllers
                         Value = new string[]
                         {
                             "HTML:<b>" + row.ParticipantUser.EmployeeNumber + " - " + row.ParticipantUser.Name + "</b><br/>" +
-                            "Entitas : " + (row.ParticipantUser.Entity == null ? "-" : row.ParticipantUser.Entity.Name) + "<br/>" +
+                            "Holding/Sub-Holding : " + (row.ParticipantUser.Entity == null ? "-" : row.ParticipantUser.Entity.Name) + "<br/>" +
+                            "Direktorat/Fungsi : " + (row.ParticipantUser.SubEntity == null ? "-" : row.ParticipantUser.SubEntity.Name) + "<br/>" +
                             //"Posisi : " + (row.ParticipantUser.Position == null ? "-" : row.ParticipantUser.Position.Name) + "<br/>" +
                             //"Fungsi : " + (row.ParticipantUser.CompanyFunction == null ? "-" : row.ParticipantUser.CompanyFunction.Name) + "<br/>" +
                             //"Divisi : " + (row.ParticipantUser.Divition == null ? "-" : row.ParticipantUser.Divition.Name) + "<br/>" +
@@ -78,12 +88,20 @@ namespace AdminLte.Controllers
         }
 
         [HttpGet("participant/table-paging-view")]
-        public IActionResult GetPaging(int page = 1, int scheduleID = 0, int finish = 0)
+        public IActionResult GetPaging(int page = 1, int scheduleID = 0, int finish = 0, string search = "")
         {
             try
             {
                 var total = _db.Participants
-                    .Where(x => x.Schedule.ID == scheduleID && (finish == 1 ? x.FinishedAt != null : (finish == 2 ? x.StartedAt != null && x.FinishedAt == null : (finish == 3 ? x.StartedAt == null && x.FinishedAt == null : true)))).Count();
+                    .Where(x =>
+                        x.Schedule.ID == scheduleID &&
+                        (finish == 1 ? x.FinishedAt != null : (finish == 2 ? x.StartedAt != null && x.FinishedAt == null : (finish == 3 ? x.StartedAt == null && x.FinishedAt == null : true))) &&
+                        (
+                            EF.Functions.ILike(x.ParticipantUser.EmployeeNumber, $"%{search}%") ||
+                            EF.Functions.ILike(x.ParticipantUser.Name, $"%{search}%") ||
+                            EF.Functions.ILike(x.ParticipantUser.Entity.Name, $"%{search}%")
+                        )
+                     ).Count();
                 ViewData["Total"] = total;
                 ViewData["Page"] = page;
 

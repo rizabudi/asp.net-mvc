@@ -1,0 +1,16 @@
+﻿@{
+    List<RowModel> RowModels = (List<RowModel>)ViewData["Rows"];
+    int selectedID = (int)ViewData["SelectedID"];
+}
+<option value="-1">Pilih</option>
+@foreach (var row in RowModels)
+{
+    if (selectedID == row.ID)
+    {
+        <option selected value="@row.ID">@row.Value</option>
+    }
+    else
+    {
+        <option value="@row.ID">@row.Value[0]</option>
+    }
+}

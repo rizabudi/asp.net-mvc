@@ -1,7 +1,18 @@
-﻿<footer class="main-footer">
+﻿@{ 
+    var currentCommit = AdminLte.Properties.Resources.CurrentCommit;
+    var info = "";
+    if(currentCommit != null)
+    {
+        var infos = currentCommit.Split("\n");
+        info = infos.Length > 0 ? infos[0] : "-";
+
+    }
+}
+
+<footer class="main-footer">
     <!-- To the right -->
     <div class="float-right d-none d-sm-inline">
-        
+        @info
     </div>
     <!-- Default to the left -->
     <strong>Copyright &copy; 2021 <a target="_blank" href="https://lp3t.psikologi.unair.ac.id/">LP3T PSIKOLOGI UNAIR</a>.</strong> All rights reserved.
