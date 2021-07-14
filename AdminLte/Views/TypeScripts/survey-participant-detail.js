@@ -33,21 +33,23 @@ var SurveyParticipantDetail = /** @class */ (function () {
                         }
                     }
                 })
+
+                $(".numerical-row-" + row).val(6-val);
             })
 
             $(document).on("change", ".numerical-box", function (e) {
-                var elem = $(this);
-                var col = elem.data("col");
-                var row = elem.data("row");
-                var val = elem.val();
+                //var elem = $(this);
+                //var col = elem.data("col");
+                //var row = elem.data("row");
+                //var val = elem.val();
 
-                var total = 0;
-                $(".numerical-box-" + col).each(function () {
-                    var subElem = $(this);
-                    total += parseInt(subElem.val());
-                })
+                //var total = 0;
+                //$(".numerical-box-" + col).each(function () {
+                //    var subElem = $(this);
+                //    total += parseInt(subElem.val());
+                //})
 
-                $("#numeric_total").html(total);
+                //$("#numeric_total").html(total);
             })
 
             $(document).on("click", "#submit-answer", function (e) {
@@ -63,13 +65,13 @@ var SurveyParticipantDetail = /** @class */ (function () {
                     }
                     ranks.push(subElem.val());
                 })
-                $(".numerical-box").each(function () {
-                    var subElem = $(this);
-                    if (subElem.val() == "" || subElem.val() == "0") {
-                        error += "Nilai baris ke " + subElem.data("sequence") + " belum diisi<br/>";
-                    }
-                    values.push(subElem.val());
-                })
+                //$(".numerical-box").each(function () {
+                //    var subElem = $(this);
+                //    if (subElem.val() == "" || subElem.val() == "0") {
+                //        error += "Nilai baris ke " + subElem.data("sequence") + " belum diisi<br/>";
+                //    }
+                //    values.push(subElem.val());
+                //})
                 $(".select-simple").each(function () {
                     var subElem = $(this);
                     if (subElem.val() == "") {
@@ -82,17 +84,17 @@ var SurveyParticipantDetail = /** @class */ (function () {
                     return false;
                 }
 
-                var total = 0;
-                $(".numerical-box").each(function () {
-                    var subElem = $(this);
-                    total += parseInt(subElem.val());
-                })
+                //var total = 0;
+                //$(".numerical-box").each(function () {
+                //    var subElem = $(this);
+                //    total += parseInt(subElem.val());
+                //})
 
-                if (values.length > 0 && total != 25) {
-                    Util.error("Total nilai harus 25")
-                    $("#submit-answer").removeAttr("disabled");
-                    return false;
-                }
+                //if (values.length > 0 && total != 25) {
+                //    Util.error("Total nilai harus 25")
+                //    $("#submit-answer").removeAttr("disabled");
+                //    return false;
+                //}
 
                 error = "";
                 for (var i = 0; i < ranks.length; i++) {

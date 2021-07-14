@@ -240,7 +240,10 @@
                                         {
                                             @if (question.QuestionType == QuestionType.MATRIX && question.MatrixSubType == MatrixSubType.CUSTOM)
                                             {
-                                                <th style="width:100px;text-align:center">@qa.Value</th>
+                                                @if (qa.MatrixValue != MatrixValueType.NUMERICAL_BOX)
+                                                {
+                                                    <th style="width:100px;text-align:center">@qa.Value</th>
+                                                }
                                             }
                                             else if (question.QuestionType == QuestionType.MATRIX && question.MatrixSubType == MatrixSubType.SIMPLE)
                                             {
@@ -271,7 +274,7 @@
                                                     <td>
                                                         @if (qa1.MatrixValue == MatrixValueType.NUMERICAL_BOX)
                                                         {
-                                                            <input data-sequence="@no" data-col="@qa1.ID" data-row="@qa.ID" id="numerical_@elemID" name="numerical_@elemID" style="text-align:center" value="@numericalValue" type="number" min="0" max="21" class="numerical-box numerical-box-@qa1.ID form-control" />
+                                                            <input data-sequence="@no" data-col="@qa1.ID" data-row="@qa.ID" id="numerical_@elemID" name="numerical_@elemID" style="text-align:center" value="@numericalValue" type="hidden" min="0" max="21" class="numerical-box numerical-box-@qa1.ID numerical-row-@qa.ID form-control" />
                                                         }
                                                         else if (qa.MatrixValue == MatrixValueType.SEQUENCE)
                                                         {  
@@ -325,7 +328,7 @@
                                 }
                                 @if (question.QuestionType == QuestionType.MATRIX && question.MatrixSubType == MatrixSubType.CUSTOM)
                                 {
-                                    <tfoot>
+                                    @*<tfoot>
                                         <tr>
                                             <th colspan="3">Total</th>
                                             @{
@@ -333,7 +336,7 @@
                                             }
                                             <th id="numeric_total" style="text-align:center" align="center">@total</th>
                                         </tr>
-                                    </tfoot>
+                                    </tfoot>*@
                                 }
                             </table>
                             <br />
