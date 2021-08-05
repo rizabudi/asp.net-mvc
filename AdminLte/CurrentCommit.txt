@@ -1,5 +1,5 @@
-commit b745c6bfb5d16623f107d094ec29d4f48c8eaaed
+commit 5d40de6fadd1baae8fe8bca4bc9ddb8b210c11d0
 Author: Riza Budi Prasetya <rizabudi@live.com>
-Date:   Sun Jun 13 20:51:03 2021 +0700
+Date:   Wed Jul 14 09:41:51 2021 +0700
 
-     Add current cmmit
+    Adjust test page
