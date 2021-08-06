@@ -1,0 +1,44 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Survey Management System | @ViewData["Title"]</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="~/frontpage/css/main.css" />
+</head>
+<body class="is-preload">
+    <div id="page-wrapper">
+
+        <!-- Nav -->
+        <nav id="nav">
+            <ul>
+                <li class="current"><a href="/home">Mulai Survei</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main -->
+        <section id="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="content">
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/frontpage/js/jquery.min.js"></script>
+    <script src="~/frontpage/js/jquery.dropotron.min.js"></script>
+    <script src="~/frontpage/js/jquery.scrolly.min.js"></script>
+    <script src="~/frontpage/js/browser.min.js"></script>
+    <script src="~/frontpage/js/breakpoints.min.js"></script>
+    <script src="~/frontpage/js/util.js"></script>
+    <script src="~/frontpage/js/main.js"></script>
+
+</body>
+</html>

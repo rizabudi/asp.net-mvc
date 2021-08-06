@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Home";
+    Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
+    var Surveys = (List<QuestionPackage>)ViewData["Surveys"];
+}
+
+<div class="module form-modal">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Selamat Datang</h3>
+            <div class="card-tools">
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+            } 
+            else
+            {
+                <div>
+                    <b>Dasboard Survei</b>
+                    <ul>
+                        @foreach(var survey in Surveys)
+                        {
+                            <li>
+                                <a href="/survey/dashboard/@survey.ID"><i class="fa fa-chart-area"></i> @survey.Assesment.Name - @survey.Name</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+        <!-- /.card-body -->
+    </div>
+</div>

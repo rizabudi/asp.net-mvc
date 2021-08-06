@@ -24,9 +24,22 @@ namespace AdminLte.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("home")]
         [HttpGet("")]
         public async Task<IActionResult> IndexAsync()
+        {
+            var surveys = await _db.QuestionPackages
+                       .Include(x => x.Assesment)
+                       .Include(x => x.QuestionPackageLines)
+                       .OrderBy(x => x.Assesment.Name)
+                       .ThenBy(x => x.Name)
+                       .ToListAsync();
+
+            ViewData["Surveys"] = surveys;
+            return View();
+        }
+
+        [HttpGet("home")]
+        public async Task<IActionResult> HomeAsync()
         {
             var surveys = await _db.QuestionPackages
                        .Include(x => x.Assesment)

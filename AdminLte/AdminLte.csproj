@@ -84,6 +84,29 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\frontpage\js\breakpoints.min.js" />
+    <None Include="wwwroot\frontpage\js\browser.min.js" />
+    <None Include="wwwroot\frontpage\js\jquery.dropotron.min.js" />
+    <None Include="wwwroot\frontpage\js\jquery.min.js" />
+    <None Include="wwwroot\frontpage\js\jquery.scrolly.min.js" />
+    <None Include="wwwroot\frontpage\js\main.js" />
+    <None Include="wwwroot\frontpage\js\util.js" />
+    <None Include="wwwroot\frontpage\sass\libs\_breakpoints.scss" />
+    <None Include="wwwroot\frontpage\sass\libs\_functions.scss" />
+    <None Include="wwwroot\frontpage\sass\libs\_html-grid.scss" />
+    <None Include="wwwroot\frontpage\sass\libs\_mixins.scss" />
+    <None Include="wwwroot\frontpage\sass\libs\_vars.scss" />
+    <None Include="wwwroot\frontpage\sass\libs\_vendor.scss" />
+    <None Include="wwwroot\frontpage\sass\main.scss" />
+    <None Include="wwwroot\frontpage\webfonts\fa-brands-400.svg" />
+    <None Include="wwwroot\frontpage\webfonts\fa-brands-400.woff2" />
+    <None Include="wwwroot\frontpage\webfonts\fa-regular-400.svg" />
+    <None Include="wwwroot\frontpage\webfonts\fa-regular-400.woff2" />
+    <None Include="wwwroot\frontpage\webfonts\fa-solid-900.svg" />
+    <None Include="wwwroot\frontpage\webfonts\fa-solid-900.woff2" />
+  </ItemGroup>
+
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="git log -n 1 &gt; &quot;$(ProjectDir)\CurrentCommit.txt&quot;" />
   </Target>

@@ -1,72 +1,34 @@
 ﻿@{
     ViewData["Title"] = "Home";
-    Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
-    var Surveys = (List<QuestionPackage>)ViewData["Surveys"];
+    Layout = "~/Views/Shared/Frontpage/_Layout.cshtml";
 }
 
-<div class="module form-modal">
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Selamat Datang</h3>
-            <div class="card-tools">
+<!-- Content -->
+<article class="box feature">
+    <section>
+        <div class="row">
+            <div class="col-4 col-6-medium col-12-small">
+                <span class="image featured"><img src="~/img/foto_dir.jpg" alt="" /></span>
+            </div>
+            <div class="col-8 col-6-medium col-12-small">
+                <h3>Semangat Pagi Perwira!</h3>
+                <p>
+                    Budaya dan employee engagement merupakan faktor penting dalam membangun suasana kerja yang optimal untuk menciptakan kinerja organisasi yang unggul, sehingga memberikan dampak positif bagi pekerja dan perusahaan. Oleh karena itu, Perusahaan berusaha secara terus-menerus untuk meningkatkan budaya kinerja yang tinggi serta employee engagement yang dapat meningkatkan motivasi pekerja untuk terus belajar, berkembang dan berkontribusi di lingkungan perusahaan.  Sebagai salah satu rangkaian proses, diperlukan pengukuran dan gambaran yang jelas terkait kondisi budaya dan employee engagement saat ini sebagai dasar penyusunan program yang efektif.
+                </p>
+                <p>
+                    Sehubungan dengan hal tersebut, Saya mendorong para Perwira di Pertamina Group untuk berkontribusi dalam culture dan employee engagement assessment yang akan menjadi masukan berarti bagi Perusahaan dalam menentukan langkah ke depan untuk menciptakan High Performance Culture yang dapat mendukung Pertamina mencapai aspirasi sebagai Perusahaan Global Energi Terdepan.
+                </p>
+                <p>
+                    Saya ucapkan terima kasih atas dukungan dan kerjasama yang baik.
+                    <br />
+                    Salam,<br />
+                    Direktur Direktur Sumber Daya Manusia<br />
+                    PT. Pertamina Persero<br />
+                    <br />
+                    Erry Sugiharto<br />
+
+                </p>
             </div>
         </div>
-        <!-- /.card-header -->
-        <div class="card-body">
-            @if (!User.Identity.IsAuthenticated)
-            {
-                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </a>
-            } 
-            else
-            {
-                <div>
-                    <b>@*Dasboard Survei*@</b>
-                    @*<ul>
-                        @foreach(var survey in Surveys)
-                        {
-                            <li>
-                                <a href="/survey/dashboard/@survey.ID"><i class="fa fa-chart-area"></i> @survey.Assesment.Name - @survey.Name</a>
-                            </li>
-                        }
-                    </ul>*@
-                    <div class="col-md-12">
-                        <table>
-                            <tr>
-                                <td valign="top">
-                                    <img width="300px" src="~/img/foto_dir.jpg" />
-                                </td>
-                                <td>
-                                    &nbsp;
-                                    &nbsp;
-                                    &nbsp;
-                                    &nbsp;
-                                    &nbsp;
-                                    &nbsp;
-                                </td>
-                                <td syle="padding:40px;">
-                                    <p dir="ltr" style="line-height:1.295;text-align: justify;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 16px; font-family: Calibri, sans-serif; color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Semangat Pagi Perwira!</span></p>
-                                    <p><span style="font-size: 16px;"></span></p>
-                                    <p dir="ltr" style="line-height:1.295;text-align: justify;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 16px;"><span style="font-family: Calibri, sans-serif; color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Budaya dan employee engagement merupakan faktor penting dalam membangun suasana kerja yang optimal untuk menciptakan kinerja organisasi yang unggul, sehingga memberikan dampak positif bagi pekerja dan perusahaan. Oleh karena itu, Perusahaan berusaha secara terus-menerus untuk meningkatkan budaya kinerja yang tinggi serta employee engagement yang dapat meningkatkan motivasi pekerja untuk terus belajar, berkembang dan berkontribusi di lingkungan perusahaan. &nbsp;Sebagai salah satu rangkaian proses, diperlukan pengukuran dan gambaran yang jelas terkait kondisi budaya dan employee engagement saat ini sebagai dasar penyusunan program yang efektif.</span></span></p>
-                                    <p><span style="font-size: 16px;"></span></p>
-                                    <p dir="ltr" style="line-height:1.295;text-align: justify;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 16px;"><span style="font-family: Calibri, sans-serif; color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Sehubungan dengan hal tersebut, Saya mendorong para Perwira di Pertamina Group untuk berkontribusi dalam culture dan employee engagement assessment yang akan menjadi masukan berarti bagi Perusahaan dalam menentukan langkah ke depan untuk menciptakan High Performance Culture yang dapat mendukung Pertamina mencapai aspirasi sebagai Perusahaan Global Energi Terdepan.</span></span></p>
-                                    <p><span style="font-size: 16px;"></span></p>
-                                    <p dir="ltr" style="line-height:1.295;text-align: justify;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 16px;"><span style="font-family: Calibri, sans-serif; color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Saya ucapkan terima kasih atas dukungan dan kerjasama yang baik.</span></span></p>
-                                    <p><span style="font-size: 16px;"><br></span></p>
-                                    <p dir="ltr" style="line-height:1.295;text-align: justify;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 16px;"><span style="font-family: Calibri, sans-serif; color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Salam,</span></span></p>
-                                    <p dir="ltr" style="line-height:1.295;text-align: justify;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 16px;"><span style="font-family: Calibri, sans-serif; color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Direktur Direktur Sumber Daya Manusia</span></span></p>
-                                    <p dir="ltr" style="line-height:1.295;text-align: justify;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 16px;"><span style="font-family: Calibri, sans-serif; color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">PT. Pertamina Persero</span></span></p>
-                                    <p><span style="font-size: 16px;"></span></p>
-                                    <p dir="ltr" style="line-height:0.5;text-align: justify;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 16px;"><span style="font-family: Calibri, sans-serif; color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Erry Sugiharto</span></span></p>
-                                    <p><br></p>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            }
-        </div>
-        <!-- /.card-body -->
-    </div>
-</div>
+    </section>
+</article>

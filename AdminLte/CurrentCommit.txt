@@ -1,5 +1,5 @@
-commit 5d40de6fadd1baae8fe8bca4bc9ddb8b210c11d0
+commit 4c66b48636adcf8f1ddf99eb8c46ccc9066fc264
 Author: Riza Budi Prasetya <rizabudi@live.com>
-Date:   Wed Jul 14 09:41:51 2021 +0700
+Date:   Thu Aug 5 12:15:05 2021 +0700
 
-    Adjust test page
+    Update layout
