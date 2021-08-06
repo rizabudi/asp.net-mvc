@@ -1,5 +1,5 @@
-commit 4c66b48636adcf8f1ddf99eb8c46ccc9066fc264
+commit 6734dec10cf07afdce28486c4ee2aa1c20e4ec44
 Author: Riza Budi Prasetya <rizabudi@live.com>
-Date:   Thu Aug 5 12:15:05 2021 +0700
+Date:   Fri Aug 6 09:06:32 2021 +0700
 
-    Update layout
+    Add front page
