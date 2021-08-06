@@ -245,7 +245,7 @@ namespace AdminLte.Controllers
                 FormModels.Add(new FormModel { Label = "Telp", Name = "Phone", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.Phone });
                 
                 FormModels.Add(new FormModel { Label = "Holding/Sub-Holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = userFromDb == null || userFromDb.Entity == null ? "" : userFromDb.Entity.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
-                FormModels.Add(new FormModel { Label = "Direktorat/Fungsi", Name = "SubEntity", InputType = InputType.DROPDOWN, Options = subEntities, Value = userFromDb == null || userFromDb.SubEntity == null ? "" : userFromDb.SubEntity.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Direktorat/Fungsi/Anak Perusahaan", Name = "SubEntity", InputType = InputType.DROPDOWN, Options = subEntities, Value = userFromDb == null || userFromDb.SubEntity == null ? "" : userFromDb.SubEntity.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Posisi", Name = "Position", InputType = InputType.DROPDOWN, Options = positions, Value = userFromDb == null || userFromDb.Position == null ? "" : userFromDb.Position.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Fungsi", Name = "CompanyFunction", InputType = InputType.DROPDOWN, Options = functions, Value = userFromDb == null || userFromDb.CompanyFunction == null ? "" : userFromDb.CompanyFunction.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Divisi", Name = "Divition", InputType = InputType.DROPDOWN, Options = divitions, Value = userFromDb == null || userFromDb.Divition == null ? "" : userFromDb.Divition.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
@@ -279,7 +279,7 @@ namespace AdminLte.Controllers
             ColumnModels.Add(new ColumnModel { Label = "Jenis Kelamin", Name = "Sex" });
             ColumnModels.Add(new ColumnModel { Label = "User Name", Name = "UserName" });
             ColumnModels.Add(new ColumnModel { Label = "Holding/Sub-Holding", Name = "Entity" });
-            ColumnModels.Add(new ColumnModel { Label = "Direktorat/Fungsi", Name = "SubEntity" });
+            ColumnModels.Add(new ColumnModel { Label = "Direktorat/Fungsi/Anak Perusahaan", Name = "SubEntity" });
             //ColumnModels.Add(new ColumnModel { Label = "Posisi", Name = "Position" });
             //ColumnModels.Add(new ColumnModel { Label = "Fungsi", Name = "CompanyFunction" });
             //ColumnModels.Add(new ColumnModel { Label = "Divisi", Name = "Divition" });
