@@ -253,7 +253,7 @@ namespace AdminLte.Controllers
                 FormModels.Add(new FormModel { Label = "Level Jabatan", Name = "JobLevel", InputType = InputType.DROPDOWN, Options = jobLevels, Value = userFromDb == null || userFromDb.JobLevel == null ? "" : userFromDb.JobLevel.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
 
                 FormModels.Add(new FormModel { Label = "User Name", Name = "UserName", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.User.UserName, IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Password " + (userFromDb != null ? "(Kosongkan jika tidak ingin mengganti password)" : ""), Name = "Password", InputType = InputType.PASSWORD, Value = "", IsRequired = id == "" });
+                FormModels.Add(new FormModel { Label = "Password", Name = "Password", Note = (userFromDb != null ? "Kosongkan jika tidak ingin mengganti password" : ""), InputType = InputType.PASSWORD, Value = "", IsRequired = id == "" });
 
                 ViewData["Forms"] = FormModels;
                 ViewData["ColumnNumber"] = 2;
@@ -524,11 +524,12 @@ namespace AdminLte.Controllers
                     //.Include(x => x.CompanyFunction)
                     //.Include(x => x.JobLevel)
                     //.Include(x => x.User)
-                    .Where(x => (userId == "" ? true : x.Id == userId) && x.PasswordHash == "AQAAAAEAACcQAAAAEOkPVm5poX0hld51eV+l7J2d6srBsqMLmciEn3pu2AwipKipW8GQKK+oGep257IYOQ==")
+                    .Where(x => (userId == "" ? true : x.Id == userId) && x.PasswordHash == null)
                     .ToListAsync();
 
             var errors = new List<string>();
-            foreach(User user in usersFromDb)
+            var msg = "";
+            foreach (User user in usersFromDb)
             {
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var result = await _userManager.ResetPasswordAsync(user, token, user.UserName + "@Pertamina");
@@ -537,7 +538,6 @@ namespace AdminLte.Controllers
                 }
                 else
                 {
-                    var msg = "";
                     foreach (var error in result.Errors)
                     {
                         msg += error.Description + "<br/>";
@@ -548,7 +548,7 @@ namespace AdminLte.Controllers
 
             if(errors.Count > 0)
             {
-                return Json(new { success = false, message = "Terjadi kesalahan. Err : " + errors.Count });
+                return Json(new { success = false, message = "Terjadi kesalahan. Err : " + msg });
             }
             else
             {
