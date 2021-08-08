@@ -104,7 +104,7 @@ namespace AdminLte.Controllers
                 List<FormModel> FormModels = new List<FormModel>();
                 FormModels.Add(new FormModel { Label = "UserId", Name = "UserId", InputType = InputType.HIDDEN, Value = userFromDb == null ? "" : userFromDb.UserId });
                 FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.Name, IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Holding/Sub-holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = userFromDb == null ? "" : userFromDb.Entity.ID.ToString(), IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Holding/ Sub-Holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = userFromDb == null ? "" : userFromDb.Entity.ID.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "User Name", Name = "UserName", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.User.UserName, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Password " + (userFromDb != null ? "(Kosongkan jika tidak ingin mengganti password)" : ""), Name = "Password", InputType = InputType.PASSWORD, Value = "", IsRequired = id == "" });
 
@@ -125,7 +125,7 @@ namespace AdminLte.Controllers
             ViewData["Title"] = "Pengguna Khusus";
             List<ColumnModel> ColumnModels = new List<ColumnModel>();
             ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name", Style = "width: 15%; min-width: 200px" });
-            ColumnModels.Add(new ColumnModel { Label = "Holding/Sub-holding", Name = "Entity" });
+            ColumnModels.Add(new ColumnModel { Label = "Holding/ Sub-Holding", Name = "Entity" });
             ColumnModels.Add(new ColumnModel { Label = "User Name", Name = "UserName" });
 
 

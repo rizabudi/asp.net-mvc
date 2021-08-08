@@ -119,7 +119,7 @@ namespace AdminLte.Controllers
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = scheduleFromDb == null ? "0" : scheduleFromDb.ID.ToString() });
                 FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = scheduleFromDb == null ? "" : scheduleFromDb.Name, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Jenis Survei", Name = "Assesment", InputType = InputType.DROPDOWN, Options = assesments, Value = scheduleFromDb == null ? "" : scheduleFromDb.Assesment.ID.ToString(), IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Holding/Sub-holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = scheduleFromDb == null ? "" : scheduleFromDb.Entity.ID.ToString(), IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Holding/ Sub-Holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = scheduleFromDb == null ? "" : scheduleFromDb.Entity.ID.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Periode", Name = "Period", InputType = InputType.DROPDOWN, Options = periods, Value = scheduleFromDb == null ? "" : scheduleFromDb.Period.ID.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Sub Periode", Name = "SubPeriod", InputType = InputType.DROPDOWN, Options = subPeriods, Value = scheduleFromDb == null || scheduleFromDb.SubPeriod == null ? "" : scheduleFromDb.SubPeriod.ID.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Tanggal Mulai & Selesai", Name = "Date", InputType = InputType.TEXT, Value = scheduleFromDb == null ? "" : scheduleFromDb.Start.ToString("yyyy-MM-dd") + " s/d " + scheduleFromDb.End.ToString("yyyy-MM-dd") });
@@ -155,7 +155,7 @@ namespace AdminLte.Controllers
             ViewData["Title"] = "Penjadwalan Peserta";
             List<ColumnModel> ColumnModels = new List<ColumnModel>();
             ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name", Style = "width: 15%; min-width: 150px" });
-            ColumnModels.Add(new ColumnModel { Label = "Holding/Sub-holding", Name = "Entity" });
+            ColumnModels.Add(new ColumnModel { Label = "Holding/ Sub-Holding", Name = "Entity" });
             ColumnModels.Add(new ColumnModel { Label = "Jenis Survey", Name = "Name" });
             ColumnModels.Add(new ColumnModel { Label = "Periode", Name = "Period" });
             ColumnModels.Add(new ColumnModel { Label = "Tanggal Mulai & Selesai", Name = "Date" });

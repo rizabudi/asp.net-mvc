@@ -125,11 +125,15 @@ var Profile = /** @class */ (function () {
                 $("#modal-default").modal("show");
                 var date = new Date();
                 date.setFullYear(date.getFullYear() - 17);
+                var isEmpty = $('#BirthDate').find("input").val().toString() == "";
                 $('#BirthDate').datetimepicker({
                     format: 'YYYY-MM-DD',
                     maxDate: date,
                     date: new Date($('#BirthDate').find("input").val().toString())
                 });
+                if (isEmpty) {
+                    $("div#BirthDate .datetimepicker-input").val("");
+                }
                 $('#WorkDuration').attr("step", 1);
                 $('#WorkDuration').attr("pattern", "[0-9]");
             }, function () {

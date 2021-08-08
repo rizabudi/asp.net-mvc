@@ -25,7 +25,7 @@ namespace AdminLte.Controllers
             try
             {
                 var data = await _db.JobLevels
-                    .OrderBy(x=>x.Name)
+                    .OrderBy(x=>x.Level)
                     .Skip((page-1)*10)
                     .Take(10)
                     .ToListAsync();
@@ -33,7 +33,7 @@ namespace AdminLte.Controllers
                 var rows = new List<RowModel>();
                 foreach(var row in data)
                 {
-                    rows.Add(new RowModel { ID = row.ID, Value = new string[] { row.Name }});
+                    rows.Add(new RowModel { ID = row.ID, Value = new string[] { row.Name, row.Level.ToString() }});
                 }
 
                 ViewData["Rows"] = rows;
@@ -80,6 +80,7 @@ namespace AdminLte.Controllers
                
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = jobLevelFromDb == null ? "0" : jobLevelFromDb.ID.ToString() });
                 FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = jobLevelFromDb == null ? "" : jobLevelFromDb.Name, IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Level", Name = "Level", InputType = InputType.NUMBER, Value = jobLevelFromDb == null ? "" : jobLevelFromDb.Level.ToString(), IsRequired = true });
 
                 ViewData["Forms"] = FormModels;
 
@@ -98,6 +99,7 @@ namespace AdminLte.Controllers
             ViewData["Title"] = "Level Jabatan";
             List<ColumnModel> ColumnModels = new List<ColumnModel>();
             ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name", Style = "width: 15%; min-width: 200px" });
+            ColumnModels.Add(new ColumnModel { Label = "Level", Name = "Level" });
 
             ViewData["Columns"] = ColumnModels;
             ViewData["Script"] = "job-level.js";

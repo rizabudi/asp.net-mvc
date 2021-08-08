@@ -32,7 +32,7 @@ namespace AdminLte.Models
         public String Email { get; set; }
         public String Phone { get; set; }
         public String EmployeeNumber { get; set; }
-        public Boolean Sex { get; set; }
+        public int Sex { get; set; }
         public DateTime? BirthDate { get; set; }
         public int? WorkDuration { get; set; }
         public DateTime DeletedAt { get; set; }

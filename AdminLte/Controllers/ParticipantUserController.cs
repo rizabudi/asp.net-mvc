@@ -147,7 +147,7 @@ namespace AdminLte.Controllers
                                 row.Name,
                                 row.Email,
                                 row.Phone,
-                                row.Sex ? "Laki-laki" : "Perempuan",
+                                row.Sex == -1 ? "" : (row.Sex == 1 ? "Laki-laki" : "Perempuan"),
                                 row.User.UserName,
                                 row.Entity == null ? "-" : row.Entity.Name,
                                 row.SubEntity == null ? "-" : row.SubEntity.Name,
@@ -235,17 +235,17 @@ namespace AdminLte.Controllers
                 var departments = await _db.Departments.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
                 var divitions = await _db.Divitions.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
                 var functions = await _db.CompanyFunctions.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
-                var jobLevels = await _db.JobLevels.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+                var jobLevels = await _db.JobLevels.OrderBy(x => x.Level).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
 
                 List<FormModel> FormModels = new List<FormModel>();
                 FormModels.Add(new FormModel { Label = "UserId", Name = "UserId", InputType = InputType.HIDDEN, Value = userFromDb == null ? "" : userFromDb.UserId });
-                FormModels.Add(new FormModel { Label = "No Karyawan", Name = "EmployeeNumber", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.EmployeeNumber });
+                FormModels.Add(new FormModel { Label = "No Pekerja", Name = "EmployeeNumber", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.EmployeeNumber });
                 FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.Name, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Email", Name = "Email", InputType = InputType.EMAIL, Value = userFromDb == null ? "" : userFromDb.Email });
                 FormModels.Add(new FormModel { Label = "Telp", Name = "Phone", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.Phone });
                 
-                FormModels.Add(new FormModel { Label = "Holding/Sub-Holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = userFromDb == null || userFromDb.Entity == null ? "" : userFromDb.Entity.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
-                FormModels.Add(new FormModel { Label = "Direktorat/Fungsi/Anak Perusahaan", Name = "SubEntity", InputType = InputType.DROPDOWN, Options = subEntities, Value = userFromDb == null || userFromDb.SubEntity == null ? "" : userFromDb.SubEntity.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Holding/ Sub-Holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = userFromDb == null || userFromDb.Entity == null ? "" : userFromDb.Entity.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Direktorat/ Fungsi/ Anak Perusahaan", Name = "SubEntity", InputType = InputType.DROPDOWN, Options = subEntities, Value = userFromDb == null || userFromDb.SubEntity == null ? "" : userFromDb.SubEntity.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Posisi", Name = "Position", InputType = InputType.DROPDOWN, Options = positions, Value = userFromDb == null || userFromDb.Position == null ? "" : userFromDb.Position.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Fungsi", Name = "CompanyFunction", InputType = InputType.DROPDOWN, Options = functions, Value = userFromDb == null || userFromDb.CompanyFunction == null ? "" : userFromDb.CompanyFunction.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Divisi", Name = "Divition", InputType = InputType.DROPDOWN, Options = divitions, Value = userFromDb == null || userFromDb.Divition == null ? "" : userFromDb.Divition.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
@@ -272,14 +272,14 @@ namespace AdminLte.Controllers
         {
             ViewData["Title"] = "Pengguna Umum";
             List<ColumnModel> ColumnModels = new List<ColumnModel>();
-            ColumnModels.Add(new ColumnModel { Label = "No Karyawan", Name = "EmployeeNumber", Style = "width: 10%; min-width: 100px" });
+            ColumnModels.Add(new ColumnModel { Label = "No Pekerja", Name = "EmployeeNumber", Style = "width: 10%; min-width: 100px" });
             ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name", Style = "width: 15%; min-width: 150px" });
             ColumnModels.Add(new ColumnModel { Label = "Email", Name = "Email" });
             ColumnModels.Add(new ColumnModel { Label = "Telp", Name = "Phone" });
             ColumnModels.Add(new ColumnModel { Label = "Jenis Kelamin", Name = "Sex" });
             ColumnModels.Add(new ColumnModel { Label = "User Name", Name = "UserName" });
-            ColumnModels.Add(new ColumnModel { Label = "Holding/Sub-Holding", Name = "Entity" });
-            ColumnModels.Add(new ColumnModel { Label = "Direktorat/Fungsi/Anak Perusahaan", Name = "SubEntity" });
+            ColumnModels.Add(new ColumnModel { Label = "Holding/ Sub-Holding", Name = "Entity" });
+            ColumnModels.Add(new ColumnModel { Label = "Direktorat/ Fungsi/ Anak Perusahaan", Name = "SubEntity" });
             //ColumnModels.Add(new ColumnModel { Label = "Posisi", Name = "Position" });
             //ColumnModels.Add(new ColumnModel { Label = "Fungsi", Name = "CompanyFunction" });
             //ColumnModels.Add(new ColumnModel { Label = "Divisi", Name = "Divition" });

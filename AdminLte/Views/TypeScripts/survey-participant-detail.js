@@ -80,7 +80,8 @@ var SurveyParticipantDetail = /** @class */ (function () {
                 })
 
                 if (error != "") {
-                    Util.error(error)
+                    Util.error(error);
+                    $("#submit-answer").removeAttr("disabled");
                     return false;
                 }
 

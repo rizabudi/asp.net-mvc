@@ -60,8 +60,8 @@ namespace AdminLte.Controllers
                         Value = new string[]
                         {
                             "HTML:<b>" + row.ParticipantUser.EmployeeNumber + " - " + row.ParticipantUser.Name + "</b><br/>" +
-                            "Holding/Sub-Holding : " + (row.ParticipantUser.Entity == null ? "-" : row.ParticipantUser.Entity.Name) + "<br/>" +
-                            "Direktorat/Fungsi/Anak Perusahaan : " + (row.ParticipantUser.SubEntity == null ? "-" : row.ParticipantUser.SubEntity.Name) + "<br/>" +
+                            "Holding/ Sub-Holding : " + (row.ParticipantUser.Entity == null ? "-" : row.ParticipantUser.Entity.Name) + "<br/>" +
+                            "Direktorat/ Fungsi/ Anak Perusahaan : " + (row.ParticipantUser.SubEntity == null ? "-" : row.ParticipantUser.SubEntity.Name) + "<br/>" +
                             //"Posisi : " + (row.ParticipantUser.Position == null ? "-" : row.ParticipantUser.Position.Name) + "<br/>" +
                             //"Fungsi : " + (row.ParticipantUser.CompanyFunction == null ? "-" : row.ParticipantUser.CompanyFunction.Name) + "<br/>" +
                             //"Divisi : " + (row.ParticipantUser.Divition == null ? "-" : row.ParticipantUser.Divition.Name) + "<br/>" +

@@ -37,5 +37,6 @@ namespace AdminLte.Models
         public FormPosition FormPosition { get; set; } = FormPosition.LEFT;
         public bool IsRequired { get; set; }
         public bool IsDisable { get; set; }
+        public string Note { get; set; }
     }
 }

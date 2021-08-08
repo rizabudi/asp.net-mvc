@@ -81,11 +81,24 @@
             }
         })
 
+        $("input[type='email']").each(function () {
+            if ($(this).val() != "") {
+                if (!validateEmail($(this).val())) {
+                    msg += $(this).data('label') + " tidak valid" + "<br/>";
+                }
+            }
+        })
+
         if (msg != "") {
             Util.error(msg)
         }
 
         return msg == ""
+    }
+
+    function validateEmail(email) {
+        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
     }
 
     function processResponse(successCallback, failureCallback) {

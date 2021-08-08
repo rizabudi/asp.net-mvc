@@ -85,23 +85,23 @@ namespace AdminLte.Controllers
                 var departments = await _db.Departments.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
                 var divitions = await _db.Divitions.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
                 var functions = await _db.CompanyFunctions.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
-                var jobLevels = await _db.JobLevels.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+                var jobLevels = await _db.JobLevels.OrderBy(x => x.Level).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
                 var sexs = new Dictionary<string, string> {
                     {"1", "Laki-laki"},
                     {"0", "Perempuan"},
                 };
 
                 FormModels.Add(new FormModel { Label = "UserId", Name = "UserId", InputType = InputType.HIDDEN, Value = participantUserFromDb == null ? "" : user.Id.ToString() });
-                FormModels.Add(new FormModel { Label = "No Karyawan", Name = "EmployeeNumber", InputType = InputType.TEXT, Value = participantUserFromDb == null ? "" : participantUserFromDb.EmployeeNumber, IsRequired = true, IsDisable = true });
+                FormModels.Add(new FormModel { Label = "No Pekerja", Name = "EmployeeNumber", InputType = InputType.TEXT, Value = participantUserFromDb == null ? "" : participantUserFromDb.EmployeeNumber, IsRequired = true, IsDisable = true });
                 FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = participantUserFromDb == null ? "" : participantUserFromDb.Name, IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Email", Name = "Email", InputType = InputType.EMAIL, Value = participantUserFromDb == null ? "" : participantUserFromDb.Email, IsRequired = true });
-                FormModels.Add(new FormModel { Label = "No Telp", Name = "Phone", InputType = InputType.TEXT, Value = participantUserFromDb == null ? "" : participantUserFromDb.Phone, IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Jenis Kelamin", Name = "Sex", InputType = InputType.DROPDOWN, Options = sexs, Value = participantUserFromDb == null ? "" : participantUserFromDb.Sex ? "1": "0", IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Email", Name = "Email", Note = "dihimbau menggunakan email @pertamina.com", InputType = InputType.EMAIL, Value = participantUserFromDb == null ? "" : participantUserFromDb.Email, IsRequired = true });
+                //FormModels.Add(new FormModel { Label = "No Telp", Name = "Phone", InputType = InputType.TEXT, Value = participantUserFromDb == null ? "" : participantUserFromDb.Phone, IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Jenis Kelamin", Name = "Sex", InputType = InputType.DROPDOWN, Options = sexs, Value = participantUserFromDb == null ? "" : participantUserFromDb.Sex.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Tanggal Lahir", Name = "BirthDate", InputType = InputType.DATE, Value = participantUserFromDb == null || participantUserFromDb.BirthDate == null ? "" : participantUserFromDb.BirthDate.Value.ToString("yyyy-MM-dd"), IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Masa kerja di PT. Pertamina (Tahun)", Name = "WorkDuration", InputType = InputType.NUMBER, Value = participantUserFromDb == null || participantUserFromDb.WorkDuration == null ? "" : participantUserFromDb.WorkDuration.Value.ToString(), IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Masa kerja di PT. Pertamina", Name = "WorkDuration", Note = "Tahun", InputType = InputType.NUMBER, Value = participantUserFromDb == null || participantUserFromDb.WorkDuration == null ? "" : participantUserFromDb.WorkDuration.Value.ToString(), IsRequired = true });
 
-                FormModels.Add(new FormModel { Label = "Holding/Sub-holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = participantUserFromDb == null || participantUserFromDb.Entity == null ? "" : participantUserFromDb.Entity.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
-                FormModels.Add(new FormModel { Label = "Direktorat/Fungsi/Anak Perusahaan", Name = "SubEntity", InputType = InputType.DROPDOWN, Options = subEntities, Value = participantUserFromDb == null || participantUserFromDb.SubEntity == null ? "" : participantUserFromDb.SubEntity.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Holding/ Sub-Holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = participantUserFromDb == null || participantUserFromDb.Entity == null ? "" : participantUserFromDb.Entity.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Direktorat/ Fungsi/ Anak Perusahaan/ Afiliasi", Name = "SubEntity", InputType = InputType.DROPDOWN, Options = subEntities, Value = participantUserFromDb == null || participantUserFromDb.SubEntity == null ? "" : participantUserFromDb.SubEntity.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Posisi", Name = "Position", InputType = InputType.DROPDOWN, Options = positions, Value = participantUserFromDb == null || participantUserFromDb.Position == null ? "" : participantUserFromDb.Position.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Fungsi", Name = "CompanyFunction", InputType = InputType.DROPDOWN, Options = functions, Value = participantUserFromDb == null || participantUserFromDb.CompanyFunction == null ? "" : participantUserFromDb.CompanyFunction.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Divisi", Name = "Divition", InputType = InputType.DROPDOWN, Options = divitions, Value = participantUserFromDb == null || participantUserFromDb.Divition == null ? "" : participantUserFromDb.Divition.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
@@ -212,7 +212,7 @@ namespace AdminLte.Controllers
                     .OrderBy(x => x.Name)
                     .ToListAsync();
                 var entities = Entity.getEntities(entityList, 0, 0);
-                var data = entities.Take(10).ToList();
+                var data = entities.ToList();
 
                 var rows = new List<RowModel>();
                 foreach (var row in data)

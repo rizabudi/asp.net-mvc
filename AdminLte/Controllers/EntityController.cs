@@ -189,7 +189,7 @@ namespace AdminLte.Controllers
                     .OrderBy(x => x.Name)
                     .ToListAsync();
                 var entities = Entity.getEntities(entityList, 0, 0);
-                var data = entities.Take(10).ToList();
+                var data = entities.ToList();
 
                 var rows = new List<RowModel>();
                 foreach (var row in data)
