@@ -531,6 +531,10 @@ namespace AdminLte.Controllers
             var msg = "";
             foreach (User user in usersFromDb)
             {
+                if(user.SecurityStamp == null)
+                {
+                    user.SecurityStamp = Guid.NewGuid().ToString();
+                }
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var result = await _userManager.ResetPasswordAsync(user, token, user.UserName + "@Pertamina");
                 if (result.Succeeded)
