@@ -62,7 +62,7 @@ namespace AdminLte.Controllers
                 return Redirect("/home/errors/404");
             }
 
-            if (participantUser.BirthDate == null || 
+            if (participantUser.Age == null || 
                 participantUser.Entity == null || 
                 participantUser.JobLevel == null || 
                 participantUser.WorkDuration == null)

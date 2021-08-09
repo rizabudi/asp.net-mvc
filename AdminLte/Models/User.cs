@@ -44,5 +44,6 @@ namespace AdminLte.Models
         public Department Department { get; set; }
         public JobLevel JobLevel { get; set; }
         public virtual User User { get; set; }
+        public int? Age { get; set; }
     }
 }

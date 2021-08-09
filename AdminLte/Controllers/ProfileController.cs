@@ -97,7 +97,8 @@ namespace AdminLte.Controllers
                 FormModels.Add(new FormModel { Label = "Email", Name = "Email", Note = "dihimbau menggunakan email @pertamina.com", InputType = InputType.EMAIL, Value = participantUserFromDb == null ? "" : participantUserFromDb.Email, IsRequired = true });
                 //FormModels.Add(new FormModel { Label = "No Telp", Name = "Phone", InputType = InputType.TEXT, Value = participantUserFromDb == null ? "" : participantUserFromDb.Phone, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Jenis Kelamin", Name = "Sex", InputType = InputType.DROPDOWN, Options = sexs, Value = participantUserFromDb == null ? "" : participantUserFromDb.Sex.ToString(), IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Tanggal Lahir", Name = "BirthDate", InputType = InputType.DATE, Value = participantUserFromDb == null || participantUserFromDb.BirthDate == null ? "" : participantUserFromDb.BirthDate.Value.ToString("yyyy-MM-dd"), IsRequired = true });
+                //FormModels.Add(new FormModel { Label = "Tanggal Lahir", Name = "BirthDate", InputType = InputType.DATE, Value = participantUserFromDb == null || participantUserFromDb.BirthDate == null ? "" : participantUserFromDb.BirthDate.Value.ToString("yyyy-MM-dd"), IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Usia", Name = "Age", Note = "tahun", InputType = InputType.NUMBER_POSITIVE, Value = participantUserFromDb == null || participantUserFromDb.Age == null ? "" : participantUserFromDb.Age.Value.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Masa kerja di PT. Pertamina", Name = "WorkDuration", Note = "pembulatan ke atas dalam tahun", InputType = InputType.NUMBER_POSITIVE, Value = participantUserFromDb == null || participantUserFromDb.WorkDuration == null ? "" : participantUserFromDb.WorkDuration.Value.ToString(), IsRequired = true });
 
                 FormModels.Add(new FormModel { Label = "Holding/ Sub-Holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = participantUserFromDb == null || participantUserFromDb.Entity == null ? "" : participantUserFromDb.Entity.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
@@ -188,6 +189,7 @@ namespace AdminLte.Controllers
                 userFromDb.Email = participantUser.Email;
                 userFromDb.Phone = participantUser.Phone;
                 userFromDb.BirthDate = participantUser.BirthDate;
+                userFromDb.Age = participantUser.Age;
                 userFromDb.WorkDuration = participantUser.WorkDuration;
                 userFromDb.Sex = participantUser.Sex;
 

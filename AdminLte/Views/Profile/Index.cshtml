@@ -10,8 +10,9 @@
         { "Email", Model.Email },
         //{ "No Telp", Model.Phone },
         { "Jenis Kelamin", Model.Sex == -1 ? "" : (Model.Sex == 1 ? "Laki-laki" : "Perempuan") },
-        { "Tanggal Lahir", Model.BirthDate == null ? "-" : Model.BirthDate.Value.ToString("yyyy-MM-dd") },
-        { "Masa kerja di PT. Pertamina", (Model.WorkDuration == null ? "0" : Model.WorkDuration.ToString()) + " Tahun" },
+        //{ "Tanggal Lahir", Model.BirthDate == null ? "-" : Model.BirthDate.Value.ToString("yyyy-MM-dd") },
+        { "Usia", (Model.Age == null ? "-" : Model.Age.ToString()) + " Tahun" },
+        { "Masa kerja di PT. Pertamina", (Model.WorkDuration == null ? "-" : Model.WorkDuration.ToString()) + " Tahun" },
         //{ "Username", Model.User.UserName },
     };
     var forms2 = new Dictionary<string, string>

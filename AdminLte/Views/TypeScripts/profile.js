@@ -51,6 +51,14 @@ var Profile = /** @class */ (function () {
             if (!Util.formCheck()) {
                 return;
             }
+            if ($('#Age').val() == "0") {
+                Util.error("Umur harus lebih besar dari 0");
+                return;
+            }
+            if ($('#WorkDuration').val() == "0") {
+                Util.error("Durasi kerja harus lebih besar dari 0");
+                return;
+            }
             var data = this.create();
             Util.request(this.urlSave, 'post', 'json', function (response) {
                 if (response != null) {
@@ -85,7 +93,8 @@ var Profile = /** @class */ (function () {
                 Email: $('#Email').val(),
                 Phone: $('#Phone').val(),
                 Sex: $('#Sex').val() == "1",
-                BirthDate: $('#BirthDate').find("input").val(),
+                //BirthDate: $('#BirthDate').find("input").val(),
+                Age: $('#Age').val(),
                 WorkDuration: $('#WorkDuration').val(),
                 Entity: {
                     ID: $("#Entity").val()
@@ -123,19 +132,21 @@ var Profile = /** @class */ (function () {
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
-                var date = new Date();
-                date.setFullYear(date.getFullYear() - 17);
-                var isEmpty = $('#BirthDate').find("input").val().toString() == "";
-                $('#BirthDate').datetimepicker({
-                    format: 'YYYY-MM-DD',
-                    maxDate: date,
-                    date: new Date($('#BirthDate').find("input").val().toString())
-                });
-                if (isEmpty) {
-                    $("div#BirthDate .datetimepicker-input").val("");
-                }
+                //var date = new Date();
+                //date.setFullYear(date.getFullYear() - 17);
+                //var isEmpty = $('#BirthDate').find("input").val().toString() == "";
+                //(<any>$('#BirthDate')).datetimepicker({
+                //    format: 'YYYY-MM-DD',
+                //    maxDate: date,
+                //    date: new Date($('#BirthDate').find("input").val().toString())
+                //});
+                //if (isEmpty) {
+                //    $("div#BirthDate .datetimepicker-input").val("")
+                //}
                 $('#WorkDuration').attr("step", 1);
                 $('#WorkDuration').attr("pattern", "[0-9]");
+                $('#Age').attr("step", 1);
+                $('#Age').attr("pattern", "[0-9]");
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
