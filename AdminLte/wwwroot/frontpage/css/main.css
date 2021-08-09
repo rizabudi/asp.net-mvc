@@ -2705,7 +2705,7 @@ input, select, textarea {
 		/* Box */
 
 			.box br {
-				display: none;
+				/*display: none;*/
 			}
 
 		/* Header */
