@@ -14,6 +14,7 @@ namespace AdminLte.Models
         PASSWORD,
         WYSIWYG,
         NUMBER,
+        NUMBER_POSITIVE,
         HIDDEN,
         DROPDOWN,
         YESNO,

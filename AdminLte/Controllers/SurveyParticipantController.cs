@@ -102,10 +102,18 @@ namespace AdminLte.Controllers
                 var sheets = participant.ParticipantAnswerSheets.Where(x => x.IsFinish).Count();
                 if(sheets > 0)
                 {
-                    if(!participant.IsCanRetake)
+                    if (participant.FinishedAt == null)
+                    {
+                        participant.FinishedAt = DateTime.Now;
+                        _db.Participants.Update(participant);
+                        _db.SaveChanges();
+                    }
+
+                    if (!participant.IsCanRetake)
                     { 
                         return View("~/Views/SurveyParticipant/Finish.cshtml");
-                    } else if(participant.IsCanRetake && sheets > participant.MaxRetake)
+                    } 
+                    else if(participant.IsCanRetake && sheets > participant.MaxRetake)
                     {
                         return View("~/Views/SurveyParticipant/Finish.cshtml");
                     }
@@ -199,6 +207,22 @@ namespace AdminLte.Controllers
             if(participantAnswerSheetSection != null)
             {
                 section = participantAnswerSheetSection.Section;
+            } 
+            else
+            {
+                if(!participantAnswerSheet.IsFinish)
+                {
+                    participantAnswerSheet.IsFinish = true;
+                    _db.ParticipantAnswerSheets.Update(participantAnswerSheet);
+                }
+                if (participant.FinishedAt == null)
+                {
+                    participant.FinishedAt = DateTime.Now;
+                    _db.Participants.Update(participant);
+                }
+
+                _db.SaveChanges();
+                return View("~/Views/SurveyParticipant/Finish.cshtml");
             }
 
             Question question = null;

@@ -58,7 +58,7 @@
             else @if (FormModel.InputType == AdminLte.Models.InputType.DATE)
             {
                 <div class="input-group date" id="@FormModel.Name" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" data-target="#@FormModel.Name" value="@FormModel.Value"/>
+                    <input type="text" class="form-control datetimepicker-input @textRequired" data-label="@FormModel.Label" data-target="#@FormModel.Name" value="@FormModel.Value"/>
                     <div class="input-group-append" data-target="#@FormModel.Name" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div>
@@ -66,7 +66,7 @@
             }
             else @if (FormModel.InputType == AdminLte.Models.InputType.PASSWORD)
             {
-                <input type="password" class="form-control" id="@FormModel.Name" data-label="@FormModel.Label" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
+                <input type="password" class="form-controll @textRequired" id="@FormModel.Name" data-label="@FormModel.Label" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
             }
             else @if (FormModel.InputType == AdminLte.Models.InputType.EMAIL)
             {
@@ -88,6 +88,10 @@
             else @if (FormModel.InputType == AdminLte.Models.InputType.NUMBER)
             {
                 <input type="number" class="form-control @numberRequired" id="@FormModel.Name" data-label="@FormModel.Label" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
+            }
+            else @if (FormModel.InputType == AdminLte.Models.InputType.NUMBER_POSITIVE)
+            {
+                <input type="number" class="form-control @numberRequired" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="@FormModel.Name" data-label="@FormModel.Label" name="@FormModel.Name" placeholder="@FormModel.Label" value="@FormModel.Value">
             }
             else @if (FormModel.InputType == AdminLte.Models.InputType.YESNO)
             {
