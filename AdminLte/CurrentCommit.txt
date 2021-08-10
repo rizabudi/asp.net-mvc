@@ -1,5 +1,5 @@
-commit d976b4c221647110392ae757ae727bf0fec20d50
+commit 94eca7104bd9632b3731085890491f50d8979457
 Author: Riza Budi Prasetya <rizabudi@live.com>
-Date:   Mon Aug 9 11:53:09 2021 +0700
+Date:   Tue Aug 10 06:34:17 2021 +0700
 
-    Update reset password
+    Update sambutan dir

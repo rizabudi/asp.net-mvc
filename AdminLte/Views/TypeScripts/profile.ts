@@ -51,10 +51,12 @@
             if (!Util.formCheck()) {
                 return;
             }
-            if ($('#Age').val() == "0") {
-                Util.error("Umur harus lebih besar dari 0");
+            var age = parseInt($('#Age').val().toString());
+            if (age < 17 || age > 75) {
+                Util.error("Umur harus diantara 17-75 tahun");
                 return;
             }
+
             if ($('#WorkDuration').val() == "0") {
                 Util.error("Durasi kerja harus lebih besar dari 0");
                 return;
