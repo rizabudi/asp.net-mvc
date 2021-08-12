@@ -91,7 +91,7 @@
                 Name: $('#Name').val(),
                 Email: $('#Email').val(),
                 Phone: $('#Phone').val(),
-                Sex: $('#Sex').val() == "1",
+                Sex: $('#Sex').val(),
                 //BirthDate: $('#BirthDate').find("input").val(),
                 Age: $('#Age').val(),
                 WorkDuration: $('#WorkDuration').val(),

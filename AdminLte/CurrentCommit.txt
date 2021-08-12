@@ -1,5 +1,5 @@
-commit 94eca7104bd9632b3731085890491f50d8979457
+commit 3e584645b643cc0bf1e999108c45d55c1b146cb3
 Author: Riza Budi Prasetya <rizabudi@live.com>
-Date:   Tue Aug 10 06:34:17 2021 +0700
+Date:   Thu Aug 12 08:54:58 2021 +0700
 
-    Update sambutan dir
+    Udate sambutan
