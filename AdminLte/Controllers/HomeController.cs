@@ -53,6 +53,10 @@ namespace AdminLte.Controllers
                                 .Include(x => x.Entity)
                                 .FirstOrDefaultAsync(x => x.User.Id == user.Id);
 
+            if(backendUser.UserAccess == null)
+            {
+                backendUser.UserAccess = new UserAccess();
+            }
             HttpContext.Session.Set("Access_MasterData_DaftarSurvei", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_DaftarSurvei ? "1" : "0"));
             HttpContext.Session.Set("Access_MasterData_DimensiHorizontal", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_DimensiHorizontal ? "1" : "0"));
             HttpContext.Session.Set("Access_MasterData_DimensiVertical", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_DimensiVertical ? "1" : "0"));

@@ -56,6 +56,10 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     var userAccess = user.BackendUser.UserAccess;
+                    if(userAccess == null)
+                    {
+                        userAccess = new UserAccess();
+                    }
                     @*<li class="nav-item ">
                             <a asp-controller="Home" asp-action="Privacy" class="nav-link @Url.MakeActiveClass("home","privacy")">
                                 <i class="nav-icon fas fa-lock"></i>

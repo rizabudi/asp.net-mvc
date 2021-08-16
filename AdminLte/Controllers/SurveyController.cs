@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AdminLte.Controllers
@@ -288,12 +289,25 @@ namespace AdminLte.Controllers
             var sections = await _db.Sections.OrderBy(x => x.Name).ToListAsync(); ;
             Section sectionData = null;
 
+            int entityID = 0;
+            byte[] bytes;
+            if (HttpContext.Session.TryGetValue("User_Entity", out bytes))
+            {
+                string value = Encoding.ASCII.GetString(bytes);
+                int.TryParse(value, out entityID);
+            }
+
             var entityList = await _db.Entities
-                    .Where(x => x.Level <= 1)
+                    .Where(x => x.Level <= 1 && (entityID == 0 ? true : x.ID == entityID))
                     .OrderBy(x => x.Name)
                     .ToListAsync();
             var entities = Entity.getEntities(entityList, 0, 0);
             var entityData = await _db.Entities.FirstOrDefaultAsync(x => x.ID == entity);
+
+            if(entityID != 0)
+            {
+                entityData = await _db.Entities.FirstOrDefaultAsync(x => x.ID == entityID);
+            }
 
             var questionPackage = await _db.QuestionPackages.FirstOrDefaultAsync(x => x.ID == surveyID);
             if (questionPackage == null)
@@ -409,11 +423,9 @@ namespace AdminLte.Controllers
 
                     ViewData["DashboardPerformance"] = dashboardPerformance;
                 }
-
-
-                ViewData["SideBarCollapse"] = true;
             }
 
+            ViewData["SideBarCollapse"] = true;
             ViewData["Entities"] = entities;
             ViewData["Entity"] = entityData;
             ViewData["Survey"] = questionPackage;

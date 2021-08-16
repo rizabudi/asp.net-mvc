@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AdminLte.Controllers
@@ -26,12 +27,21 @@ namespace AdminLte.Controllers
         {
             try
             {
+                int entityID = 0;
+                byte[] bytes;
+                if (HttpContext.Session.TryGetValue("User_Entity", out bytes))
+                {
+                    string value = Encoding.ASCII.GetString(bytes);
+                    int.TryParse(value, out entityID);
+                }
+
                 var data = await _db.Schedules
                     .Include(x=>x.Entity)
                     .Include(x=>x.Assesment)
                     .Include(x=>x.Period)
                     .Include(x=>x.SubPeriod)
                     .Include(x => x.Participants)
+                    .Where(x => entityID == 0 ? true : x.Entity.ID == entityID)
                     .OrderBy(x=>x.Name)
                     .Skip((page-1)*10)
                     .Take(10)
@@ -78,7 +88,17 @@ namespace AdminLte.Controllers
         {
             try
             {
-                var total = _db.Schedules.Count();
+                int entityID = 0;
+                byte[] bytes;
+                if (HttpContext.Session.TryGetValue("User_Entity", out bytes))
+                {
+                    string value = Encoding.ASCII.GetString(bytes);
+                    int.TryParse(value, out entityID);
+                }
+
+                var total = _db.Schedules
+                    .Where(x => entityID == 0 ? true : x.Entity.ID == entityID)
+                    .Count();
                 ViewData["Total"] = total;
                 ViewData["Page"] = page;
 
@@ -102,8 +122,17 @@ namespace AdminLte.Controllers
                     scheduleFromDb = await _db.Schedules.FirstOrDefaultAsync(e => e.ID == id);
                 }
                 var assesments = await _db.Assesments.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
+
+                int entityID = 0;
+                byte[] bytes;
+                if (HttpContext.Session.TryGetValue("User_Entity", out bytes))
+                {
+                    string value = Encoding.ASCII.GetString(bytes);
+                    int.TryParse(value, out entityID);
+                }
+
                 var entityList = await _db.Entities
-                    .Where(x=>x.Level <= 1)
+                    .Where(x => x.Level <= 1 && (entityID == 0 ? true : x.ID == entityID))
                     .OrderBy(x => x.Name)
                     .ToListAsync();
                 var entities = Entity.getEntities(entityList, 0, 0);
@@ -112,7 +141,7 @@ namespace AdminLte.Controllers
                     .ToDictionaryAsync(x => x.ID.ToString(), y => y.Name + " (" + y.Start.ToString("yyyy-MM-dd") + " s/d " + y.End.ToString("yyyy-MM-dd") + ")");
                 var subPeriods = await _db.SubPeriods
                     .Include(x => x.Period)
-                    .Where(x => (id == 0 ? false : x.Period == scheduleFromDb.Period))
+                    .Where(x => id == 0 ? false : x.Period == scheduleFromDb.Period)
                     .OrderBy(x => x.Start)
                     .ToDictionaryAsync(x => x.ID.ToString(), y => y.Name + " (" + y.Start.ToString("yyyy-MM-dd") + " s/d " + y.End.ToString("yyyy-MM-dd") + ")");
 
@@ -121,7 +150,7 @@ namespace AdminLte.Controllers
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = scheduleFromDb == null ? "0" : scheduleFromDb.ID.ToString() });
                 FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = scheduleFromDb == null ? "" : scheduleFromDb.Name, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Jenis Survei", Name = "Assesment", InputType = InputType.DROPDOWN, Options = assesments, Value = scheduleFromDb == null ? "" : scheduleFromDb.Assesment.ID.ToString(), IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Holding/ Sub-Holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = scheduleFromDb == null ? "" : scheduleFromDb.Entity.ID.ToString(), IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Holding/ Sub-Holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = scheduleFromDb == null ? (entityID == 0 ? "" : entityID.ToString()) : scheduleFromDb.Entity.ID.ToString(), IsRequired = true, IsDisable = entityID != 0 });
                 FormModels.Add(new FormModel { Label = "Periode", Name = "Period", InputType = InputType.DROPDOWN, Options = periods, Value = scheduleFromDb == null ? "" : scheduleFromDb.Period.ID.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Sub Periode", Name = "SubPeriod", InputType = InputType.DROPDOWN, Options = subPeriods, Value = scheduleFromDb == null || scheduleFromDb.SubPeriod == null ? "" : scheduleFromDb.SubPeriod.ID.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Tanggal Mulai & Selesai", Name = "Date", InputType = InputType.TEXT, Value = scheduleFromDb == null ? "" : scheduleFromDb.Start.ToString("yyyy-MM-dd") + " s/d " + scheduleFromDb.End.ToString("yyyy-MM-dd") });

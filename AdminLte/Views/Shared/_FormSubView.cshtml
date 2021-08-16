@@ -118,7 +118,8 @@
             }
             else @if (FormModel.InputType == AdminLte.Models.InputType.DROPDOWN)
             {
-                <select id="@FormModel.Name" name="@FormModel.Name" data-label="@FormModel.Label" class="form-control @selectRequired">
+                var disabled = FormModel.IsDisable ? "disabled" : "";
+                <select @disabled id="@FormModel.Name" name="@FormModel.Name" data-label="@FormModel.Label" class="form-control @selectRequired">
                     <option value="-1">Pilih</option>
                     @if (FormModel.Options != null)
                     {

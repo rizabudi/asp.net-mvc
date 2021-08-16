@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AdminLte.Controllers
@@ -30,6 +31,14 @@ namespace AdminLte.Controllers
         {
             try
             {
+                int entityID = 0;
+                byte[] bytes;
+                if (HttpContext.Session.TryGetValue("User_Entity", out bytes))
+                {
+                    string value = Encoding.ASCII.GetString(bytes);
+                    int.TryParse(value, out entityID);
+                }
+
                 var temps = _db.ParticipantUsers
                     .Include(x => x.Entity)
                     .Include(x => x.SubEntity)
@@ -39,10 +48,10 @@ namespace AdminLte.Controllers
                     .Include(x => x.Position)
                     .Include(x => x.JobLevel)
                     .Include(x=> x.User)
-                    .Where(x=> EF.Functions.ILike(x.EmployeeNumber, $"%{search}%") ||
+                    .Where(x=> (EF.Functions.ILike(x.EmployeeNumber, $"%{search}%") ||
                             EF.Functions.ILike(x.Name, $"%{search}%") ||
                             EF.Functions.ILike(x.Email, $"%{search}%") ||
-                            EF.Functions.ILike(x.Phone, $"%{search}%")
+                            EF.Functions.ILike(x.Phone, $"%{search}%")) && (entityID == 0 ? true : x.Entity.ID == entityID)
                      );
 
                 IOrderedQueryable<ParticipantUser> temps2 = null;
@@ -180,11 +189,19 @@ namespace AdminLte.Controllers
         {
             try
             {
+                int entityID = 0;
+                byte[] bytes;
+                if (HttpContext.Session.TryGetValue("User_Entity", out bytes))
+                {
+                    string value = Encoding.ASCII.GetString(bytes);
+                    int.TryParse(value, out entityID);
+                }
+
                 var total = _db.ParticipantUsers
-                    .Where(x => EF.Functions.ILike(x.EmployeeNumber, $"%{search}%") ||
+                    .Where(x => (EF.Functions.ILike(x.EmployeeNumber, $"%{search}%") ||
                             EF.Functions.ILike(x.Name, $"%{search}%") ||
                             EF.Functions.ILike(x.Email, $"%{search}%") ||
-                            EF.Functions.ILike(x.Phone, $"%{search}%")
+                            EF.Functions.ILike(x.Phone, $"%{search}%")) && (entityID == 0 ? true : x.Entity.ID == entityID)
                      ).Count();
                 ViewData["Total"] = total;
                 ViewData["Page"] = page;
@@ -203,6 +220,20 @@ namespace AdminLte.Controllers
         {
             try
             {
+                int entityID = 0;
+                byte[] bytes;
+                if (HttpContext.Session.TryGetValue("User_Entity", out bytes))
+                {
+                    string value = Encoding.ASCII.GetString(bytes);
+                    int.TryParse(value, out entityID);
+                }
+
+                var entityList = await _db.Entities
+                    .Where(x => x.Level <= 1)
+                    .OrderBy(x => x.Name)
+                    .ToListAsync();
+                var subEntities = new Dictionary<string, string>();
+
                 ParticipantUser userFromDb = null;
                 if(id != "")
                 {
@@ -216,22 +247,22 @@ namespace AdminLte.Controllers
                         .Include(x => x.JobLevel)
                         .Include(x => x.User)
                         .FirstOrDefaultAsync(e => e.UserId == id);
-                }
 
-                var entityList = await _db.Entities
-                    .Where(x=>x.Level <= 1)
-                    .OrderBy(x => x.Name)
-                    .ToListAsync();
-                var entities = Entity.getEntities(entityList, 0, 0);
-                var subEntities = new Dictionary<string, string>();
-                if (userFromDb != null)
-                {
                     var subEntityList = await _db.Entities
                         .Where(x => x.ParentEntity.ID == userFromDb.Entity.ID)
                         .OrderBy(x => x.Name)
                         .ToListAsync();
                     subEntities = Entity.getEntities(subEntityList, userFromDb.Entity.ID, userFromDb.Entity.Level + 1);
+                } 
+                else
+                {
+                    if (entityID != 0)
+                    {
+                        entityList = await _db.Entities.Where(x => x.ID == entityID).ToListAsync();
+                    }
                 }
+
+                var entities = Entity.getEntities(entityList, 0, 0);
 
                 var positions = await _db.Position.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
                 var departments = await _db.Departments.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
@@ -246,7 +277,7 @@ namespace AdminLte.Controllers
                 FormModels.Add(new FormModel { Label = "Email", Name = "Email", InputType = InputType.EMAIL, Value = userFromDb == null ? "" : userFromDb.Email });
                 FormModels.Add(new FormModel { Label = "Telp", Name = "Phone", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.Phone });
                 
-                FormModels.Add(new FormModel { Label = "Holding/ Sub-Holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = userFromDb == null || userFromDb.Entity == null ? "" : userFromDb.Entity.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Holding/ Sub-Holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = userFromDb == null || userFromDb.Entity == null ? (entityID == 0 ? "" : entityID.ToString()) : userFromDb.Entity.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT, IsDisable = entityID != 0 });
                 FormModels.Add(new FormModel { Label = "Direktorat/ Fungsi/ Anak Perusahaan", Name = "SubEntity", InputType = InputType.DROPDOWN, Options = subEntities, Value = userFromDb == null || userFromDb.SubEntity == null ? "" : userFromDb.SubEntity.ID.ToString(), IsRequired = true, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Posisi", Name = "Position", InputType = InputType.DROPDOWN, Options = positions, Value = userFromDb == null || userFromDb.Position == null ? "" : userFromDb.Position.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });
                 //FormModels.Add(new FormModel { Label = "Fungsi", Name = "CompanyFunction", InputType = InputType.DROPDOWN, Options = functions, Value = userFromDb == null || userFromDb.CompanyFunction == null ? "" : userFromDb.CompanyFunction.ID.ToString(), IsRequired = false, FormPosition = FormPosition.RIGHT });

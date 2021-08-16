@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AdminLte.Controllers
@@ -30,10 +31,19 @@ namespace AdminLte.Controllers
         {
             try
             {
+                int entityID = 0;
+                byte[] bytes;
+                if (HttpContext.Session.TryGetValue("User_Entity", out bytes))
+                {
+                    string value = Encoding.ASCII.GetString(bytes);
+                    int.TryParse(value, out entityID);
+                }
+
                 var data = await _db.BackendUsers
                     .Include(x=>x.Entity)
                     .Include(x=>x.User)
                     .Include(x=>x.UserAccess)
+                    .Where(x=> entityID == 0 || x.Entity == null ? true : x.Entity.ID == entityID)
                     .OrderBy(x=>x.Name)
                     .Skip((page-1)*10)
                     .Take(10)
@@ -73,7 +83,17 @@ namespace AdminLte.Controllers
         {
             try
             {
-                var total = _db.BackendUsers.Count();
+                int entityID = 0;
+                byte[] bytes;
+                if (HttpContext.Session.TryGetValue("User_Entity", out bytes))
+                {
+                    string value = Encoding.ASCII.GetString(bytes);
+                    int.TryParse(value, out entityID);
+                }
+
+                var total = _db.BackendUsers
+                    .Where(x => entityID == 0 || x.Entity == null ? true : x.Entity.ID == entityID)
+                    .Count();
                 ViewData["Total"] = total;
                 ViewData["Page"] = page;
 
@@ -100,8 +120,16 @@ namespace AdminLte.Controllers
                         .FirstOrDefaultAsync(e => e.UserId == id);
                 }
 
+                int entityID = 0;
+                byte[] bytes;
+                if (HttpContext.Session.TryGetValue("User_Entity", out bytes))
+                {
+                    string value = Encoding.ASCII.GetString(bytes);
+                    int.TryParse(value, out entityID);
+                }
+
                 var entityList = await _db.Entities
-                    .Where(x=>x.Level <= 1)
+                    .Where(x => x.Level <= 1 && (entityID == 0 ? true : x.ID == entityID))
                     .OrderBy(x => x.Name).ToListAsync();
                 var entities = Entity.getEntities(entityList, 0, 0);
 
@@ -112,7 +140,7 @@ namespace AdminLte.Controllers
                 List<FormModel> FormModels = new List<FormModel>();
                 FormModels.Add(new FormModel { Label = "UserId", Name = "UserId", InputType = InputType.HIDDEN, Value = userFromDb == null ? "" : userFromDb.UserId });
                 FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.Name, IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Holding/ Sub-Holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = userFromDb == null ? "" : userFromDb.Entity.ID.ToString(), IsRequired = false });
+                FormModels.Add(new FormModel { Label = "Holding/ Sub-Holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = userFromDb == null || userFromDb.Entity == null ? (entityID == 0 ? "" : entityID.ToString()) : userFromDb.Entity.ID.ToString(), IsRequired = false, IsDisable = entityID != 0 });
                 FormModels.Add(new FormModel { Label = "Hak Akses", Name = "UserAccess", InputType = InputType.DROPDOWN, Options = userAccesses, Value = userFromDb == null || userFromDb.UserAccess == null ? "" : userFromDb.UserAccess.ID.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "User Name", Name = "UserName", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.User.UserName, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Password", Name = "Password", Note = (userFromDb != null ? "Kosongkan jika tidak ingin mengganti password" : ""), InputType = InputType.PASSWORD, Value = "", IsRequired = id == "" });
