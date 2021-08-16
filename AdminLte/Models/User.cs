@@ -20,8 +20,9 @@ namespace AdminLte.Models
         [Key, ForeignKey("User")]
         public string UserId { get; set; }
         public String Name { get; set; }
-        public Entity Entity { get; set; }
+        public Entity? Entity { get; set; }
         public virtual User User { get; set; }
+        public UserAccess UserAccess { get; set; }
     }
 
     public class ParticipantUser
@@ -45,5 +46,28 @@ namespace AdminLte.Models
         public JobLevel JobLevel { get; set; }
         public virtual User User { get; set; }
         public int? Age { get; set; }
+    }
+
+    public class UserAccess
+    {
+        [Key]
+        public int ID { get; set; }
+        public String Name { get; set; }
+        public String Access { get; set; }
+
+        public bool Access_MasterData_JenisSurvei { get; set; }
+        public bool Access_MasterData_Konstruk { get; set; }
+        public bool Access_MasterData_DimensiVertical { get; set; }
+        public bool Access_MasterData_DimensiHorizontal { get; set; }
+        public bool Access_MasterData_StrukturOrganisasi_Entitas { get; set; }
+        public bool Access_MasterData_StrukturOrganisasi_LevelJabatan { get; set; }
+        public bool Access_MasterData_Periode { get; set; }
+        public bool Access_MasterData_Pertanyaan { get; set; }
+        public bool Access_MasterData_DaftarSurvei { get; set; }
+        public bool Access_Penjadwalan_PenjadwalanSurvei { get; set; }
+        public bool Access_Penjadwalan_PenjadwalanPeserta { get; set; }
+        public bool Access_PengaturanPengguna_HakAkses { get; set; }
+        public bool Access_PengaturanPengguna_PenggunaUmum { get; set; }
+        public bool Access_PengaturanPengguna_PenggunaKhusus { get; set; }
     }
 }

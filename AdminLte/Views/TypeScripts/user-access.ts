@@ -1,9 +1,9 @@
-﻿class BackendUser {
-    private urlGetData = "/backend-user/table-data-view";
-    private urlGetPaging = "/backend-user/table-paging-view";
-    private urlGetForm = "/backend-user/form-view";
-    private urlSave = '/backend-user/save';
-    private urlDelete = '/backend-user/delete';
+﻿class UserAccess {
+    private urlGetData = "/role/table-data-view";
+    private urlGetPaging = "/role/table-paging-view";
+    private urlGetForm = "/role/form-view";
+    private urlSave = '/role/save';
+    private urlDelete = '/role/delete';
 
     private currentPage = 1;
 
@@ -22,12 +22,12 @@
                 this.initTable(idx);
             });
             $(document).on("click", ".btn-delete", (e) => {
-                const id = $(e.currentTarget).data('id-strng');
+                const id = $(e.currentTarget).data('id');
                 const data = { id: id };
                 this.delete(data);
             });
             $(document).on("click", ".btn-edit", (e) => {
-                const id = $(e.currentTarget).data('id-strng');
+                const id = $(e.currentTarget).data('id');
                 const data = { id: id };
                 this.edit(data);
             });
@@ -45,15 +45,15 @@
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
-                    console.error('Failed to get data. Please try again');
-                    Util.error('Failed to get data. Please try again');
+                console.error('Failed to get data. Please try again');
+                Util.error('Failed to get data. Please try again');
             });
             Util.request(this.urlGetPaging + "?page=" + page, 'GET', 'html', (response) => {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
-                    console.error('Failed to get data. Please try again');
-                    Util.error('Failed to get data. Please try again');
+                console.error('Failed to get data. Please try again');
+                Util.error('Failed to get data. Please try again');
             });
         } catch (e) {
             console.error(e);
@@ -118,18 +118,22 @@
     private create() {
         try {
             const data = {
-                UserId: $('#UserId').val(),
+                ID: $('#ID').val(),
                 Name: $('#Name').val(),
-                User: {
-                    UserName: $("#UserName").val(),
-                    PasswordHash: $("#Password").val(),
-                },
-                Entity: {
-                    ID: $("#Entity").val()
-                },
-                UserAccess: {
-                    ID: $("#UserAccess").val()
-                }
+                Access_MasterData_JenisSurvei: $("#Access_MasterData_JenisSurvei").is(":checked"),
+                Access_MasterData_Konstruk: $("#Access_MasterData_Konstruk").is(":checked"),
+                Access_MasterData_DimensiVertical: $("#Access_MasterData_DimensiVertical").is(":checked"),
+                Access_MasterData_DimensiHorizontal: $("#Access_MasterData_DimensiHorizontal").is(":checked"),
+                Access_MasterData_StrukturOrganisasi_Entitas: $("#Access_MasterData_StrukturOrganisasi_Entitas").is(":checked"),
+                Access_MasterData_StrukturOrganisasi_LevelJabatan: $("#Access_MasterData_StrukturOrganisasi_LevelJabatan").is(":checked"),
+                Access_MasterData_Periode: $("#Access_MasterData_Periode").is(":checked"),
+                Access_MasterData_Pertanyaan: $("#Access_MasterData_Pertanyaan").is(":checked"),
+                Access_MasterData_DaftarSurvei: $("#Access_MasterData_DaftarSurvei").is(":checked"),
+                Access_Penjadwalan_PenjadwalanSurvei: $("#Access_Penjadwalan_PenjadwalanSurvei").is(":checked"),
+                Access_Penjadwalan_PenjadwalanPeserta: $("#Access_Penjadwalan_PenjadwalanPeserta").is(":checked"),
+                Access_PengaturanPengguna_HakAkses: $("#Access_PengaturanPengguna_HakAkses").is(":checked"),
+                Access_PengaturanPengguna_PenggunaUmum: $("#Access_PengaturanPengguna_PenggunaUmum").is(":checked"),
+                Access_PengaturanPengguna_PenggunaKhusus: $("#Access_PengaturanPengguna_PenggunaKhusus").is(":checked")
             };
             return data;
         } catch (e) {
@@ -173,5 +177,5 @@
 }
 
 $(document).ready(function () {
-    new BackendUser();
+    new UserAccess();
 });

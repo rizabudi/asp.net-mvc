@@ -1,4 +1,5 @@
 ﻿using AdminLte.Data;
+using AdminLte.Helpers;
 using AdminLte.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 namespace AdminLte.Controllers
 {
     [Authorize(Roles = "Pengguna Khusus")]
+    [CustomAuthFilter("Access_PengaturanPengguna_PenggunaKhusus")]
     public class BackendUserController : Controller
     {
         private readonly PostgreDbContext _db;
@@ -31,6 +33,7 @@ namespace AdminLte.Controllers
                 var data = await _db.BackendUsers
                     .Include(x=>x.Entity)
                     .Include(x=>x.User)
+                    .Include(x=>x.UserAccess)
                     .OrderBy(x=>x.Name)
                     .Skip((page-1)*10)
                     .Take(10)
@@ -45,8 +48,9 @@ namespace AdminLte.Controllers
                             Value = new string[] 
                             { 
                                 row.Name,
-                                row.Entity.Name ,
-                                row.User.UserName
+                                row.Entity == null ? "" : row.Entity.Name,
+                                row.User.UserName,
+                                row.UserAccess == null ? "" : row.UserAccess.Name
                             }
                         }
                     );
@@ -101,10 +105,15 @@ namespace AdminLte.Controllers
                     .OrderBy(x => x.Name).ToListAsync();
                 var entities = Entity.getEntities(entityList, 0, 0);
 
+                var userAccesses = await _db.UserAccesses
+                    .OrderBy(x => x.Name)
+                    .ToDictionaryAsync(x=>x.ID.ToString(), y=>y.Name);
+
                 List<FormModel> FormModels = new List<FormModel>();
                 FormModels.Add(new FormModel { Label = "UserId", Name = "UserId", InputType = InputType.HIDDEN, Value = userFromDb == null ? "" : userFromDb.UserId });
                 FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.Name, IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Holding/ Sub-Holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = userFromDb == null ? "" : userFromDb.Entity.ID.ToString(), IsRequired = true });
+                FormModels.Add(new FormModel { Label = "Holding/ Sub-Holding", Name = "Entity", InputType = InputType.DROPDOWN, Options = entities, Value = userFromDb == null ? "" : userFromDb.Entity.ID.ToString(), IsRequired = false });
+                FormModels.Add(new FormModel { Label = "Hak Akses", Name = "UserAccess", InputType = InputType.DROPDOWN, Options = userAccesses, Value = userFromDb == null || userFromDb.UserAccess == null ? "" : userFromDb.UserAccess.ID.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "User Name", Name = "UserName", InputType = InputType.TEXT, Value = userFromDb == null ? "" : userFromDb.User.UserName, IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Password", Name = "Password", Note = (userFromDb != null ? "Kosongkan jika tidak ingin mengganti password" : ""), InputType = InputType.PASSWORD, Value = "", IsRequired = id == "" });
 
@@ -127,6 +136,7 @@ namespace AdminLte.Controllers
             ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name", Style = "width: 15%; min-width: 200px" });
             ColumnModels.Add(new ColumnModel { Label = "Holding/ Sub-Holding", Name = "Entity" });
             ColumnModels.Add(new ColumnModel { Label = "User Name", Name = "UserName" });
+            ColumnModels.Add(new ColumnModel { Label = "Hak Akses", Name = "UserAccess" });
 
 
             ViewData["Columns"] = ColumnModels;
@@ -154,6 +164,7 @@ namespace AdminLte.Controllers
                         await _userManager.AddToRoleAsync(user, "Pengguna Khusus");
 
                         backendUser.Entity = await _db.Entities.FirstOrDefaultAsync(e => e.ID == backendUser.Entity.ID);
+                        backendUser.UserAccess = await _db.UserAccesses.FirstOrDefaultAsync(e => e.ID == backendUser.UserAccess.ID);
 
                         backendUser.User = user;
                         _db.BackendUsers.Add(backendUser);
@@ -175,8 +186,9 @@ namespace AdminLte.Controllers
                 else
                 {
                     backendUser.Entity = await _db.Entities.FirstOrDefaultAsync(e => e.ID == backendUser.Entity.ID);
+                    backendUser.UserAccess = await _db.UserAccesses.FirstOrDefaultAsync(e => e.ID == backendUser.UserAccess.ID);
 
-                    if(backendUser.User.PasswordHash != null)
+                    if (backendUser.User.PasswordHash != null)
                     {
                         var token = await _userManager.GeneratePasswordResetTokenAsync(userFromDb.User);
                         var result = await _userManager.ResetPasswordAsync(userFromDb.User, token, backendUser.User.PasswordHash);
@@ -196,6 +208,8 @@ namespace AdminLte.Controllers
                     }
 
                     userFromDb.Name = backendUser.Name;
+                    userFromDb.Entity = backendUser.Entity;
+                    userFromDb.UserAccess = backendUser.UserAccess;
                     _db.BackendUsers.Update(userFromDb);
                     _db.SaveChanges();
                     return Json(new { success = true, message = "Data berhasil diperbarui" });

@@ -1,14 +1,14 @@
-var BackendUser = /** @class */ (function () {
-    function BackendUser() {
-        this.urlGetData = "/backend-user/table-data-view";
-        this.urlGetPaging = "/backend-user/table-paging-view";
-        this.urlGetForm = "/backend-user/form-view";
-        this.urlSave = '/backend-user/save';
-        this.urlDelete = '/backend-user/delete';
+var UserAccess = /** @class */ (function () {
+    function UserAccess() {
+        this.urlGetData = "/role/table-data-view";
+        this.urlGetPaging = "/role/table-paging-view";
+        this.urlGetForm = "/role/form-view";
+        this.urlSave = '/role/save';
+        this.urlDelete = '/role/delete';
         this.currentPage = 1;
         this.init();
     }
-    BackendUser.prototype.init = function () {
+    UserAccess.prototype.init = function () {
         var _this = this;
         try {
             this.initTable(this.currentPage);
@@ -21,12 +21,12 @@ var BackendUser = /** @class */ (function () {
                 _this.initTable(idx);
             });
             $(document).on("click", ".btn-delete", function (e) {
-                var id = $(e.currentTarget).data('id-strng');
+                var id = $(e.currentTarget).data('id');
                 var data = { id: id };
                 _this.delete(data);
             });
             $(document).on("click", ".btn-edit", function (e) {
-                var id = $(e.currentTarget).data('id-strng');
+                var id = $(e.currentTarget).data('id');
                 var data = { id: id };
                 _this.edit(data);
             });
@@ -37,7 +37,7 @@ var BackendUser = /** @class */ (function () {
             Util.error(e);
         }
     };
-    BackendUser.prototype.initTable = function (page) {
+    UserAccess.prototype.initTable = function (page) {
         try {
             Util.request(this.urlGetData + "?page=" + page, 'GET', 'html', function (response) {
                 $('#table_list tbody').empty();
@@ -59,7 +59,7 @@ var BackendUser = /** @class */ (function () {
             Util.error(e);
         }
     };
-    BackendUser.prototype.add = function () {
+    UserAccess.prototype.add = function () {
         try {
             Util.request(this.urlGetForm, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Tambah Data");
@@ -75,7 +75,7 @@ var BackendUser = /** @class */ (function () {
             Util.error(e);
         }
     };
-    BackendUser.prototype.initForm = function () {
+    UserAccess.prototype.initForm = function () {
         var _this = this;
         try {
             $('#save_form').click(function () {
@@ -91,7 +91,7 @@ var BackendUser = /** @class */ (function () {
             Util.error(e);
         }
     };
-    BackendUser.prototype.save = function () {
+    UserAccess.prototype.save = function () {
         var _this = this;
         try {
             if (!Util.formCheck()) {
@@ -121,21 +121,25 @@ var BackendUser = /** @class */ (function () {
             Util.error(e);
         }
     };
-    BackendUser.prototype.create = function () {
+    UserAccess.prototype.create = function () {
         try {
             var data = {
-                UserId: $('#UserId').val(),
+                ID: $('#ID').val(),
                 Name: $('#Name').val(),
-                User: {
-                    UserName: $("#UserName").val(),
-                    PasswordHash: $("#Password").val(),
-                },
-                Entity: {
-                    ID: $("#Entity").val()
-                },
-                UserAccess: {
-                    ID: $("#UserAccess").val()
-                }
+                Access_MasterData_JenisSurvei: $("#Access_MasterData_JenisSurvei").is(":checked"),
+                Access_MasterData_Konstruk: $("#Access_MasterData_Konstruk").is(":checked"),
+                Access_MasterData_DimensiVertical: $("#Access_MasterData_DimensiVertical").is(":checked"),
+                Access_MasterData_DimensiHorizontal: $("#Access_MasterData_DimensiHorizontal").is(":checked"),
+                Access_MasterData_StrukturOrganisasi_Entitas: $("#Access_MasterData_StrukturOrganisasi_Entitas").is(":checked"),
+                Access_MasterData_StrukturOrganisasi_LevelJabatan: $("#Access_MasterData_StrukturOrganisasi_LevelJabatan").is(":checked"),
+                Access_MasterData_Periode: $("#Access_MasterData_Periode").is(":checked"),
+                Access_MasterData_Pertanyaan: $("#Access_MasterData_Pertanyaan").is(":checked"),
+                Access_MasterData_DaftarSurvei: $("#Access_MasterData_DaftarSurvei").is(":checked"),
+                Access_Penjadwalan_PenjadwalanSurvei: $("#Access_Penjadwalan_PenjadwalanSurvei").is(":checked"),
+                Access_Penjadwalan_PenjadwalanPeserta: $("#Access_Penjadwalan_PenjadwalanPeserta").is(":checked"),
+                Access_PengaturanPengguna_HakAkses: $("#Access_PengaturanPengguna_HakAkses").is(":checked"),
+                Access_PengaturanPengguna_PenggunaUmum: $("#Access_PengaturanPengguna_PenggunaUmum").is(":checked"),
+                Access_PengaturanPengguna_PenggunaKhusus: $("#Access_PengaturanPengguna_PenggunaKhusus").is(":checked")
             };
             return data;
         }
@@ -144,7 +148,7 @@ var BackendUser = /** @class */ (function () {
             Util.error(e);
         }
     };
-    BackendUser.prototype.delete = function (data) {
+    UserAccess.prototype.delete = function (data) {
         var _this = this;
         try {
             if (confirm("Apa anda yaking menghapus data ini ?") == true) {
@@ -166,7 +170,7 @@ var BackendUser = /** @class */ (function () {
             Util.error(e);
         }
     };
-    BackendUser.prototype.edit = function (data) {
+    UserAccess.prototype.edit = function (data) {
         try {
             Util.request(this.urlGetForm + "?id=" + data.id, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Ubah Data");
@@ -181,9 +185,9 @@ var BackendUser = /** @class */ (function () {
             console.error(e);
         }
     };
-    return BackendUser;
+    return UserAccess;
 }());
 $(document).ready(function () {
-    new BackendUser();
+    new UserAccess();
 });
-//# sourceMappingURL=backend-user.js.map
+//# sourceMappingURL=user-access.js.map

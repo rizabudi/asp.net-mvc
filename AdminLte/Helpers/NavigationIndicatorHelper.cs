@@ -12,6 +12,15 @@ namespace AdminLte.Helpers
         {
             try
             {
+                if (!urlHelper.ActionContext.RouteData.Values.ContainsKey("controller"))
+                {
+                    return null;
+                }
+                if (!urlHelper.ActionContext.RouteData.Values.ContainsKey("action"))
+                {
+                    return null;
+                }
+
                 string result = "active";
                 string controllerName = urlHelper.ActionContext.RouteData.Values["controller"].ToString();
                 string methodName = urlHelper.ActionContext.RouteData.Values["action"].ToString();
@@ -35,6 +44,15 @@ namespace AdminLte.Helpers
         {
             try
             {
+                if (!urlHelper.ActionContext.RouteData.Values.ContainsKey("controller"))
+                {
+                    return null;
+                }
+                if (!urlHelper.ActionContext.RouteData.Values.ContainsKey("action"))
+                {
+                    return null;
+                }
+
                 string result = "active";
                 string controllerName = urlHelper.ActionContext.RouteData.Values["controller"].ToString();
                 string methodName = urlHelper.ActionContext.RouteData.Values["action"].ToString();
@@ -61,6 +79,15 @@ namespace AdminLte.Helpers
         {
             try
             {
+                if (!urlHelper.ActionContext.RouteData.Values.ContainsKey("controller"))
+                {
+                    return null;
+                }
+                if (!urlHelper.ActionContext.RouteData.Values.ContainsKey("action"))
+                {
+                    return null;
+                }
+
                 string result = "active";
                 string controllerName = urlHelper.ActionContext.RouteData.Values["controller"].ToString();
                 string methodName = urlHelper.ActionContext.RouteData.Values["action"].ToString();
@@ -90,6 +117,15 @@ namespace AdminLte.Helpers
         {
             try
             {
+                if (!urlHelper.ActionContext.RouteData.Values.ContainsKey("controller"))
+                {
+                    return null;
+                }
+                if (!urlHelper.ActionContext.RouteData.Values.ContainsKey("action"))
+                {
+                    return null;
+                }
+
                 string result = "open menu-open";
                 string controllerName = urlHelper.ActionContext.RouteData.Values["controller"].ToString();
                 string methodName = urlHelper.ActionContext.RouteData.Values["action"].ToString();
@@ -110,6 +146,11 @@ namespace AdminLte.Helpers
             {
                 return null;
             }
+        }
+
+        public static string MakeVisibleClass(this IUrlHelper urlHelper, bool status)
+        {
+            return status ? "" : "none";
         }
     }
 }

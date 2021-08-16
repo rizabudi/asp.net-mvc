@@ -59,6 +59,7 @@ namespace AdminLte.Data
         public DbSet<EntityHorizontalDimentionScore> EntityHorizontalDimentionScores { get; set; }
         public DbSet<EntityVerticalDimentionScore> EntityVerticalDimentionScores { get; set; }
         public DbSet<EntitySubVerticalDimentionScore> EntitySubVerticalDimentionScores { get; set; }
+        public DbSet<UserAccess> UserAccesses { get; set; }
 
         // VIEWS
         public DbSet<VwCulturePerRow> VwCulturePerRow { get; set; }
@@ -69,5 +70,6 @@ namespace AdminLte.Data
         public DbSet<VwEngagementPerHorizontalDimention> VwEngagementPerHorizontalDimention { get; set; }
         public DbSet<VwEngagementPerSubVerticalDimention> VwEngagementPerSubVerticalDimention { get; set; }
         public DbSet<VwPerformancePerVerticalDimention> VwPerformancePerVerticalDimention { get; set; }
+        public DbSet<VwParticipant> VwParticipant { get; set; }
     }
 }

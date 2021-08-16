@@ -6,6 +6,11 @@
     var entities = (Dictionary<string, string>)ViewData["Entities"];
     var entity = (Entity)ViewData["Entity"];
     var sections = (List<Section>)ViewData["Sections"];
+    sections.Add(new Section
+    {
+        ID = 0,
+        Name = "Peserta"
+    });
     var section = (Section)ViewData["Section"];
 
     ViewData["Title"] = "Dashboard Survei - " + survey.Name + " - " + (entity == null ? "ALL" : entity.Name) + " - " + section.Name;
@@ -16,19 +21,27 @@
     <script src="~/plugins/amcharts/charts.js"></script>
     <script src="~/plugins/amcharts/animated.js"></script>
 
-    @if (section.Construct == Construct.CULTURE)
+    @if (section.ID == 0)
     {
-        <script src="~/Views/TypeScripts/survey-dashboard-akhlak-gauge.js"></script>
-        <script src="~/Views/TypeScripts/survey-dashboard-akhlak-radar.js"></script>
-    }
-    else if (section.Construct == Construct.ENGAGEMENT)
-    {
-        <script src="~/Views/TypeScripts/survey-dashboard-engagement-gauge.js"></script>
-        <script src="~/Views/TypeScripts/survey-dashboard-engagement-radar.js"></script>
+        <script src="~/Views/TypeScripts/survey-dashboard-peserta-pie.js"></script>
     }
     else
     {
-        <script src="~/Views/TypeScripts/survey-dashboard-perfromance-column.js"></script>
+        if (section.Construct == Construct.CULTURE)
+        {
+            <script src="~/Views/TypeScripts/survey-dashboard-akhlak-gauge.js"></script>
+            <script src="~/Views/TypeScripts/survey-dashboard-akhlak-radar.js"></script>
+        }
+        else if (section.Construct == Construct.ENGAGEMENT)
+        {
+            <script src="~/Views/TypeScripts/survey-dashboard-engagement-gauge.js"></script>
+            <script src="~/Views/TypeScripts/survey-dashboard-engagement-radar.js"></script>
+        }
+        else
+        {
+            <script src="~/Views/TypeScripts/survey-dashboard-perfromance-column.js"></script>
+        }
+
     }
 }
 
@@ -85,7 +98,7 @@
                         </div>
                         <br />
                         <br />
-                        <label class="col-md-4 col-form-label">Konstruk : </label>
+                        <label class="col-md-4 col-form-label">Jenis Dashboard : </label>
                         <div class="col-md-8">
                             <select name="section" class="form-control">
                                 <option value="0">Pilih</option>

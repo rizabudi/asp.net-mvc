@@ -1,4 +1,5 @@
 ﻿using AdminLte.Data;
+using AdminLte.Helpers;
 using AdminLte.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Html;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 namespace AdminLte.Controllers
 {
     [Authorize(Roles = "Pengguna Khusus")]
+    [CustomAuthFilter("Access_MasterData_Pertanyaan")]
     public class QuestionAnswerController : Controller
     {
         private readonly PostgreDbContext _db;

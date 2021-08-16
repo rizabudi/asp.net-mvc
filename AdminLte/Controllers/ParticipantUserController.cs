@@ -1,4 +1,5 @@
 ﻿using AdminLte.Data;
+using AdminLte.Helpers;
 using AdminLte.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 namespace AdminLte.Controllers
 {
     [Authorize(Roles = "Pengguna Khusus")]
+    [CustomAuthFilter("Access_PengaturanPengguna_PenggunaUmum")]
     public class ParticipantUserController : Controller
     {
         private readonly PostgreDbContext _db;

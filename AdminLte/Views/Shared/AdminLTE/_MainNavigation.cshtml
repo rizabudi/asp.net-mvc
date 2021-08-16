@@ -5,6 +5,13 @@
 @inject UserManager<User> userManager
 @inject PostgreDbContext context;
 
+@{ 
+    var user = await userManager.GetUserAsync(User);
+    await context.Entry(user).Reference(x => x.BackendUser).LoadAsync();
+    await context.Entry(user.BackendUser).Reference(x => x.UserAccess).LoadAsync();
+    await context.Entry(user).Reference(x => x.ParticipantUser).LoadAsync();
+}   
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="~/home" class="brand-link">
         <img src="~/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
@@ -15,9 +22,6 @@
         @if (User.Identity.IsAuthenticated)
         {
             //var userTask = userManager.GetUserAsync(User);
-            var user = await userManager.GetUserAsync(User);
-            await context.Entry(user).Reference(x => x.BackendUser).LoadAsync();
-            await context.Entry(user).Reference(x => x.ParticipantUser).LoadAsync();
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
                     <img src="~/img/no-user-image-icon-0.jpg" class="img-circle elevation-2" alt="User Image">
@@ -51,6 +55,7 @@
                 </li>
                 @if (User.Identity.IsAuthenticated)
                 {
+                    var userAccess = user.BackendUser.UserAccess;
                     @*<li class="nav-item ">
                             <a asp-controller="Home" asp-action="Privacy" class="nav-link @Url.MakeActiveClass("home","privacy")">
                                 <i class="nav-icon fas fa-lock"></i>
@@ -71,7 +76,8 @@
                     @if (User.IsInRole("Pengguna Khusus"))
                     {
 
-                        <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "assesment", "section", "horizontaldimention", "verticaldimention", "SubVerticalDimention", "entity", "position", "divition", "function", "department", "JobLevel", "period", "subperiod", "question", "questionanswer" }, "index")">
+                        <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "assesment", "section", "horizontaldimention", "verticaldimention", "SubVerticalDimention", "entity", "position", "divition", "function", "department", "JobLevel", "period", "subperiod", "question", "questionanswer" }, "index")"
+                             style="display: @Url.MakeVisibleClass(userAccess.Access_MasterData_JenisSurvei || userAccess.Access_MasterData_Konstruk || userAccess.Access_MasterData_DimensiVertical || userAccess.Access_MasterData_DimensiHorizontal  || userAccess.Access_MasterData_Periode  || userAccess.Access_MasterData_Pertanyaan || userAccess.Access_MasterData_StrukturOrganisasi_Entitas || userAccess.Access_MasterData_StrukturOrganisasi_LevelJabatan)">
                             <a href="#" class="nav-link @Url.MakeActiveClass(new List<string> { "assesment", "section", "horizontaldimention", "verticaldimention", "SubVerticalDimention", "entity", "position", "divition", "function", "department", "JobLevel", "period", "subperiod", "question", "questionanswer" }, "index")">
                                 <i class="nav-icon fas fa-folder"></i>
                                 <p>
@@ -80,31 +86,32 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li class="nav-item">
+                                <li class="nav-item" style="display: @Url.MakeVisibleClass(userAccess.Access_MasterData_JenisSurvei)">
                                     <a asp-controller="Assesment" asp-action="Index" class="nav-link @Url.MakeActiveClass("assesment", "index")">
                                         <i class="fas fa-list nav-icon"></i>
                                         <p>Jenis Survei</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item" style="display: @Url.MakeVisibleClass(userAccess.Access_MasterData_Konstruk)">
                                     <a asp-controller="Section" asp-action="Index" class="nav-link @Url.MakeActiveClass("section", "index")">
                                         <i class="fas fa-list nav-icon"></i>
                                         <p>Konstruk</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item" style="display: @Url.MakeVisibleClass(userAccess.Access_MasterData_DimensiVertical)">
                                     <a asp-controller="VerticalDimention" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "verticaldimention", "SubVerticalDimention" }, "index")">
                                         <i class="fas fa-list nav-icon"></i>
                                         <p>Dimensi Vertikal</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item" style="display: @Url.MakeVisibleClass(userAccess.Access_MasterData_DimensiHorizontal)">
                                     <a asp-controller="HorizontalDimention" asp-action="Index" class="nav-link @Url.MakeActiveClass("horizontaldimention", "index")">
                                         <i class="fas fa-list nav-icon"></i>
                                         <p>Dimensi Horizontal</p>
                                     </a>
                                 </li>
-                                <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "entity", "position", "divition", "function", "department", "JobLevel" }, "index")">
+                                <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "entity", "position", "divition", "function", "department", "JobLevel" }, "index")" 
+                                    style="display: @Url.MakeVisibleClass(userAccess.Access_MasterData_StrukturOrganisasi_Entitas || userAccess.Access_MasterData_StrukturOrganisasi_LevelJabatan)">
                                     <a href="#" class="nav-link @Url.MakeActiveClass(new List<string> { "entity", "position", "divition", "function", "department", "JobLevel" }, "index")">
                                         <i class="nav-icon fas fa-building"></i>
                                         <p>
@@ -113,7 +120,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        <li class="nav-item">
+                                        <li class="nav-item" style="display: @Url.MakeVisibleClass(userAccess.Access_MasterData_StrukturOrganisasi_Entitas)">
                                             <a asp-controller="Entity" asp-action="Index" class="nav-link @Url.MakeActiveClass("entity", "index")">
                                                 <i class="fas fa-list nav-icon"></i>
                                                 <p>Entitas</p>
@@ -143,7 +150,7 @@
                                                 <p>Departemen</p>
                                             </a>
                                         </li>*@
-                                        <li class="nav-item">
+                                        <li class="nav-item" style="display: @Url.MakeVisibleClass(userAccess.Access_MasterData_StrukturOrganisasi_LevelJabatan)">
                                             <a asp-controller="JobLevel" asp-action="Index" class="nav-link @Url.MakeActiveClass("JobLevel", "index")">
                                                 <i class="fas fa-list nav-icon"></i>
                                                 <p>Level Jabatan</p>
@@ -151,13 +158,13 @@
                                         </li>
                                     </ul>
                                 </li>   
-                                <li class="nav-item">
+                                <li class="nav-item" style="display: @Url.MakeVisibleClass(userAccess.Access_MasterData_Periode)">
                                     <a asp-controller="Period" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "Period", "SubPeriod" }, "index")">
                                         <i class="fas fa-clock nav-icon"></i>
                                         <p>Periode</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item" style="display: @Url.MakeVisibleClass(userAccess.Access_MasterData_Pertanyaan)">
                                     <a asp-controller="Question" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "Question", "QuestionAnswer" }, "index")">
                                         <i class="fas fa-question nav-icon"></i>
                                         <p>Pertanyaan</p>
@@ -165,13 +172,14 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" style="display: @Url.MakeVisibleClass(userAccess.Access_MasterData_DaftarSurvei)">
                             <a asp-controller="Survey" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "Survey", "SurveyQuestion" }, new List<string> { "index", "result","dashboard" })">
                                 <i class="fas fa-file-signature nav-icon"></i>
                                 <p>Daftar Survei</p>
                             </a>
                         </li>
-                        <li class="nav-item has-treeview  @Url.MakeOpenClass(new List<string> { "SurveySchedule", "Schedule", "Participant" },"index")">
+                        <li class="nav-item has-treeview  @Url.MakeOpenClass(new List<string> { "SurveySchedule", "Schedule", "Participant" },"index")"
+                             style="display: @Url.MakeVisibleClass(userAccess.Access_Penjadwalan_PenjadwalanSurvei || userAccess.Access_Penjadwalan_PenjadwalanPeserta)">
                             <a href="#" class="nav-link  @Url.MakeActiveClass(new List<string> { "SurveySchedule", "Schedule", "Participant" },"index")">
                                 <i class="nav-icon fas fa-calendar"></i>
                                 <p>
@@ -180,13 +188,13 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li class="nav-item">
+                                <li class="nav-item" style="display: @Url.MakeVisibleClass(userAccess.Access_Penjadwalan_PenjadwalanSurvei)">
                                     <a asp-controller="SurveySchedule" asp-action="Index" class="nav-link @Url.MakeActiveClass("SurveySchedule","index")">
                                         <i class="fas fa-calendar-check nav-icon"></i>
                                         <p>Penjadwalan Survei</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item" style="display: @Url.MakeVisibleClass(userAccess.Access_Penjadwalan_PenjadwalanPeserta)">
                                     <a asp-controller="Schedule" asp-action="Index" class="nav-link @Url.MakeActiveClass(new List<string> { "Schedule","Participant" },"index")">
                                         <i class="fas fa-calendar-week nav-icon"></i>
                                         <p>Penjadwalan Peserta</p>
@@ -194,8 +202,9 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "backenduser", "participantuser" }, "index")">
-                            <a href="#" class="nav-link @Url.MakeActiveClass(new List<string> { "backenduser", "participantuser" }, "index")">
+                        <li class="nav-item has-treeview @Url.MakeOpenClass(new List<string> { "backenduser", "participantuser","role" }, "index")"
+                            style="display: @Url.MakeVisibleClass(userAccess.Access_PengaturanPengguna_HakAkses || userAccess.Access_PengaturanPengguna_PenggunaUmum || userAccess.Access_PengaturanPengguna_PenggunaKhusus)">
+                            <a href="#" class="nav-link @Url.MakeActiveClass(new List<string> { "backenduser", "participantuser","role" }, "index")">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>
                                     Pengaturan Pengguna
@@ -203,13 +212,19 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li class="nav-item">
+                                <li class="nav-item" style="display: @Url.MakeVisibleClass(userAccess.Access_PengaturanPengguna_HakAkses)">
+                                    <a asp-controller="Role" asp-action="Index" class="nav-link @Url.MakeActiveClass("role","index")">
+                                        <i class="fas fa-lock nav-icon"></i>
+                                        <p>Hak Akses</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item" style="display: @Url.MakeVisibleClass(userAccess.Access_PengaturanPengguna_PenggunaUmum)">
                                     <a asp-controller="ParticipantUser" asp-action="Index" class="nav-link @Url.MakeActiveClass("participantuser","index")">
                                         <i class="fas fa-user-friends nav-icon"></i>
                                         <p>Pengguna Umum</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item" style="display: @Url.MakeVisibleClass(userAccess.Access_PengaturanPengguna_PenggunaKhusus)">
                                     <a asp-controller="BackendUser" asp-action="Index" class="nav-link @Url.MakeActiveClass("backenduser","index")">
                                         <i class="fas fa-user-astronaut nav-icon"></i>
                                         <p>Pengguna Khusus</p>

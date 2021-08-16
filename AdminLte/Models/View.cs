@@ -11,6 +11,7 @@ namespace AdminLte.Models
         public int QuestionID { get; set; }
         public int MatrixRowAnswerID { get; set; }
         public int ParticipantID { get; set; }
+        public Participant Participant { get; set; }
         public int VerticalDimentionID { get; set; }
         public int SubVerticalDimentionID { get; set; }
         public float urutan { get; set; }
@@ -57,6 +58,7 @@ namespace AdminLte.Models
         public int QuestionID { get; set; }
         public int MatrixRowAnswerID { get; set; }
         public int ParticipantID { get; set; }
+        public Participant Participant { get; set; }
         public int VerticalDimentionID { get; set; }
         public int SubVerticalDimentionID { get; set; }
         public float nilai { get; set; }
@@ -80,6 +82,7 @@ namespace AdminLte.Models
         public int QuestionID { get; set; }
         public int MatrixRowAnswerID { get; set; }
         public int ParticipantID { get; set; }
+        public Participant Participant { get; set; }
         public int VerticalDimentionID { get; set; }
         public int SubVerticalDimentionID { get; set; }
         public int HorizontalDimentionID { get; set; }
@@ -106,5 +109,18 @@ namespace AdminLte.Models
         public int SubVerticalDimentionID { get; set; }
         public SubVerticalDimention SubVerticalDimention { get; set; }
         public double indexsituasi { get; set; }
+    }
+
+    public class VwParticipant
+    {
+        [Key]
+        public int ParticipantID { get; set; }
+        public int EntityID { get; set; }
+        public Entity Entity { get; set; }
+        public int AssesmentID { get; set; }
+        public int QuestionPackageID { get; set; }
+        public string UserId { get; set; }
+        public DateTime? StartedAt { get; set; }
+        public DateTime? FinishedAt { get; set; }
     }
 }

@@ -49,9 +49,14 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<int?>("UserAccessID")
+                        .HasColumnType("integer");
+
                     b.HasKey("UserId");
 
                     b.HasIndex("EntityID");
+
+                    b.HasIndex("UserAccessID");
 
                     b.ToTable("BackendUsers");
                 });
@@ -346,6 +351,25 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     b.ToTable("HorizontalDimentions");
                 });
 
+            modelBuilder.Entity("AdminLte.Models.JobLevel", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("JobLevels");
+                });
+
             modelBuilder.Entity("AdminLte.Models.Participant", b =>
                 {
                     b.Property<int>("ID")
@@ -353,19 +377,7 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("CompanyFunctionID")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("DepartmentID")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("DivitionID")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("EntityID")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("FinishedAt")
+                    b.Property<DateTime?>("FinishedAt")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsCanRetake")
@@ -377,28 +389,18 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     b.Property<string>("ParticipantUserUserId")
                         .HasColumnType("text");
 
-                    b.Property<int?>("PositionID")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("QuestionPackageID")
                         .HasColumnType("integer");
 
                     b.Property<int?>("ScheduleID")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime?>("StartedAt")
+                        .HasColumnType("timestamp without time zone");
+
                     b.HasKey("ID");
 
-                    b.HasIndex("CompanyFunctionID");
-
-                    b.HasIndex("DepartmentID");
-
-                    b.HasIndex("DivitionID");
-
-                    b.HasIndex("EntityID");
-
                     b.HasIndex("ParticipantUserUserId");
-
-                    b.HasIndex("PositionID");
 
                     b.HasIndex("QuestionPackageID");
 
@@ -417,11 +419,20 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     b.Property<string>("Data")
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("FinishedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsFinish")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsLast")
+                        .HasColumnType("boolean");
+
                     b.Property<int?>("ParticipantID")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ScheduleID")
-                        .HasColumnType("integer");
+                    b.Property<DateTime?>("StartedAt")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("State")
                         .HasColumnType("integer");
@@ -429,8 +440,6 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     b.HasKey("ID");
 
                     b.HasIndex("ParticipantID");
-
-                    b.HasIndex("ScheduleID");
 
                     b.ToTable("ParticipantAnswerSheets");
                 });
@@ -460,7 +469,7 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     b.Property<bool>("IsSkipped")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("MatrixRowAnserID")
+                    b.Property<int>("MatrixRowAnswerID")
                         .HasColumnType("integer");
 
                     b.Property<float>("NumericalBoxValue")
@@ -469,8 +478,14 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     b.Property<int?>("ParticipantAnswerSheetID")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("QuestionID")
+                        .HasColumnType("integer");
+
                     b.Property<int>("QuestionSquence")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime?>("SubmitAt")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("SuggestedAnswerID")
                         .HasColumnType("integer");
@@ -479,7 +494,34 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
 
                     b.HasIndex("ParticipantAnswerSheetID");
 
+                    b.HasIndex("QuestionID");
+
                     b.ToTable("ParticipantAnswerSheetLines");
+                });
+
+            modelBuilder.Entity("AdminLte.Models.ParticipantAnswerSheetSection", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<bool>("IsFinish")
+                        .HasColumnType("boolean");
+
+                    b.Property<int?>("ParticipantAnswerSheetID")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SectionID")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ParticipantAnswerSheetID");
+
+                    b.HasIndex("SectionID");
+
+                    b.ToTable("ParticipantAnswerSheetSections");
                 });
 
             modelBuilder.Entity("AdminLte.Models.ParticipantHorizontalDimentionScore", b =>
@@ -568,6 +610,12 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     b.Property<string>("UserId")
                         .HasColumnType("text");
 
+                    b.Property<int?>("Age")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("BirthDate")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<int?>("CompanyFunctionID")
                         .HasColumnType("integer");
 
@@ -589,6 +637,9 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     b.Property<int?>("EntityID")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("JobLevelID")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
@@ -598,8 +649,14 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     b.Property<int?>("PositionID")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("Sex")
-                        .HasColumnType("boolean");
+                    b.Property<int>("Sex")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SubEntityID")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("WorkDuration")
+                        .HasColumnType("integer");
 
                     b.HasKey("UserId");
 
@@ -611,7 +668,11 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
 
                     b.HasIndex("EntityID");
 
+                    b.HasIndex("JobLevelID");
+
                     b.HasIndex("PositionID");
+
+                    b.HasIndex("SubEntityID");
 
                     b.ToTable("ParticipantUsers");
                 });
@@ -686,6 +747,9 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<string>("Attachment")
+                        .HasColumnType("text");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
@@ -734,7 +798,7 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("boolean");
 
-                    b.Property<bool>("IsUnvorable")
+                    b.Property<bool>("IsUnFavorable")
                         .HasColumnType("boolean");
 
                     b.Property<int?>("MatrixQuestionID")
@@ -899,6 +963,9 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
+                    b.Property<string>("Introduction")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsRandom")
                         .HasColumnType("boolean");
 
@@ -977,6 +1044,66 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     b.ToTable("SubVerticalDimentions");
                 });
 
+            modelBuilder.Entity("AdminLte.Models.UserAccess", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Access")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Access_MasterData_DaftarSurvei")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Access_MasterData_DimensiHorizontal")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Access_MasterData_DimensiVertical")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Access_MasterData_JenisSurvei")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Access_MasterData_Konstruk")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Access_MasterData_Periode")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Access_MasterData_Pertanyaan")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Access_MasterData_StrukturOrganisasi_Entitas")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Access_MasterData_StrukturOrganisasi_LevelJabatan")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Access_PengaturanPengguna_HakAkses")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Access_PengaturanPengguna_PenggunaKhusus")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Access_PengaturanPengguna_PenggunaUmum")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Access_Penjadwalan_PenjadwalanPeserta")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Access_Penjadwalan_PenjadwalanSurvei")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("UserAccesses");
+                });
+
             modelBuilder.Entity("AdminLte.Models.VerticalDimention", b =>
                 {
                     b.Property<int>("ID")
@@ -1004,6 +1131,229 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     b.HasIndex("SectionID");
 
                     b.ToTable("VerticalDimentions");
+                });
+
+            modelBuilder.Entity("AdminLte.Models.VwCulturePerRow", b =>
+                {
+                    b.Property<string>("id")
+                        .HasColumnType("text");
+
+                    b.Property<int>("MatrixRowAnswerID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ParticipantID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QuestionID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubVerticalDimentionID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("VerticalDimentionID")
+                        .HasColumnType("integer");
+
+                    b.Property<float>("bobot")
+                        .HasColumnType("real");
+
+                    b.Property<float>("bobotxnilai")
+                        .HasColumnType("real");
+
+                    b.Property<float>("nilai")
+                        .HasColumnType("real");
+
+                    b.Property<float>("urutan")
+                        .HasColumnType("real");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("ParticipantID");
+
+                    b.ToTable("VwCulturePerRow");
+                });
+
+            modelBuilder.Entity("AdminLte.Models.VwCulturePerSubVerticalDimention", b =>
+                {
+                    b.Property<string>("id")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ParticipantID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubVerticalDimentionID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("VerticalDimentionID")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("indexsituasi")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("skorsituasi")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("ParticipantID");
+
+                    b.HasIndex("SubVerticalDimentionID");
+
+                    b.ToTable("VwCulturePerSubVerticalDimention");
+                });
+
+            modelBuilder.Entity("AdminLte.Models.VwCulturePerVerticalDimention", b =>
+                {
+                    b.Property<string>("id")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ParticipantID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("VerticalDimentionID")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("indexvaluesubject")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("ParticipantID");
+
+                    b.HasIndex("VerticalDimentionID");
+
+                    b.ToTable("VwCulturePerVerticalDimention");
+                });
+
+            modelBuilder.Entity("AdminLte.Models.VwEngagementPerHorizontalDimention", b =>
+                {
+                    b.Property<string>("id")
+                        .HasColumnType("text");
+
+                    b.Property<int>("HorizontalDimentionID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ParticipantID")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("indexsituasi")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("HorizontalDimentionID");
+
+                    b.HasIndex("ParticipantID");
+
+                    b.ToTable("VwEngagementPerHorizontalDimention");
+                });
+
+            modelBuilder.Entity("AdminLte.Models.VwEngagementPerRow", b =>
+                {
+                    b.Property<string>("id")
+                        .HasColumnType("text");
+
+                    b.Property<int>("HorizontalDimentionID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MatrixRowAnswerID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ParticipantID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QuestionID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubVerticalDimentionID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("VerticalDimentionID")
+                        .HasColumnType("integer");
+
+                    b.Property<float>("nilai")
+                        .HasColumnType("real");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("ParticipantID");
+
+                    b.ToTable("VwEngagementPerRow");
+                });
+
+            modelBuilder.Entity("AdminLte.Models.VwEngagementPerSubVerticalDimention", b =>
+                {
+                    b.Property<string>("id")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ParticipantID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubVerticalDimentionID")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("indexsituasi")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("ParticipantID");
+
+                    b.HasIndex("SubVerticalDimentionID");
+
+                    b.ToTable("VwEngagementPerSubVerticalDimention");
+                });
+
+            modelBuilder.Entity("AdminLte.Models.VwPerformancePerRow", b =>
+                {
+                    b.Property<string>("id")
+                        .HasColumnType("text");
+
+                    b.Property<int>("MatrixRowAnswerID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ParticipantID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QuestionID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubVerticalDimentionID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("VerticalDimentionID")
+                        .HasColumnType("integer");
+
+                    b.Property<float>("nilai")
+                        .HasColumnType("real");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("ParticipantID");
+
+                    b.ToTable("VwPerformancePerRow");
+                });
+
+            modelBuilder.Entity("AdminLte.Models.VwPerformancePerVerticalDimention", b =>
+                {
+                    b.Property<string>("id")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ParticipantID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("VerticalDimentionID")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("indexvaluesubject")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("ParticipantID");
+
+                    b.HasIndex("VerticalDimentionID");
+
+                    b.ToTable("VwPerformancePerVerticalDimention");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -1219,6 +1569,10 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                         .WithMany()
                         .HasForeignKey("EntityID");
 
+                    b.HasOne("AdminLte.Models.UserAccess", "UserAccess")
+                        .WithMany()
+                        .HasForeignKey("UserAccessID");
+
                     b.HasOne("AdminLte.Models.User", "User")
                         .WithOne("BackendUser")
                         .HasForeignKey("AdminLte.Models.BackendUser", "UserId")
@@ -1317,48 +1671,24 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
 
             modelBuilder.Entity("AdminLte.Models.Participant", b =>
                 {
-                    b.HasOne("AdminLte.Models.CompanyFunction", "CompanyFunction")
-                        .WithMany()
-                        .HasForeignKey("CompanyFunctionID");
-
-                    b.HasOne("AdminLte.Models.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentID");
-
-                    b.HasOne("AdminLte.Models.Divition", "Divition")
-                        .WithMany()
-                        .HasForeignKey("DivitionID");
-
-                    b.HasOne("AdminLte.Models.Entity", "Entity")
-                        .WithMany()
-                        .HasForeignKey("EntityID");
-
                     b.HasOne("AdminLte.Models.ParticipantUser", "ParticipantUser")
                         .WithMany()
                         .HasForeignKey("ParticipantUserUserId");
-
-                    b.HasOne("AdminLte.Models.Position", "Position")
-                        .WithMany()
-                        .HasForeignKey("PositionID");
 
                     b.HasOne("AdminLte.Models.QuestionPackage", "QuestionPackage")
                         .WithMany()
                         .HasForeignKey("QuestionPackageID");
 
                     b.HasOne("AdminLte.Models.Schedule", "Schedule")
-                        .WithMany()
+                        .WithMany("Participants")
                         .HasForeignKey("ScheduleID");
                 });
 
             modelBuilder.Entity("AdminLte.Models.ParticipantAnswerSheet", b =>
                 {
                     b.HasOne("AdminLte.Models.Participant", "Participant")
-                        .WithMany()
+                        .WithMany("ParticipantAnswerSheets")
                         .HasForeignKey("ParticipantID");
-
-                    b.HasOne("AdminLte.Models.Schedule", "Schedule")
-                        .WithMany()
-                        .HasForeignKey("ScheduleID");
                 });
 
             modelBuilder.Entity("AdminLte.Models.ParticipantAnswerSheetLine", b =>
@@ -1366,6 +1696,21 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     b.HasOne("AdminLte.Models.ParticipantAnswerSheet", "ParticipantAnswerSheet")
                         .WithMany()
                         .HasForeignKey("ParticipantAnswerSheetID");
+
+                    b.HasOne("AdminLte.Models.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionID");
+                });
+
+            modelBuilder.Entity("AdminLte.Models.ParticipantAnswerSheetSection", b =>
+                {
+                    b.HasOne("AdminLte.Models.ParticipantAnswerSheet", "ParticipantAnswerSheet")
+                        .WithMany("ParticipantAnswerSheetSections")
+                        .HasForeignKey("ParticipantAnswerSheetID");
+
+                    b.HasOne("AdminLte.Models.Section", "Section")
+                        .WithMany()
+                        .HasForeignKey("SectionID");
                 });
 
             modelBuilder.Entity("AdminLte.Models.ParticipantHorizontalDimentionScore", b =>
@@ -1419,9 +1764,17 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                         .WithMany()
                         .HasForeignKey("EntityID");
 
+                    b.HasOne("AdminLte.Models.JobLevel", "JobLevel")
+                        .WithMany()
+                        .HasForeignKey("JobLevelID");
+
                     b.HasOne("AdminLte.Models.Position", "Position")
                         .WithMany()
                         .HasForeignKey("PositionID");
+
+                    b.HasOne("AdminLte.Models.Entity", "SubEntity")
+                        .WithMany()
+                        .HasForeignKey("SubEntityID");
 
                     b.HasOne("AdminLte.Models.User", "User")
                         .WithOne("ParticipantUser")
@@ -1553,6 +1906,108 @@ namespace AdminLte.Data.Migrations.PostgreMigrations
                     b.HasOne("AdminLte.Models.Section", "Section")
                         .WithMany("VerticalDimentions")
                         .HasForeignKey("SectionID");
+                });
+
+            modelBuilder.Entity("AdminLte.Models.VwCulturePerRow", b =>
+                {
+                    b.HasOne("AdminLte.Models.Participant", "Participant")
+                        .WithMany()
+                        .HasForeignKey("ParticipantID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AdminLte.Models.VwCulturePerSubVerticalDimention", b =>
+                {
+                    b.HasOne("AdminLte.Models.Participant", "Participant")
+                        .WithMany()
+                        .HasForeignKey("ParticipantID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AdminLte.Models.SubVerticalDimention", "SubVerticalDimention")
+                        .WithMany()
+                        .HasForeignKey("SubVerticalDimentionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AdminLte.Models.VwCulturePerVerticalDimention", b =>
+                {
+                    b.HasOne("AdminLte.Models.Participant", "Participant")
+                        .WithMany()
+                        .HasForeignKey("ParticipantID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AdminLte.Models.VerticalDimention", "VerticalDimention")
+                        .WithMany()
+                        .HasForeignKey("VerticalDimentionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AdminLte.Models.VwEngagementPerHorizontalDimention", b =>
+                {
+                    b.HasOne("AdminLte.Models.HorizontalDimention", "HorizontalDimention")
+                        .WithMany()
+                        .HasForeignKey("HorizontalDimentionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AdminLte.Models.Participant", "Participant")
+                        .WithMany()
+                        .HasForeignKey("ParticipantID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AdminLte.Models.VwEngagementPerRow", b =>
+                {
+                    b.HasOne("AdminLte.Models.Participant", "Participant")
+                        .WithMany()
+                        .HasForeignKey("ParticipantID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AdminLte.Models.VwEngagementPerSubVerticalDimention", b =>
+                {
+                    b.HasOne("AdminLte.Models.Participant", "Participant")
+                        .WithMany()
+                        .HasForeignKey("ParticipantID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AdminLte.Models.SubVerticalDimention", "SubVerticalDimention")
+                        .WithMany()
+                        .HasForeignKey("SubVerticalDimentionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AdminLte.Models.VwPerformancePerRow", b =>
+                {
+                    b.HasOne("AdminLte.Models.Participant", "Participant")
+                        .WithMany()
+                        .HasForeignKey("ParticipantID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AdminLte.Models.VwPerformancePerVerticalDimention", b =>
+                {
+                    b.HasOne("AdminLte.Models.Participant", "Participant")
+                        .WithMany()
+                        .HasForeignKey("ParticipantID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AdminLte.Models.VerticalDimention", "VerticalDimention")
+                        .WithMany()
+                        .HasForeignKey("VerticalDimentionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
