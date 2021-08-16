@@ -8,8 +8,12 @@
 @{ 
     var user = await userManager.GetUserAsync(User);
     await context.Entry(user).Reference(x => x.BackendUser).LoadAsync();
-    await context.Entry(user.BackendUser).Reference(x => x.UserAccess).LoadAsync();
     await context.Entry(user).Reference(x => x.ParticipantUser).LoadAsync();
+
+    if(user.BackendUser != null)
+    {
+        await context.Entry(user.BackendUser).Reference(x => x.UserAccess).LoadAsync();
+    }
 }   
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -55,10 +59,14 @@
                 </li>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    var userAccess = user.BackendUser.UserAccess;
-                    if(userAccess == null)
+                    var userAccess = new UserAccess();
+                    if (user.BackendUser != null)
                     {
-                        userAccess = new UserAccess();
+                        userAccess = user.BackendUser.UserAccess;
+                        if (userAccess == null)
+                        {
+                            userAccess = new UserAccess();
+                        }
                     }
                     @*<li class="nav-item ">
                             <a asp-controller="Home" asp-action="Privacy" class="nav-link @Url.MakeActiveClass("home","privacy")">

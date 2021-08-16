@@ -1,5 +1,5 @@
-commit 44222cd0dc08a6cbef6f42edf9c8a1585718eb6c
+commit 186e62510d1a8e654e6bd84943586ede641a0d6f
 Author: Riza Budi Prasetya <rizabudi@live.com>
-Date:   Mon Aug 16 14:13:35 2021 +0700
+Date:   Mon Aug 16 14:17:06 2021 +0700
 
-    Update dashboard
+    Update label

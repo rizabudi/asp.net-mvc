@@ -53,27 +53,30 @@ namespace AdminLte.Controllers
                                 .Include(x => x.Entity)
                                 .FirstOrDefaultAsync(x => x.User.Id == user.Id);
 
-            if(backendUser.UserAccess == null)
+            if(backendUser != null)
             {
-                backendUser.UserAccess = new UserAccess();
+                if (backendUser.UserAccess == null)
+                {
+                    backendUser.UserAccess = new UserAccess();
+                }
+                HttpContext.Session.Set("Access_MasterData_DaftarSurvei", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_DaftarSurvei ? "1" : "0"));
+                HttpContext.Session.Set("Access_MasterData_DimensiHorizontal", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_DimensiHorizontal ? "1" : "0"));
+                HttpContext.Session.Set("Access_MasterData_DimensiVertical", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_DimensiVertical ? "1" : "0"));
+                HttpContext.Session.Set("Access_MasterData_JenisSurvei", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_JenisSurvei ? "1" : "0"));
+                HttpContext.Session.Set("Access_MasterData_Konstruk", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_Konstruk ? "1" : "0"));
+                HttpContext.Session.Set("Access_MasterData_Periode", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_Periode ? "1" : "0"));
+                HttpContext.Session.Set("Access_MasterData_Pertanyaan", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_Pertanyaan ? "1" : "0"));
+                HttpContext.Session.Set("Access_MasterData_StrukturOrganisasi_Entitas", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_StrukturOrganisasi_Entitas ? "1" : "0"));
+                HttpContext.Session.Set("Access_MasterData_StrukturOrganisasi_LevelJabatan", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_StrukturOrganisasi_LevelJabatan ? "1" : "0"));
+                HttpContext.Session.Set("Access_PengaturanPengguna_HakAkses", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_PengaturanPengguna_HakAkses ? "1" : "0"));
+                HttpContext.Session.Set("Access_PengaturanPengguna_PenggunaKhusus", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_PengaturanPengguna_PenggunaKhusus ? "1" : "0"));
+                HttpContext.Session.Set("Access_PengaturanPengguna_PenggunaUmum", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_PengaturanPengguna_PenggunaUmum ? "1" : "0"));
+                HttpContext.Session.Set("Access_Penjadwalan_PenjadwalanPeserta", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_Penjadwalan_PenjadwalanPeserta ? "1" : "0"));
+                HttpContext.Session.Set("Access_Penjadwalan_PenjadwalanSurvei", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_Penjadwalan_PenjadwalanSurvei ? "1" : "0"));
+
+                HttpContext.Session.Set("User_Entity", Encoding.ASCII.GetBytes(backendUser.Entity == null ? "0" : backendUser.Entity.ID.ToString()));
+
             }
-            HttpContext.Session.Set("Access_MasterData_DaftarSurvei", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_DaftarSurvei ? "1" : "0"));
-            HttpContext.Session.Set("Access_MasterData_DimensiHorizontal", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_DimensiHorizontal ? "1" : "0"));
-            HttpContext.Session.Set("Access_MasterData_DimensiVertical", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_DimensiVertical ? "1" : "0"));
-            HttpContext.Session.Set("Access_MasterData_JenisSurvei", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_JenisSurvei ? "1" : "0"));
-            HttpContext.Session.Set("Access_MasterData_Konstruk", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_Konstruk ? "1" : "0"));
-            HttpContext.Session.Set("Access_MasterData_Periode", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_Periode ? "1" : "0"));
-            HttpContext.Session.Set("Access_MasterData_Pertanyaan", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_Pertanyaan ? "1" : "0"));
-            HttpContext.Session.Set("Access_MasterData_StrukturOrganisasi_Entitas", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_StrukturOrganisasi_Entitas ? "1" : "0"));
-            HttpContext.Session.Set("Access_MasterData_StrukturOrganisasi_LevelJabatan", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_MasterData_StrukturOrganisasi_LevelJabatan ? "1" : "0"));
-            HttpContext.Session.Set("Access_PengaturanPengguna_HakAkses", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_PengaturanPengguna_HakAkses ? "1" : "0"));
-            HttpContext.Session.Set("Access_PengaturanPengguna_PenggunaKhusus", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_PengaturanPengguna_PenggunaKhusus ? "1" : "0"));
-            HttpContext.Session.Set("Access_PengaturanPengguna_PenggunaUmum", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_PengaturanPengguna_PenggunaUmum ? "1" : "0"));
-            HttpContext.Session.Set("Access_Penjadwalan_PenjadwalanPeserta", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_Penjadwalan_PenjadwalanPeserta ? "1" : "0"));
-            HttpContext.Session.Set("Access_Penjadwalan_PenjadwalanSurvei", Encoding.ASCII.GetBytes(backendUser.UserAccess.Access_Penjadwalan_PenjadwalanSurvei ? "1" : "0"));
-
-            HttpContext.Session.Set("User_Entity", Encoding.ASCII.GetBytes(backendUser.Entity == null ? "0" : backendUser.Entity.ID.ToString()));
-
             return View();
         }
 
