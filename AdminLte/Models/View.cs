@@ -117,6 +117,8 @@ namespace AdminLte.Models
         public int ParticipantID { get; set; }
         public int EntityID { get; set; }
         public Entity Entity { get; set; }
+        public int? SubEntityID { get; set; }
+        public Entity SubEntity { get; set; }
         public int AssesmentID { get; set; }
         public int QuestionPackageID { get; set; }
         public string UserId { get; set; }

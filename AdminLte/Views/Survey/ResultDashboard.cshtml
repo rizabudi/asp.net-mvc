@@ -151,7 +151,8 @@
 
 @if (section.ID == 0)
 {
-    var participants = (Dictionary<int, int[]>)ViewData["Participants"];
+    var participants = (Dictionary<Entity, int[]>)ViewData["Participants"];
+    var participantSubs = (Dictionary<Entity, int[]>)ViewData["ParticipantSubs"];
     <div class="row">
         <div class="col-md-6">
             <div class="card">
@@ -164,40 +165,48 @@
                             <tr>
                                 <th>No</th>
                                 <th>Entitas</th>
-                                <th>Jumlah Peserta</th>
-                                <th>Selesai</th>
-                                <th>Mengerjakan</th>
-                                <th>Belum Mengerjakan</th>
+                                <th style="text-align:right">Jumlah Peserta</th>
+                                <th style="text-align:right">Selesai</th>
+                                <th style="text-align:right">Mengerjakan</th>
+                                <th style="text-align:right">Belum Mengerjakan</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @{ 
+                            @{
                                 var no = 0;
                                 var total = 0;
                                 var total1 = 0;
                                 var total2 = 0;
                                 var total3 = 0;
                             }
-                            @foreach (string entity in entities.Keys)
+                            @foreach (Entity entity in participants.Keys)
                             {
                                 no++;
-                                var entityID = int.Parse(entity);
-                                if (!participants.ContainsKey(entityID))
-                                {
-                                    continue;
-                                }
-                                total += participants[entityID][0];
-                                total1 += participants[entityID][1];
-                                total2 += participants[entityID][2];
-                                total3 += participants[entityID][3];
+                                total += participants[entity][0];
+                                total1 += participants[entity][1];
+                                total2 += participants[entity][2];
+                                total3 += participants[entity][3];
                                 <tr>
                                     <td>@no</td>
-                                    <td>@entities[entity]</td>
-                                    <td align="right">@participants[entityID][0]</td>
-                                    <td align="right">@participants[entityID][1]</td>
-                                    <td align="right">@participants[entityID][2]</td>
-                                    <td align="right">@participants[entityID][3]</td>
+                                    <td>@entity.Name</td>
+                                    <td align="right">@participants[entity][0]</td>
+                                    <td align="right">@participants[entity][1]</td>
+                                    <td align="right">@participants[entity][2]</td>
+                                    <td align="right">@participants[entity][3]</td>
                                 </tr>
+                                @foreach (Entity subEntity in participantSubs.Where(x => x.Key.ParentEntity == entity).Select(x => x.Key))
+                                {
+                                    no++;
+                                    <tr>
+                                        <td>@no</td>
+                                        <td>---- @subEntity.Name</td>
+                                        <td align="right">@participantSubs[subEntity][0]</td>
+                                        <td align="right">@participantSubs[subEntity][1]</td>
+                                        <td align="right">@participantSubs[subEntity][2]</td>
+                                        <td align="right">@participantSubs[subEntity][3]</td>
+                                    </tr>
+
+                                }
                             }
                         </tbody>
                         <tfoot>

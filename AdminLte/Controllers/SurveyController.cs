@@ -307,6 +307,7 @@ namespace AdminLte.Controllers
             if(entityID != 0)
             {
                 entityData = await _db.Entities.FirstOrDefaultAsync(x => x.ID == entityID);
+                entity = entityID;
             }
 
             var questionPackage = await _db.QuestionPackages.FirstOrDefaultAsync(x => x.ID == surveyID);
@@ -324,13 +325,25 @@ namespace AdminLte.Controllers
                 };
 
                 var participants = await _db.VwParticipant
-                            .Where(x => x.QuestionPackageID == surveyID &&
-                                (entity == 0 || x.EntityID == entity)
-                             )
+                            .Include(x=>x.Entity)
+                            .Include(x=>x.SubEntity)
+                            .Where(x => x.QuestionPackageID == surveyID)
                             .OrderBy(x => x.EntityID)
                             .ToListAsync();
                 var participantsPerEntities = participants
-                    .GroupBy(x => x.EntityID)
+                    .Where(x=> entity == 0 ? x.Entity != null : x.Entity.ID == entity)
+                    .GroupBy(x => x.Entity)
+                    .ToDictionary(x => x.Key, y => new int[]
+                    {
+                        y.Count(),
+                        y.Where(x => x.FinishedAt != null).Count(),
+                        y.Where(x => x.FinishedAt == null && x.StartedAt != null).Count(),
+                        y.Where(x => x.StartedAt == null).Count()
+                    });
+
+                var participantsPerSubEntities = participants
+                    .Where(x=>x.SubEntity != null)
+                    .GroupBy(x => x.SubEntity)
                     .ToDictionary(x => x.Key, y => new int[]
                     {
                         y.Count(),
@@ -340,6 +353,7 @@ namespace AdminLte.Controllers
                     });
 
                 ViewData["Participants"] = participantsPerEntities;
+                ViewData["ParticipantSubs"] = participantsPerSubEntities;
             } 
             else
             {
