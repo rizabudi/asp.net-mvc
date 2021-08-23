@@ -40,6 +40,7 @@ namespace AdminLte.Data
         public DbSet<QuestionAnswer> QuestionAnswer { get; set; }
         public DbSet<QuestionPackagePeriod> QuestionPackagePeriods { get; set; }
         public DbSet<QuestionPackageLine> QuestionPackageLines { get; set; }
+        public DbSet<QuestionPackageEntity> QuestionPackageEntities { get; set; }
         public DbSet<HorizontalDimention> HorizontalDimentions { get; set; }
         public DbSet<VerticalDimention> VerticalDimentions { get; set; }
         public DbSet<SubVerticalDimention> SubVerticalDimentions { get; set; }

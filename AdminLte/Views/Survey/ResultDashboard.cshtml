@@ -151,10 +151,17 @@
 
 @if (section.ID == 0)
 {
+    var survey = (QuestionPackage)ViewData["Survey"];
+    var entityInfos = new Dictionary<Entity, QuestionPackageEntity>();
+    foreach(var questionPackageEntity in survey.QuestionPackageEntities)
+    {
+        entityInfos.Add(questionPackageEntity.Entity, questionPackageEntity);
+    }
+
     var participants = (Dictionary<Entity, int[]>)ViewData["Participants"];
     var participantSubs = (Dictionary<Entity, int[]>)ViewData["ParticipantSubs"];
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Daftar Per Entitas</h3>
@@ -163,12 +170,14 @@
                     <table class="table table-striped table-scrollable table-bordered table-hover table-checkable order-column">
                         <thead>
                             <tr>
-                                <th>No</th>
+                                <th style="width:50px">No</th>
                                 <th>Entitas</th>
-                                <th style="text-align:right">Jumlah Peserta</th>
-                                <th style="text-align:right">Selesai</th>
-                                <th style="text-align:right">Mengerjakan</th>
-                                <th style="text-align:right">Belum Mengerjakan</th>
+                                <th style="text-align:right; width:100px">Jumlah Karyawan</th>
+                                <th style="text-align:right; width:100px">Target Minimum Responden</th>
+                                <th style="text-align:right; width:100px">Selesai Mengerjakan</th>
+                                <th style="text-align:right; width:100px">Prosentase Responden Total</th>
+                                <th style="text-align:right; width:100px">Prosentase Responden Minimum</th>
+                                <th style="text-align:right; width:100px">Sedang Mengerjakan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -181,48 +190,77 @@
                             }
                             @foreach (Entity entity in participants.Keys)
                             {
+                                if (entity.Level == 0)
+                                {
+                                    continue;
+                                }
+
+                                var employeeCount = 0;
+                                var targetRespondent = 0;
+
+                                double procentaseRespondentTotal = 0d;
+                                double procentaseRespondentMinimum = 0d;
+
+                                if (entityInfos.ContainsKey(entity))
+                                {
+                                    targetRespondent = entityInfos[entity].TargetRespondent;
+                                    employeeCount = entityInfos[entity].EmployeeCount;
+
+                                    procentaseRespondentTotal = (double)participants[entity][1] * 100 / (double)employeeCount;
+                                    procentaseRespondentMinimum = (double)participants[entity][1] * 100 / (double)targetRespondent;
+                                }
+
                                 no++;
                                 total += participants[entity][0];
                                 total1 += participants[entity][1];
                                 total2 += participants[entity][2];
                                 total3 += participants[entity][3];
-                                <tr>
+                                <tr style="background:yellow">
                                     <td>@no</td>
                                     <td>@entity.Name</td>
-                                    <td align="right">@participants[entity][0]</td>
-                                    <td align="right">@participants[entity][1]</td>
-                                    <td align="right">@participants[entity][2]</td>
-                                    <td align="right">@participants[entity][3]</td>
+                                    <td align="right">@employeeCount.ToString("n0")</td>
+                                    <td align="right">@targetRespondent.ToString("n0")</td>
+                                    <td align="right">@participants[entity][1].ToString("n0")</td>
+                                    <td align="right">@Math.Round(procentaseRespondentTotal,2)%</td>
+                                    <td align="right">@Math.Round(procentaseRespondentMinimum, 2)%</td>
+                                    <td align="right">@participants[entity][2].ToString("n0")</td>
                                 </tr>
                                 @foreach (Entity subEntity in participantSubs.Where(x => x.Key.ParentEntity == entity).Select(x => x.Key))
                                 {
                                     no++;
+                                    employeeCount = 0;
+                                    targetRespondent = 0;
+
+                                    procentaseRespondentTotal = 0d;
+                                    procentaseRespondentMinimum = 0d;
+
+                                    if (entityInfos.ContainsKey(subEntity))
+                                    {
+                                        targetRespondent = entityInfos[subEntity].TargetRespondent;
+                                        employeeCount = entityInfos[subEntity].EmployeeCount;
+
+                                        procentaseRespondentTotal = (double)participantSubs[subEntity][1] * 100 / (double)employeeCount;
+                                        procentaseRespondentMinimum = (double)participantSubs[subEntity][1] * 100 / (double)targetRespondent;
+                                    }
                                     <tr>
                                         <td>@no</td>
                                         <td>---- @subEntity.Name</td>
-                                        <td align="right">@participantSubs[subEntity][0]</td>
-                                        <td align="right">@participantSubs[subEntity][1]</td>
-                                        <td align="right">@participantSubs[subEntity][2]</td>
-                                        <td align="right">@participantSubs[subEntity][3]</td>
+                                        <td align="right">@employeeCount.ToString("n0")</td>
+                                        <td align="right">@targetRespondent.ToString("n0")</td>
+                                        <td align="right">@participantSubs[subEntity][1].ToString("n0")</td>
+                                        <td align="right">@Math.Round(procentaseRespondentTotal, 2)%</td>
+                                        <td align="right">@Math.Round(procentaseRespondentMinimum, 2)%</td>
+                                        <td align="right">@participantSubs[subEntity][2].ToString("n0")</td>
                                     </tr>
 
                                 }
                             }
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="2">Total</th>
-                                <th align="right" style="text-align:right">@total</th>
-                                <th align="right" style="text-align:right">@total1</th>
-                                <th align="right" style="text-align:right">@total2</th>
-                                <th align="right" style="text-align:right">@total3</th>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" style="display:none">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Grafik</h3>

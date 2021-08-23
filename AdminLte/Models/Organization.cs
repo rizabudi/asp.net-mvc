@@ -44,7 +44,10 @@ namespace AdminLte.Models
             var fixResult = new Dictionary<string, string>();
             foreach (string key in result.Keys)
             {
-                fixResult.Add(key, result[key]);
+                if(result[key].Trim() != "-")
+                {
+                    fixResult.Add(key, result[key]);
+                }
                 var subEntities = getEntities(entities, int.Parse(key), level + 1);
                 if (subEntities.Count > 0)
                 {

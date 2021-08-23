@@ -32,6 +32,7 @@ namespace AdminLte.Controllers
                 var data = await _db.QuestionPackages
                     .Include(x=>x.Assesment)
                     .Include(x=>x.QuestionPackageLines)
+                    .Include(x => x.QuestionPackageEntities)
                     .OrderBy(x => x.Assesment.Name)
                     .ThenBy(x=>x.Name)
                     .Skip((page-1)*10)
@@ -42,12 +43,14 @@ namespace AdminLte.Controllers
                 foreach(var row in data)
                 {
                     var questions = row.QuestionPackageLines.Count();
+                    var entities = row.QuestionPackageEntities.Count();
                     rows.Add(new RowModel { 
                         ID = row.ID, 
                         Value = new string[] { 
                             row.Assesment.Name,
                             row.Name,
                             "HTML:<a href='/survey-question/" + row.ID + "'><i class='fa fa-question'></i> " + questions + " Soal</a>",
+                            "HTML:<a href='/survey-entity/" + row.ID + "'><i class='fa fa-building'></i> " + entities + " Soal</a>",
                             "HTML:<a href='/survey/result/" + row.ID + "'><i class='fa fa-file'></i> Hasil Survei</a><br/><a href='/survey/dashboard/" + row.ID + "'><i class='fa fa-chart-area'></i> Dashboard</a>"
                         }
                     });
@@ -120,6 +123,7 @@ namespace AdminLte.Controllers
             ColumnModels.Add(new ColumnModel { Label = "Jenis Survei", Name = "Assesment", Style = "width: 15%; min-width: 200px" });
             ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name" });
             ColumnModels.Add(new ColumnModel { Label = "Daftar Soal", Name = "Questions" });
+            ColumnModels.Add(new ColumnModel { Label = "Pengaturan Entitas", Name = "Entities" });
             ColumnModels.Add(new ColumnModel { Label = "Hasil Survei", Name = "Result" });
 
             ViewData["Columns"] = ColumnModels;
@@ -310,7 +314,10 @@ namespace AdminLte.Controllers
                 entity = entityID;
             }
 
-            var questionPackage = await _db.QuestionPackages.FirstOrDefaultAsync(x => x.ID == surveyID);
+            var questionPackage = await _db.QuestionPackages
+                .Include(x=>x.QuestionPackageEntities)
+                .ThenInclude(x=>x.Entity)
+                .FirstOrDefaultAsync(x => x.ID == surveyID);
             if (questionPackage == null)
             {
                 return Redirect("/home/errors/404");

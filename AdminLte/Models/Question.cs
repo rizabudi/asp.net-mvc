@@ -155,6 +155,7 @@ namespace AdminLte.Models
         public string Name { get; set; }
         public virtual ICollection<QuestionPackagePeriod> QuestionPackagePeriods { get; set; }
         public virtual ICollection<QuestionPackageLine> QuestionPackageLines { get; set; }
+        public virtual ICollection<QuestionPackageEntity> QuestionPackageEntities { get; set; }
     }
 
     public class QuestionPackageLine
@@ -171,6 +172,16 @@ namespace AdminLte.Models
         public int ID { get; set; }
         public QuestionPackage QuestionPackage { get; set; }
         public Period Period { get; set; }
+    }
+
+    public class QuestionPackageEntity
+    {
+        [Key]
+        public int ID { get; set; }
+        public QuestionPackage QuestionPackage { get; set; }
+        public Entity Entity { get; set; }
+        public int EmployeeCount { get; set; }
+        public int TargetRespondent { get; set; }
     }
 
 }

@@ -4,8 +4,10 @@ using AdminLte.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -81,6 +83,101 @@ namespace AdminLte.Controllers
                 ViewData["Page"] = page;
 
                 return PartialView("~/Views/Shared/_TableData.cshtml");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
+        }
+
+        [HttpGet("participant/download")]
+        public async Task<IActionResult> GetDownload(int scheduleID = 0, int finish = 0, string search = "")
+        {
+            try
+            {
+                var schedule = await _db.Schedules
+                    .Include(x=>x.Period)
+                    .Where(x=>x.ID == scheduleID)
+                    .FirstAsync();
+
+                var data = await _db.Participants
+                    .Include(x => x.Schedule)
+                    .Include(x => x.ParticipantUser)
+                    .Include(x => x.ParticipantUser.User)
+                    .Include(x => x.ParticipantUser.Entity)
+                    .Include(x => x.ParticipantUser.SubEntity)
+                    .Include(x => x.ParticipantUser.Position)
+                    .Include(x => x.ParticipantUser.CompanyFunction)
+                    .Include(x => x.ParticipantUser.Divition)
+                    .Include(x => x.ParticipantUser.Department)
+                    .Include(x => x.ParticipantUser.JobLevel)
+                    .Include(x => x.QuestionPackage)
+                    .Include(x => x.QuestionPackage.Assesment)
+                    .Where(x =>
+                        x.Schedule.ID == scheduleID &&
+                        (finish == 1 ? x.FinishedAt != null : (finish == 2 ? x.StartedAt != null && x.FinishedAt == null : (finish == 3 ? x.StartedAt == null && x.FinishedAt == null : true))) &&
+                        (
+                            EF.Functions.ILike(x.ParticipantUser.EmployeeNumber, $"%{search}%") ||
+                            EF.Functions.ILike(x.ParticipantUser.Name, $"%{search}%") ||
+                            EF.Functions.ILike(x.ParticipantUser.Entity.Name, $"%{search}%")
+                        )
+                     )
+                    .OrderBy(x=>x.ParticipantUser.Entity.ID)
+                    .OrderBy(x => x.ParticipantUser.EmployeeNumber)
+                    .ToListAsync();
+
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                var stream = new MemoryStream();
+                using (var package = new ExcelPackage(stream))
+                {
+                    var sheet1 = package.Workbook.Worksheets.Add("Daftar Peserta");
+                    switch(finish) {
+                        case 0:
+                            sheet1.Cells["A1"].Value = "EXPORT EXCEL RESPONDEN";
+                            break;
+                        case 1:
+                            sheet1.Cells["A1"].Value = "EXPORT EXCEL RESPONDEN YANG SUDAH MENGISI";
+                            break;
+                        case 2:
+                            sheet1.Cells["A1"].Value = "EXPORT EXCEL RESPONDEN YANG SEDANG MENGISI";
+                            break;
+                        case 3:
+                            sheet1.Cells["A1"].Value = "EXPORT EXCEL RESPONDEN YANG BELUM MENGISI";
+                            break;
+                    }
+
+                    sheet1.Cells["A2"].Value = "PERIODE PENGISIAN: " + schedule.Assesment.Name + " - " + schedule.Period.Name;
+                    sheet1.Cells["A4"].Value = "No.";
+                    sheet1.Cells["B4"].Value = "Nomor Pekerja";
+                    sheet1.Cells["C4"].Value = "Nama Pekerja";
+                    sheet1.Cells["D4"].Value = "Holding/Subholding";
+                    sheet1.Cells["E4"].Value = "Direktorat/Fungsi/Anak Perusahaan/Afiliasi";
+                    sheet1.Cells["F4"].Value = "Waktu Mulai";
+                    sheet1.Cells["G4"].Value = "Waktu Selesai";
+                    sheet1.Cells["H4"].Value = "Status";
+
+                    sheet1.Cells[1, 1, 4, 8].Style.Font.Bold = true;
+
+                    var no = 1;
+                    foreach (var row in data)
+                    {
+                        sheet1.Cells[no + 4, 1].Value = no;
+                        sheet1.Cells[no + 4, 2].Value = row.ParticipantUser.EmployeeNumber;
+                        sheet1.Cells[no + 4, 3].Value = row.ParticipantUser.Name;
+                        sheet1.Cells[no + 4, 4].Value = row.ParticipantUser.Entity == null ? "-" : row.ParticipantUser.Entity.Name;
+                        sheet1.Cells[no + 4, 5].Value = row.ParticipantUser.SubEntity == null ? "-" : row.ParticipantUser.SubEntity.Name;
+                        sheet1.Cells[no + 4, 6].Value = row.StartedAt == null ? "" : row.StartedAt.Value.ToString("yyyy-MM-dd HH:mm");
+                        sheet1.Cells[no + 4, 7].Value = row.FinishedAt == null ? "" : row.FinishedAt.Value.ToString("yyyy-MM-dd HH:mm");
+                        sheet1.Cells[no + 4, 8].Value = row.FinishedAt != null ? "Selesai Mengerjakan" : (row.StartedAt != null ? "Proses Mengerjakan" : "Belum Mengerjakan");
+
+                        no++;
+                    }
+
+                    package.Save();
+                    stream.Position = 0;
+                    return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Participants-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx"); // this will be the actual export.
+                }
             }
             catch (Exception ex)
             {

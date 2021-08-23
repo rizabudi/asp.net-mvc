@@ -1,29 +1,24 @@
-var Participant = /** @class */ (function () {
-    function Participant() {
-        this.urlGetData = "/participant/table-data-view";
-        this.urlGetPaging = "/participant/table-paging-view";
-        this.urlGetForm = "/participant/form-view";
-        this.urlSave = '/participant/save';
-        this.urlDelete = '/participant/delete';
-        this.urlDownload = '/participant/download';
+var SurveyEntity = /** @class */ (function () {
+    function SurveyEntity() {
+        this.urlGetData = "/survey-entity/table-data-view";
+        this.urlGetPaging = "/survey-entity/table-paging-view";
+        this.urlGetForm = "/survey-entity/form-view";
+        this.urlSave = '/survey-entity/save';
+        this.urlDelete = '/survey-entity/delete';
         this.currentPage = 1;
-        this.search = "";
         this.init();
     }
-    Participant.prototype.init = function () {
+    SurveyEntity.prototype.init = function () {
         var _this = this;
         try {
-            this.initTable(this.currentPage, this.search);
+            this.initTable(this.currentPage);
             $('#add').click(function () {
                 _this.add();
-            });
-            $('#search').click(function () {
-                $("#modal-search").modal("show");
             });
             $(document).on("click", ".page-link", function (e) {
                 var idx = $(e.currentTarget).data('dt-idx');
                 _this.currentPage = idx;
-                _this.initTable(idx, _this.search);
+                _this.initTable(idx);
             });
             $(document).on("click", ".btn-delete", function (e) {
                 var id = $(e.currentTarget).data('id');
@@ -35,37 +30,23 @@ var Participant = /** @class */ (function () {
                 var data = { id: id };
                 _this.edit(data);
             });
-            $(document).on("change", "#IsCanRetake", function (e) {
-                var isChecked = $("#IsCanRetake").is(":checked");
-                if (isChecked) {
-                    $("#div_MaxRetake").show();
-                }
-                else {
-                    $("#div_MaxRetake").hide();
-                }
-            });
-            $('#download').click(function () {
-                window.open(_this.urlDownload + "?scheduleID=" + $("#Schedule").val() + "&finish=" + $("#Finish").val() + "&search=" + _this.search);
-            });
             this.initForm();
-            $('#search').show();
-            $('#download').show();
         }
         catch (e) {
             console.error(e);
             Util.error(e);
         }
     };
-    Participant.prototype.initTable = function (page, search) {
+    SurveyEntity.prototype.initTable = function (page) {
         try {
-            Util.request(this.urlGetData + "?page=" + page + "&scheduleID=" + $("#Schedule").val() + "&finish=" + $("#Finish").val() + "&search=" + search, 'GET', 'html', function (response) {
+            Util.request(this.urlGetData + "?page=" + page + "&surveyID=" + $("#QuestionPackage").val(), 'GET', 'html', function (response) {
                 $('#table_list tbody').empty();
                 $('#table_list tbody').append(response);
             }, function () {
                 console.error('Failed to get data. Please try again');
                 Util.error('Failed to get data. Please try again');
             });
-            Util.request(this.urlGetPaging + "?page=" + page + "&scheduleID=" + $("#Schedule").val() + "&finish=" + $("#Finish").val() + "&search=" + search, 'GET', 'html', function (response) {
+            Util.request(this.urlGetPaging + "?page=" + page + "&surveyID=" + $("#QuestionPackage").val(), 'GET', 'html', function (response) {
                 $('#table_paging').empty();
                 $('#table_paging').append(response);
             }, function () {
@@ -78,14 +59,21 @@ var Participant = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Participant.prototype.add = function () {
+    SurveyEntity.prototype.add = function () {
         try {
-            Util.request(this.urlGetForm + "?scheduleID=" + $("#Schedule").val(), 'GET', 'html', function (response) {
+            Util.request(this.urlGetForm + "?surveyID=" + $("#QuestionPackage").val(), 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Tambah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
-                $("#div_MaxRetake").hide();
+                $('#Date').daterangepicker({
+                    locale: {
+                        format: 'YYYY-MM-DD',
+                        separator: ' s/d '
+                    },
+                    minDate: $("#PeriodStart").val(),
+                    maxDate: $("#PeriodEnd").val(),
+                });
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -95,7 +83,7 @@ var Participant = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Participant.prototype.initForm = function () {
+    SurveyEntity.prototype.initForm = function () {
         var _this = this;
         try {
             $('#save_form').click(function () {
@@ -103,25 +91,7 @@ var Participant = /** @class */ (function () {
             });
             $('#close_form').click(function () {
                 $("#modal-default").modal("hide");
-                _this.initTable(_this.currentPage, _this.search);
-            });
-            $('#search_form').click(function () {
-                $("#modal-search").modal("hide");
-                $("#divSearchResult").show();
-                var search = $("#Search").val().toString();
-                _this.search = search;
-                $("#span_Search").html("<b>\"" + search + "\"</b>");
-                _this.initTable(1, _this.search);
-            });
-            $('#close_search_form').click(function () {
-                $("#modal-search").modal("hide");
-                _this.initTable(_this.currentPage, _this.search);
-            });
-            $('#clear_search').click(function () {
-                $("#Search").val("");
-                $("#divSearchResult").hide();
-                _this.search = "";
-                _this.initTable(1, _this.search);
+                _this.initTable(_this.currentPage);
             });
         }
         catch (e) {
@@ -129,7 +99,7 @@ var Participant = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Participant.prototype.save = function () {
+    SurveyEntity.prototype.save = function () {
         var _this = this;
         try {
             if (!Util.formCheck()) {
@@ -141,7 +111,7 @@ var Participant = /** @class */ (function () {
                     if (response.success) {
                         Util.success(response.message);
                         $("#modal-default").modal("hide");
-                        _this.initTable(_this.currentPage, _this.search);
+                        _this.initTable(_this.currentPage);
                     }
                     else {
                         Util.error(response.message);
@@ -159,21 +129,18 @@ var Participant = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Participant.prototype.create = function () {
+    SurveyEntity.prototype.create = function () {
         try {
             var data = {
                 ID: $('#ID').val(),
+                EmployeeCount: $('#EmployeeCount').val(),
+                TargetRespondent: $('#TargetRespondent').val(),
+                Entity: {
+                    ID: $('#Entity').val()
+                },
                 QuestionPackage: {
-                    ID: $('#QuestionPackage').val(),
-                },
-                ParticipantUser: {
-                    UserId: $('#ParticipantUser').val(),
-                },
-                Schedule: {
-                    ID: $('#Schedule').val(),
-                },
-                IsCanRetake: $('#IsCanRetake').is(":checked"),
-                MaxRetake: $('#MaxRetake').val()
+                    ID: $('#QuestionPackage').val()
+                }
             };
             return data;
         }
@@ -182,14 +149,14 @@ var Participant = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Participant.prototype.delete = function (data) {
+    SurveyEntity.prototype.delete = function (data) {
         var _this = this;
         try {
             if (confirm("Apa anda yaking menghapus data ini ?") == true) {
                 Util.request(this.urlDelete, 'post', 'json', function (response) {
                     if (response.success) {
                         Util.success(response.message);
-                        _this.initTable(_this.currentPage, _this.search);
+                        _this.initTable(_this.currentPage);
                     }
                     else {
                         Util.error(response.message);
@@ -204,17 +171,21 @@ var Participant = /** @class */ (function () {
             Util.error(e);
         }
     };
-    Participant.prototype.edit = function (data) {
+    SurveyEntity.prototype.edit = function (data) {
         try {
-            Util.request(this.urlGetForm + "?id=" + data.id + "&scheduleID=" + $("#Schedule").val(), 'GET', 'html', function (response) {
+            Util.request(this.urlGetForm + "?id=" + data.id, 'GET', 'html', function (response) {
                 $('#modal-default .modal-title').html("Ubah Data");
                 $('#modal-default .modal-body').empty();
                 $('#modal-default .modal-body').append(response);
                 $("#modal-default").modal("show");
-                $("#div_MaxRetake").hide();
-                if ($("#IsCanRetake").is(":checked")) {
-                    $("#div_MaxRetake").show();
-                }
+                $('#Date').daterangepicker({
+                    locale: {
+                        format: 'YYYY-MM-DD',
+                        separator: ' s/d '
+                    },
+                    minDate: $("#PeriodStart").val(),
+                    maxDate: $("#PeriodEnd").val(),
+                });
             }, function () {
                 Util.error('Failed to get data. Please try again');
             });
@@ -223,9 +194,9 @@ var Participant = /** @class */ (function () {
             console.error(e);
         }
     };
-    return Participant;
+    return SurveyEntity;
 }());
 $(document).ready(function () {
-    new Participant();
+    new SurveyEntity();
 });
-//# sourceMappingURL=participant.js.map
+//# sourceMappingURL=survey-entity.js.map
