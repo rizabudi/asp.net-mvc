@@ -187,6 +187,9 @@
                                 var total1 = 0;
                                 var total2 = 0;
                                 var total3 = 0;
+
+                                var totalEmployeeCount = 0;
+                                var totalTargetRespondent = 0;
                             }
                             @foreach (Entity entity in participants.Keys)
                             {
@@ -215,13 +218,15 @@
                                 total1 += participants[entity][1];
                                 total2 += participants[entity][2];
                                 total3 += participants[entity][3];
+                                totalEmployeeCount += employeeCount;
+                                totalTargetRespondent += targetRespondent;
                                 <tr style="background:yellow">
                                     <td>@no</td>
                                     <td>@entity.Name</td>
                                     <td align="right">@employeeCount.ToString("n0")</td>
                                     <td align="right">@targetRespondent.ToString("n0")</td>
                                     <td align="right">@participants[entity][1].ToString("n0")</td>
-                                    <td align="right">@Math.Round(procentaseRespondentTotal,2)%</td>
+                                    <td align="right">@Math.Round(procentaseRespondentTotal, 2)%</td>
                                     <td align="right">@Math.Round(procentaseRespondentMinimum, 2)%</td>
                                     <td align="right">@participants[entity][2].ToString("n0")</td>
                                 </tr>
@@ -256,6 +261,23 @@
                                 }
                             }
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                @{ 
+                                    var totalProcentaseRespondentTotal = 0d;
+                                    var totalProcentaseRespondentMinimum = 0d;
+                                    totalProcentaseRespondentTotal = (double)total1 * 100 / (double)totalEmployeeCount;
+                                    totalProcentaseRespondentMinimum = (double)total1 * 100 / (double)totalTargetRespondent;
+                                }
+                                <th colspan="2">Total</th>
+                                <th align="right" style="text-align:right">@totalEmployeeCount.ToString("n0")</th>
+                                <th align="right" style="text-align:right">@totalTargetRespondent.ToString("n0")</th>
+                                <th align="right" style="text-align:right">@total1.ToString("n0")</th>
+                                <td align="right">@Math.Round(totalProcentaseRespondentTotal, 2)%</td>
+                                <td align="right">@Math.Round(totalProcentaseRespondentMinimum, 2)%</td>
+                                <th align="right" style="text-align:right">@total2</th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

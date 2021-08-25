@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 namespace AdminLte.Controllers
 {
     [Authorize(Roles = "Pengguna Khusus")]
-    //[CustomAuthFilter("Access_MasterData_DaftarSurvei")]
     public class SurveyController : Controller
     {
         private readonly PostgreDbContext _db;
@@ -116,6 +115,7 @@ namespace AdminLte.Controllers
         }
 
         [HttpGet("survey")]
+        [CustomAuthFilter("Access_MasterData_DaftarSurvei")]
         public IActionResult Index()
         {
             ViewData["Title"] = "Daftar Survei";
@@ -190,6 +190,7 @@ namespace AdminLte.Controllers
 
         [HttpGet("survey/result")]
         [Route("survey/result/{surveyID:int}/{tab:int?}")]
+        [CustomAuthFilter("Access_MasterData_DaftarSurvei")]
         public async Task<IActionResult> ResultAsync(int surveyID, int tab = 0, int entity = 0)
         {
             var questionPackage = await _db.QuestionPackages.FirstOrDefaultAsync(x => x.ID == surveyID);
@@ -458,6 +459,7 @@ namespace AdminLte.Controllers
 
         [HttpGet("survey/download")]
         [Route("survey/download/{surveyID:int}/{construct:int}")]
+        [CustomAuthFilter("Access_MasterData_DaftarSurvei")]
         public async Task<IActionResult> DownloadAysnc(int surveyID, Construct construct)
         {
             var questionPackage = await _db.QuestionPackages.FirstOrDefaultAsync(x => x.ID == surveyID);
