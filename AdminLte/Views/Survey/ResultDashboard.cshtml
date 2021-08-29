@@ -156,7 +156,7 @@
     var entityInfos = new Dictionary<Entity, QuestionPackageEntity>();
     foreach(var questionPackageEntity in survey.QuestionPackageEntities)
     {
-        if(questionPackageEntity.Entity == entityData || questionPackageEntity.Entity.ParentEntity == entityData)
+        if(entityData == null || questionPackageEntity.Entity == entityData || questionPackageEntity.Entity.ParentEntity == entityData)
         {
             entityInfos.Add(questionPackageEntity.Entity, questionPackageEntity);
         }

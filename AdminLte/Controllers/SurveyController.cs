@@ -348,7 +348,7 @@ namespace AdminLte.Controllers
                     .Where(x => x.Level <= 1 && (entityID == 0 ? true : x.ID == entityID))
                     .OrderBy(x => x.Name)
                     .ToListAsync();
-            var entities = Entity.getEntities(entityList, 0, 0);
+            var entities = Entity.getEntities(entityList, 0, 0, true);
             var entityData = await _db.Entities.FirstOrDefaultAsync(x => x.ID == entity);
 
             if(entityID != 0)
@@ -534,7 +534,7 @@ namespace AdminLte.Controllers
                         .Where(x => x.Level <= 1 && (entityID == 0 ? true : x.ID == entityID))
                         .OrderBy(x => x.Name)
                         .ToListAsync();
-                var entities = Entity.getEntities(entityList, 0, 0);
+                var entities = Entity.getEntities(entityList, 0, 0, true);
                 var entityData = await _db.Entities.FirstOrDefaultAsync(x => x.ID == entity);
 
                 if (entityID != 0)
