@@ -33,7 +33,7 @@
                                 <th rowspan="4">Index Kinerja Subjek</th>
                             </tr>
                             <tr>
-                                @foreach (VerticalDimention verticalDimention in verticalDimentions.Where(x => x.Section.Construct == Construct.PERFORMANCE))
+                                @foreach (VerticalDimention verticalDimention in verticalDimentions)
                                 {
                                     <th colspan="6">
                                         @verticalDimention.Name
@@ -41,7 +41,7 @@
                                 }
                             </tr>
                             <tr>
-                                @foreach (VerticalDimention verticalDimention in verticalDimentions.Where(x => x.Section.Construct == Construct.PERFORMANCE))
+                                @foreach (VerticalDimention verticalDimention in verticalDimentions)
                                 {
                                     foreach (SubVerticalDimention subVerticalDimention in verticalDimention.SubVerticalDimentions)
                                     {
@@ -55,7 +55,7 @@
                                 @{
                                     var i = 1;
                                 }
-                                @foreach (Question question in questions.Where(x => x.Section.Construct == Construct.PERFORMANCE))
+                                @foreach (Question question in questions)
                                 {
                                     foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs)
                                     {
@@ -76,7 +76,7 @@
                                 <tr>
                                     <td>@no</td>
                                     <td>@participant.ParticipantUser.Name</td>
-                                    @foreach (Question question in questions.Where(x => x.Section.Construct == Construct.PERFORMANCE))
+                                    @foreach (Question question in questions)
                                     {
                                         foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs)
                                         {
@@ -134,7 +134,7 @@
                                 @reports.Average(x=>x.Value).ToString("0.00")
                             </td>
                         </tr>
-                        @foreach (VerticalDimention vd in verticalDimentions.Where(x => x.Section.Construct == Construct.PERFORMANCE))
+                        @foreach (VerticalDimention vd in verticalDimentions)
                         {
                             no++;
                             <tr>

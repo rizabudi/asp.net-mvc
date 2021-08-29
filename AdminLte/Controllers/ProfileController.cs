@@ -70,7 +70,7 @@ namespace AdminLte.Controllers
                     .Where(x => x.Level <= 1)
                     .OrderBy(x => x.Name)
                     .ToListAsync();
-                var entities = Entity.getEntities(entityList, 0, 0);
+                var entities = Entity.getEntities(entityList, 0, 0, true);
                 var subEntities = new Dictionary<string, string>();
                 if (participantUserFromDb != null)
                 {
@@ -78,7 +78,7 @@ namespace AdminLte.Controllers
                         .Where(x => x.ParentEntity.ID == participantUserFromDb.Entity.ID)
                         .OrderBy(x => x.Name)
                         .ToListAsync();
-                    subEntities = Entity.getEntities(subEntityList, participantUserFromDb.Entity.ID, participantUserFromDb.Entity.Level + 1);
+                    subEntities = Entity.getEntities(subEntityList, participantUserFromDb.Entity.ID, participantUserFromDb.Entity.Level + 1, true);
                 }
 
                 var positions = await _db.Position.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
@@ -213,7 +213,7 @@ namespace AdminLte.Controllers
                 var entityList = await _db.Entities.Where(x => x.ParentEntity.ID == entity)
                     .OrderBy(x => x.Name)
                     .ToListAsync();
-                var entities = Entity.getEntities(entityList, 0, 0);
+                var entities = Entity.getEntities(entityList, 0, 0, true);
                 var data = entities.ToList();
 
                 var rows = new List<RowModel>();

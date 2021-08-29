@@ -1,0 +1,31 @@
+﻿@{ 
+    var participants = (List<Participant>)ViewData["Participants"];
+}
+
+<table class="table table-striped table-scrollable table-bordered table-hover table-checkable order-column">
+    <thead>
+        <tr>
+            <th width="25px">No</th>
+            <th width="150px">Username</th>
+            <th>Nama</th>
+            <th width="150px">Waktu Mulai</th>
+            <th width="150px">Waktu Selesai</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var no = 1;
+        }
+        @foreach (var participant in participants)
+        {
+            <tr>
+                <td>@no</td>
+                <td>@participant.ParticipantUser.User.UserName</td>
+                <td>@participant.ParticipantUser.Name</td>
+                <td>@participant.StartedAt.Value.ToString("dd MMM yyy HH:mm")</td>
+                <td>@participant.FinishedAt.Value.ToString("dd MMM yyy HH:mm")</td>
+            </tr>
+            no++;
+        }
+    </tbody>
+</table>

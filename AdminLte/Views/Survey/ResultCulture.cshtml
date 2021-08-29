@@ -7,366 +7,363 @@
     var no = 1;
 }
 
-<div class="card">
-    <div class="card-body">
-        <ul class="nav nav-tabs" id="result-culture-tab" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="culture-answer-tab" data-toggle="pill" href="#culture-answer" role="tab" aria-controls="culture-answer" aria-selected="true">Hasil Jawaban</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="culture-resume-tab" data-toggle="pill" href="#culture-resume" role="tab" aria-controls="culture-resume" aria-selected="false">Ringkasan</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="culture-report-tab" data-toggle="pill" href="#culture-report" role="tab" aria-controls="culture-report" aria-selected="false">Laporan</a>
-            </li>
-            <li class="nav-item">
-                <a target="_blank" class="nav-link" href="/survey/download/2/0"><i class="fa fa-download"></i> Download Excel</a>
-            </li>
-        </ul>
-        <div class="tab-content" id="result-culture-tabContent">
-            <div class="tab-pane fade show active" id="culture-answer" role="tabpanel" aria-labelledby="culture-answer-tab">
-                <div style="overflow:scroll; max-height:550px">
-                    <table class="table table-striped table-scrollable table-bordered table-hover table-checkable order-column">
-                        <thead>
-                            <tr>
-                                <th rowspan="3" width="25px">No</th>
-                                <th rowspan="3" width="150px">Subject</th>
-                                <th>Konstruk</th>
-                                @foreach (VerticalDimention verticalDimention in verticalDimentions.Where(x => x.Section.Construct == Construct.CULTURE))
-                                {
-                                    <th colspan="15">
-                                        @verticalDimention.Name
-                                    </th>
-                                }
-                            </tr>
-                            <tr>
-                                <th>Dimensi</th>
-                                @foreach (VerticalDimention verticalDimention in verticalDimentions.Where(x => x.Section.Construct == Construct.CULTURE))
-                                {
-                                    foreach (SubVerticalDimention subVerticalDimention in verticalDimention.SubVerticalDimentions)
-                                    {
-                                        <th colspan="5">
-                                            @subVerticalDimention.Name
-                                        </th>
-                                    }
-                                }
-                            </tr>
-                            <tr>
-                                <th>Item</th>
-                                @{
-                                    var i = 1;
-                                }
-                                @foreach (Question question in questions.Where(x => x.Section.Construct == Construct.CULTURE))
-                                {
-                                    <th colspan="5">
-                                        @i
-                                    </th>
-                                    i++;
-                                }
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                no = 1;
-                            }
-                            @foreach (var participant in participants)
+
+<ul class="nav nav-tabs" id="result-culture-tab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="culture-answer-tab" data-toggle="pill" href="#culture-answer" role="tab" aria-controls="culture-answer" aria-selected="true">Hasil Jawaban</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="culture-resume-tab" data-toggle="pill" href="#culture-resume" role="tab" aria-controls="culture-resume" aria-selected="false">Ringkasan</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="culture-report-tab" data-toggle="pill" href="#culture-report" role="tab" aria-controls="culture-report" aria-selected="false">Laporan</a>
+    </li>
+    <li class="nav-item">
+        <a target="_blank" class="nav-link" href="/survey/download/2/0"><i class="fa fa-download"></i> Download Excel</a>
+    </li>
+</ul>
+<div class="tab-content" id="result-culture-tabContent">
+    <div class="tab-pane fade show active" id="culture-answer" role="tabpanel" aria-labelledby="culture-answer-tab">
+        <div style="overflow:scroll; max-height:550px">
+            <table class="table table-striped table-scrollable table-bordered table-hover table-checkable order-column">
+                <thead>
+                    <tr>
+                        <th rowspan="3" width="25px">No</th>
+                        <th rowspan="3" width="150px">Subject</th>
+                        <th>Konstruk</th>
+                        @foreach (VerticalDimention verticalDimention in verticalDimentions)
+                        {
+                            <th colspan="15">
+                                @verticalDimention.Name
+                            </th>
+                        }
+                    </tr>
+                    <tr>
+                        <th>Dimensi</th>
+                        @foreach (VerticalDimention verticalDimention in verticalDimentions)
+                        {
+                            foreach (SubVerticalDimention subVerticalDimention in verticalDimention.SubVerticalDimentions)
                             {
-                                if (!answerCultures.ContainsKey(participant.ID))
-                                {
-                                    continue;
-                                }
-                                var answer = answerCultures[participant.ID];
-                                <tr>
-                                    <td rowspan="5">@no</td>
-                                    <td rowspan="5">@participant.ParticipantUser.Name</td>
-                                    <td>Respon</td>
-                                    @foreach (Question question in questions.Where(x => x.Section.Construct == Construct.CULTURE))
-                                    {
-                                        @for (i = 1; i <= 5; i++)
-                                        {
-                                            <td align="right">@i</td>
-                                        }
-                                    }
-                                </tr>
-                                <tr>
-                                    <td>Urutan</td>
-                                    @foreach (Question question in questions.Where(x => x.Section.Construct == Construct.CULTURE))
-                                    {
-                                        foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs.OrderBy(x => x.Sequence))
-                                        {
-                                            <td align="right">
-                                                @{
-                                                    var asw = answer.FirstOrDefault(x => x.QuestionID == question.ID && x.MatrixRowAnswerID == qa.ID);
-                                                    var value = asw == null ? "-" : asw.urutan.ToString();
-                                                }
-                                                @value
-                                            </td>
-                                        }
-                                    }
-                                </tr>
-                                <tr>
-                                    <td>Nilai</td>
-                                    @foreach (Question question in questions.Where(x => x.Section.Construct == Construct.CULTURE))
-                                    {
-                                        foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs.OrderBy(x => x.Sequence))
-                                        {
-                                            <td align="right">
-                                                @{
-                                                    var asw = answer.FirstOrDefault(x => x.QuestionID == question.ID && x.MatrixRowAnswerID == qa.ID);
-                                                    var value = asw == null ? "-" : asw.nilai.ToString();
-                                                }
-                                                @value
-                                            </td>
-                                        }
-                                    }
-                                </tr>
-                                <tr>
-                                    <td>Bobot</td>
-                                    @foreach (Question question in questions.Where(x => x.Section.Construct == Construct.CULTURE))
-                                    {
-                                        foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs.OrderBy(x => x.Sequence))
-                                        {
-                                            <td align="right">
-                                                @{
-                                                    var asw = answer.FirstOrDefault(x => x.QuestionID == question.ID && x.MatrixRowAnswerID == qa.ID);
-                                                    var value = asw == null ? "-" : asw.bobot.ToString();
-                                                }
-                                                @value
-                                            </td>
-                                        }
-                                    }
-                                </tr>
-                                <tr>
-                                    <td>Bobot x Nilai</td>
-                                    @foreach (Question question in questions.Where(x => x.Section.Construct == Construct.CULTURE))
-                                    {
-                                        foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs.OrderBy(x => x.Sequence))
-                                        {
-                                            <td align="right">
-                                                @{
-                                                    var asw = answer.FirstOrDefault(x => x.QuestionID == question.ID && x.MatrixRowAnswerID == qa.ID);
-                                                    var value = asw == null ? "-" : asw.bobotxnilai.ToString();
-                                                }
-                                                @value
-                                            </td>
-                                        }
-                                    }
-                                </tr>
-                                no++;
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="culture-resume" role="tabpanel" aria-labelledby="culture-resume-tab">
-                <div style="overflow:scroll; max-height:550px">
-                    <table class="table table-striped table-scrollable table-bordered table-hover table-checkable order-column">
-                        <thead>
-                            <tr>
-                                <th rowspan="3" width="25px">No</th>
-                                <th rowspan="3" width="150px">Subject</th>
-                                @foreach (VerticalDimention verticalDimention in verticalDimentions.Where(x => x.Section.Construct == Construct.CULTURE))
-                                {
-                                    <th colspan="7">
-                                        @verticalDimention.Name
-                                    </th>
-                                }
-                                <th rowspan="3" width="150px">Index Akhlak Subjek</th>
-                            </tr>
-                            <tr>
-                                @foreach (VerticalDimention verticalDimention in verticalDimentions.Where(x => x.Section.Construct == Construct.CULTURE))
-                                {
-                                    <th colspan="3">
-                                        Skor Situasi
-                                    </th>
-                                    <th colspan="3">
-                                        Indexs Situasi
-                                    </th>
-                                    <th>
-                                        Indexs Value Subjek
-                                    </th>
-                                }
-                            </tr>
-                            <tr>
-                                @foreach (VerticalDimention verticalDimention in verticalDimentions.Where(x => x.Section.Construct == Construct.CULTURE))
-                                {
-                                    foreach (SubVerticalDimention subVerticalDimention in verticalDimention.SubVerticalDimentions)
-                                    {
-                                        <th>
-                                            @subVerticalDimention.Name
-                                        </th>
-                                    }
-                                    foreach (SubVerticalDimention subVerticalDimention in verticalDimention.SubVerticalDimentions)
-                                    {
-                                        <th>
-                                            @subVerticalDimention.Name
-                                        </th>
-                                    }
-                                    <th>
-                                        @verticalDimention.Name
-                                    </th>
-                                }
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                no = 1;
-                            }
-                            @foreach (var participant in participants)
-                            {
-                                if (!answerCultures.ContainsKey(participant.ID))
-                                {
-                                    no++;
-                                    continue;
-                                }
-                                var answer = answerCultures[participant.ID];
-                                <tr>
-                                    <td>@no</td>
-                                    <td>@participant.ParticipantUser.Name</td>
-                                    @foreach (VerticalDimention verticalDimention in verticalDimentions.Where(x => x.Section.Construct == Construct.CULTURE))
-                                    {
-                                        foreach (SubVerticalDimention subVerticalDimention in verticalDimention.SubVerticalDimentions)
-                                        {
-                                            <td align="right">
-                                                @{
-                                                    var skore = answer.Where(x => x.VerticalDimentionID == verticalDimention.ID && x.SubVerticalDimentionID == subVerticalDimention.ID).Sum(x => x.bobotxnilai);
-                                                }
-                                                @skore.ToString()
-                                            </td>
-                                        }
-                                        foreach (SubVerticalDimention subVerticalDimention in verticalDimention.SubVerticalDimentions)
-                                        {
-                                            <td align="right">
-                                                @{
-                                                    var skore = answer
-                                                        .Where(x => x.VerticalDimentionID == verticalDimention.ID && x.SubVerticalDimentionID == subVerticalDimention.ID)
-                                                        .Sum(x => x.bobotxnilai);
-                                                    var index = (skore - 39) * 100 / 76;
-                                                }
-                                                @index.ToString("0.00")
-                                            </td>
-                                        }
-                                        <td align="right">
-                                            @{
-                                                var subtotal = answer.Where(x => x.VerticalDimentionID == verticalDimention.ID)
-                                                    .GroupBy(x => x.SubVerticalDimentionID)
-                                                    .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
-                                            }
-                                            @subtotal.ToString("0.00")
-                                        </td>
-                                    }
-                                    <td>
-                                        @{
-                                            var subtotal1 = answer
-                                                .GroupBy(x => x.SubVerticalDimentionID)
-                                                .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
-                                        }
-                                        @subtotal1.ToString("0.00")
-                                    </td>
-                                </tr>
-                                no++;
-                            }
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="2">Index Value</th>
-                                @{
-                                    var answers = answerCultures.SelectMany(x => x.Value);
-                                }
-                                @foreach (VerticalDimention vd in verticalDimentions.Where(x => x.Section.Construct == Construct.CULTURE))
-                                {
-                                    <th colspan="3"></th>
-                                    foreach (SubVerticalDimention svd in vd.SubVerticalDimentions)
-                                    {
-                                        <th>
-                                            @{
-                                                var subtotal = answers.Where(x => x.SubVerticalDimentionID == svd.ID)
-                                                    .GroupBy(x=>x.ParticipantID)
-                                                    .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
-                                            }
-                                            @subtotal.ToString("0.00")
-                                        </th>
-                                    }
-                                    <th>
-                                        @{
-                                            var subtotal1 = answers.Where(x => x.VerticalDimentionID == vd.ID)
-                                                .GroupBy(x => new { x.ParticipantID, x.SubVerticalDimentionID })
-                                                .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
-                                        }
-                                        @subtotal1.ToString("0.00")
-                                    </th>
-                                }
-                                <th>
-                                    @{
-                                        var total = answers
-                                            .GroupBy(x => new { x.ParticipantID, x.SubVerticalDimentionID })
-                                            .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
-                                    }
-                                    @total.ToString("0.00")
+                                <th colspan="5">
+                                    @subVerticalDimention.Name
                                 </th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="culture-report" role="tabpanel" aria-labelledby="culture-report-tab">
-                <table class="table table-striped table-scrollable table-bordered table-hover table-checkable order-column">
-                    <thead>
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <th>Item</th>
+                        @{
+                            var i = 1;
+                        }
+                        @foreach (Question question in questions)
+                        {
+                            <th colspan="5">
+                                @i
+                            </th>
+                            i++;
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        no = 1;
+                    }
+                    @foreach (var participant in participants)
+                    {
+                        if (!answerCultures.ContainsKey(participant.ID))
+                        {
+                            continue;
+                        }
+                        var answer = answerCultures[participant.ID];
                         <tr>
-                            <td width="50px">No</td>
-                            <td>Index</td>
-                            <th width="150px">Nilai</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Index Akhlak</td>
-                            <td align="right">
-                                @{
-                                    var total1 = answers
-                                        .GroupBy(x => new { x.ParticipantID, x.SubVerticalDimentionID })
-                                        .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
+                            <td rowspan="5">@no</td>
+                            <td rowspan="5">@participant.ParticipantUser.Name</td>
+                            <td>Respon</td>
+                            @foreach (Question question in questions)
+                            {
+                                @for (i = 1; i <= 5; i++)
+                                {
+                                    <td align="right">@i</td>
                                 }
-                                @total1.ToString("0.00")
-                            </td>
+                            }
                         </tr>
-                        @{ no = 1; }
-                        @foreach (VerticalDimention vd in verticalDimentions.Where(x => x.Section.Construct == Construct.CULTURE))
+                        <tr>
+                            <td>Urutan</td>
+                            @foreach (Question question in questions)
+                            {
+                                foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs.OrderBy(x => x.Sequence))
+                                {
+                                    <td align="right">
+                                        @{
+                                            var asw = answer.FirstOrDefault(x => x.QuestionID == question.ID && x.MatrixRowAnswerID == qa.ID);
+                                            var value = asw == null ? "-" : asw.urutan.ToString();
+                                        }
+                                        @value
+                                    </td>
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>Nilai</td>
+                            @foreach (Question question in questions)
+                            {
+                                foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs.OrderBy(x => x.Sequence))
+                                {
+                                    <td align="right">
+                                        @{
+                                            var asw = answer.FirstOrDefault(x => x.QuestionID == question.ID && x.MatrixRowAnswerID == qa.ID);
+                                            var value = asw == null ? "-" : asw.nilai.ToString();
+                                        }
+                                        @value
+                                    </td>
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>Bobot</td>
+                            @foreach (Question question in questions)
+                            {
+                                foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs.OrderBy(x => x.Sequence))
+                                {
+                                    <td align="right">
+                                        @{
+                                            var asw = answer.FirstOrDefault(x => x.QuestionID == question.ID && x.MatrixRowAnswerID == qa.ID);
+                                            var value = asw == null ? "-" : asw.bobot.ToString();
+                                        }
+                                        @value
+                                    </td>
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>Bobot x Nilai</td>
+                            @foreach (Question question in questions)
+                            {
+                                foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs.OrderBy(x => x.Sequence))
+                                {
+                                    <td align="right">
+                                        @{
+                                            var asw = answer.FirstOrDefault(x => x.QuestionID == question.ID && x.MatrixRowAnswerID == qa.ID);
+                                            var value = asw == null ? "-" : asw.bobotxnilai.ToString();
+                                        }
+                                        @value
+                                    </td>
+                                }
+                            }
+                        </tr>
+                        no++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="culture-resume" role="tabpanel" aria-labelledby="culture-resume-tab">
+        <div style="overflow:scroll; max-height:550px">
+            <table class="table table-striped table-scrollable table-bordered table-hover table-checkable order-column">
+                <thead>
+                    <tr>
+                        <th rowspan="3" width="25px">No</th>
+                        <th rowspan="3" width="150px">Subject</th>
+                        @foreach (VerticalDimention verticalDimention in verticalDimentions)
+                        {
+                            <th colspan="7">
+                                @verticalDimention.Name
+                            </th>
+                        }
+                        <th rowspan="3" width="150px">Index Akhlak Subjek</th>
+                    </tr>
+                    <tr>
+                        @foreach (VerticalDimention verticalDimention in verticalDimentions)
+                        {
+                            <th colspan="3">
+                                Skor Situasi
+                            </th>
+                            <th colspan="3">
+                                Indexs Situasi
+                            </th>
+                            <th>
+                                Indexs Value Subjek
+                            </th>
+                        }
+                    </tr>
+                    <tr>
+                        @foreach (VerticalDimention verticalDimention in verticalDimentions)
+                        {
+                            foreach (SubVerticalDimention subVerticalDimention in verticalDimention.SubVerticalDimentions)
+                            {
+                                <th>
+                                    @subVerticalDimention.Name
+                                </th>
+                            }
+                            foreach (SubVerticalDimention subVerticalDimention in verticalDimention.SubVerticalDimentions)
+                            {
+                                <th>
+                                    @subVerticalDimention.Name
+                                </th>
+                            }
+                            <th>
+                                @verticalDimention.Name
+                            </th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        no = 1;
+                    }
+                    @foreach (var participant in participants)
+                    {
+                        if (!answerCultures.ContainsKey(participant.ID))
                         {
                             no++;
-                            <tr>
-                                <td>@no</td>
-                                <td>-- Index @vd.Name</td>
+                            continue;
+                        }
+                        var answer = answerCultures[participant.ID];
+                        <tr>
+                            <td>@no</td>
+                            <td>@participant.ParticipantUser.Name</td>
+                            @foreach (VerticalDimention verticalDimention in verticalDimentions)
+                            {
+                                foreach (SubVerticalDimention subVerticalDimention in verticalDimention.SubVerticalDimentions)
+                                {
+                                    <td align="right">
+                                        @{
+                                            var skore = answer.Where(x => x.VerticalDimentionID == verticalDimention.ID && x.SubVerticalDimentionID == subVerticalDimention.ID).Sum(x => x.bobotxnilai);
+                                        }
+                                        @skore.ToString()
+                                    </td>
+                                }
+                                foreach (SubVerticalDimention subVerticalDimention in verticalDimention.SubVerticalDimentions)
+                                {
+                                    <td align="right">
+                                        @{
+                                            var skore = answer
+                                                .Where(x => x.VerticalDimentionID == verticalDimention.ID && x.SubVerticalDimentionID == subVerticalDimention.ID)
+                                                .Sum(x => x.bobotxnilai);
+                                            var index = (skore - 39) * 100 / 76;
+                                        }
+                                        @index.ToString("0.00")
+                                    </td>
+                                }
                                 <td align="right">
                                     @{
-                                        var subtotal = answers.Where(x => x.VerticalDimentionID == vd.ID)
-                                            .GroupBy(x => new { x.ParticipantID, x.SubVerticalDimentionID })
+                                        var subtotal = answer.Where(x => x.VerticalDimentionID == verticalDimention.ID)
+                                            .GroupBy(x => x.SubVerticalDimentionID)
                                             .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
                                     }
                                     @subtotal.ToString("0.00")
                                 </td>
-                            </tr>
+                            }
+                            <td>
+                                @{
+                                    var subtotal1 = answer
+                                        .GroupBy(x => x.SubVerticalDimentionID)
+                                        .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
+                                }
+                                @subtotal1.ToString("0.00")
+                            </td>
+                        </tr>
+                        no++;
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2">Index Value</th>
+                        @{
+                            var answers = answerCultures.SelectMany(x => x.Value);
+                        }
+                        @foreach (VerticalDimention vd in verticalDimentions)
+                        {
+                            <th colspan="3"></th>
                             foreach (SubVerticalDimention svd in vd.SubVerticalDimentions)
                             {
-                                no++;
-                                <tr>
-                                    <td>@no</td>
-                                    <td>---- Index @svd.Name</td>
-                                    <td align="right">
-                                        @{
-                                            var subtotal1 = answers.Where(x => x.SubVerticalDimentionID == svd.ID)
-                                                .GroupBy(x => x.ParticipantID)
-                                                .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
-                                        }
-                                        @subtotal1.ToString("0.00")
-                                    </td>
-                                </tr>
+                                <th>
+                                    @{
+                                        var subtotal = answers.Where(x => x.SubVerticalDimentionID == svd.ID)
+                                            .GroupBy(x => x.ParticipantID)
+                                            .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
+                                    }
+                                    @subtotal.ToString("0.00")
+                                </th>
                             }
+                            <th>
+                                @{
+                                    var subtotal1 = answers.Where(x => x.VerticalDimentionID == vd.ID)
+                                        .GroupBy(x => new { x.ParticipantID, x.SubVerticalDimentionID })
+                                        .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
+                                }
+                                @subtotal1.ToString("0.00")
+                            </th>
                         }
-                    </tbody>
-                </table>
-            </div>
+                        <th>
+                            @{
+                                var total = answers
+                                    .GroupBy(x => new { x.ParticipantID, x.SubVerticalDimentionID })
+                                    .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
+                            }
+                            @total.ToString("0.00")
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
+    </div>
+    <div class="tab-pane fade" id="culture-report" role="tabpanel" aria-labelledby="culture-report-tab">
+        <table class="table table-striped table-scrollable table-bordered table-hover table-checkable order-column">
+            <thead>
+                <tr>
+                    <td width="50px">No</td>
+                    <td>Index</td>
+                    <th width="150px">Nilai</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Index Akhlak</td>
+                    <td align="right">
+                        @{
+                            var total1 = answers
+                                .GroupBy(x => new { x.ParticipantID, x.SubVerticalDimentionID })
+                                .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
+                        }
+                        @total1.ToString("0.00")
+                    </td>
+                </tr>
+                @{ no = 1; }
+                @foreach (VerticalDimention vd in verticalDimentions)
+                {
+                    no++;
+                    <tr>
+                        <td>@no</td>
+                        <td>-- Index @vd.Name</td>
+                        <td align="right">
+                            @{
+                                var subtotal = answers.Where(x => x.VerticalDimentionID == vd.ID)
+                                    .GroupBy(x => new { x.ParticipantID, x.SubVerticalDimentionID })
+                                    .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
+                            }
+                            @subtotal.ToString("0.00")
+                        </td>
+                    </tr>
+                    foreach (SubVerticalDimention svd in vd.SubVerticalDimentions)
+                    {
+                        no++;
+                        <tr>
+                            <td>@no</td>
+                            <td>---- Index @svd.Name</td>
+                            <td align="right">
+                                @{
+                                    var subtotal1 = answers.Where(x => x.SubVerticalDimentionID == svd.ID)
+                                        .GroupBy(x => x.ParticipantID)
+                                        .Average(x => (x.Sum(y => y.bobotxnilai) - 39) * 100 / 76);
+                                }
+                                @subtotal1.ToString("0.00")
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
     </div>
 </div>

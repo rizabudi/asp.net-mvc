@@ -6,14 +6,13 @@
     var entities = (Dictionary<string, string>)ViewData["Entities"];
     var entity = (Entity)ViewData["Entity"];
     var sections = (List<Section>)ViewData["Sections"];
-    sections.Add(new Section
-    {
-        ID = 0,
-        Name = "Peserta"
-    });
     var section = (Section)ViewData["Section"];
 
-    ViewData["Title"] = "Dashboard Survei - " + survey.Name + " - " + (entity == null ? "ALL" : entity.Name) + " - " + section.Name;
+    ViewData["Title"] = "Dashboard Survei - " + survey.Name + " - " + (entity == null ? "ALL" : entity.Name);
+    ViewData["BreadCrump"] = new Dictionary<string, string>()
+    {
+        {"Daftar Survey", "/survey"}
+    };
 }
 
 @section Scripts {

@@ -251,7 +251,7 @@ namespace AdminLte.Controllers
                         .Where(x => x.ParentEntity.ID == userFromDb.Entity.ID)
                         .OrderBy(x => x.Name)
                         .ToListAsync();
-                    subEntities = Entity.getEntities(subEntityList, userFromDb.Entity.ID, userFromDb.Entity.Level + 1);
+                    subEntities = Entity.getEntities(subEntityList, userFromDb.Entity.ID, userFromDb.Entity.Level + 1, true);
                 } 
                 else
                 {
@@ -261,7 +261,7 @@ namespace AdminLte.Controllers
                     }
                 }
 
-                var entities = Entity.getEntities(entityList, 0, 0);
+                var entities = Entity.getEntities(entityList, 0, 0, true);
 
                 var positions = await _db.Position.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
                 var departments = await _db.Departments.OrderBy(x => x.Name).ToDictionaryAsync(x => x.ID.ToString(), y => y.Name);
@@ -591,6 +591,77 @@ namespace AdminLte.Controllers
             {
                 return Json(new { success = false, message = "Berhasil" });
             }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("participant-user/fix-participant-answer-sheet")]
+        public async Task<IActionResult> FixParticipantAnswerSheet()
+        {
+            var referenceData = await _db.ParticipantAnswerSheetLines
+                .Include(x=>x.Question)
+                .Where(x => x.ParticipantAnswerSheet.ID == 10000).ToListAsync();
+            var referenceAnswerLine = new Dictionary<int, ParticipantAnswerSheetLine>();
+            
+            foreach(var row in referenceData)
+            {
+                referenceAnswerLine.Add(row.MatrixRowAnswerID, row);
+            }
+
+            var brokenData = await _db.ParticipantAnswerSheets
+                .Include(x => x.ParticipantAnswerSheetLines)
+                .Where(x => x.ParticipantAnswerSheetLines.Count() != 182 && x.IsFinish == true && x.IsLast == true)
+                .ToListAsync();
+
+            var needToInsert = new List<ParticipantAnswerSheetLine>();
+            foreach(var row in brokenData)
+            {
+                foreach(var key in referenceAnswerLine.Keys)
+                {
+                    if(row.ParticipantAnswerSheetLines.Where(x=>x.MatrixRowAnswerID == key).Count() == 0)
+                    {
+                        var dt = referenceAnswerLine[key];
+                        var newLine = new ParticipantAnswerSheetLine
+                        {
+                            ParticipantAnswerSheet = row,
+                            SuggestedAnswerID = dt.SuggestedAnswerID,
+                            MatrixRowAnswerID = dt.MatrixRowAnswerID,
+                            QuestionSquence = dt.QuestionSquence,
+                            IsSkipped = dt.IsSkipped,
+                            AnswerType = dt.AnswerType,
+                            CharBoxValue = dt.CharBoxValue,
+                            FreeTextValue = dt.FreeTextValue,
+                            NumericalBoxValue = dt.NumericalBoxValue,
+                            AnswerWeight = dt.AnswerWeight,
+                            AnswerScore = dt.AnswerScore,
+                            Question = dt.Question,
+                            SubmitAt = row.ParticipantAnswerSheetLines.First().SubmitAt,
+                        };
+                        needToInsert.Add(newLine);
+                    }
+                }
+            }
+
+            if(needToInsert.Count > 0)
+            {
+                _db.ParticipantAnswerSheetLines.AddRange(needToInsert);
+                _db.SaveChanges();
+            }
+
+            var brokenDataLines = await _db.ParticipantAnswerSheetLines
+                .Where(x => x.Question == null && x.MatrixRowAnswerID >= 158 && x.MatrixRowAnswerID <= 261)
+                .ToListAsync();
+            foreach(var row in brokenDataLines)
+            {
+                row.Question = referenceAnswerLine[row.MatrixRowAnswerID].Question;
+            }
+
+            if (brokenDataLines.Count > 0)
+            {
+                _db.ParticipantAnswerSheetLines.UpdateRange(brokenDataLines);
+                _db.SaveChanges();
+            }
+
+            return Json(new { success = false, message = "Berhasil" });
         }
     }
 }

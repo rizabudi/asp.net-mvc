@@ -50,7 +50,7 @@ namespace AdminLte.Controllers
                             row.Name,
                             "HTML:<a href='/survey-question/" + row.ID + "'><i class='fa fa-question'></i> " + questions + " Soal</a>",
                             "HTML:<a href='/survey-entity/" + row.ID + "'><i class='fa fa-building'></i> " + entities + " Soal</a>",
-                            "HTML:<a href='/survey/result/" + row.ID + "'><i class='fa fa-file'></i> Hasil Survei</a><br/><a href='/survey/dashboard/" + row.ID + "'><i class='fa fa-chart-area'></i> Dashboard</a>"
+                            "HTML:<a href='/survey/download/" + row.ID + "/false'><i class='fa fa-file'></i> Hasil Survei</a><br/><a href='/survey/dashboard/" + row.ID + "'><i class='fa fa-chart-area'></i> Dashboard</a>"
                         }
                     });
                 }
@@ -187,11 +187,10 @@ namespace AdminLte.Controllers
             }
         }
 
-
         [HttpGet("survey/result")]
         [Route("survey/result/{surveyID:int}/{tab:int?}")]
         [CustomAuthFilter("Access_MasterData_DaftarSurvei")]
-        public async Task<IActionResult> ResultAsync(int surveyID, int tab = 0, int entity = 0)
+        public async Task<IActionResult> ResultAsync(int surveyID, int tab = 0)
         {
             var questionPackage = await _db.QuestionPackages.FirstOrDefaultAsync(x => x.ID == surveyID);
 
@@ -202,84 +201,127 @@ namespace AdminLte.Controllers
 
             var participants = await _db.Participants
                 .Include(x=>x.ParticipantUser)
+                .ThenInclude(x=>x.User)
                 .Where(x => x.FinishedAt != null && x.QuestionPackage.ID == surveyID)
                 .OrderBy(x=>x.ParticipantUser.Name)
+                .Skip(0)
+                .Take(10)
                 .ToListAsync();
 
-            var questions = await _db.QuestionPackageLines
-                .Include(x=>x.Question)
-                .ThenInclude(x=>x.QuestionAnswerMatrixs)
-                .Include(x => x.Question.Section)
-                .Where(x => x.QuestionPackage.ID == surveyID)
-                .Select(x=>x.Question)
-                .ToListAsync();
-
-            var verticalDimentions = await _db.VerticalDimentions
-                .Include(x=>x.Section)
-                .Include(x=>x.SubVerticalDimentions)
-                .ToListAsync();
-
-            var horizontalDimentions = await _db.HorizontalDimentions
-                .Include(x => x.Section)
-                .ToListAsync();
-
-            var vwCulturePerRows = await _db.VwCulturePerRow
-                .Where(x=>x.Participant.QuestionPackage.ID == surveyID)
-                .ToListAsync();
-            var vwPerformancePerRows = await _db.VwPerformancePerRow
-                .Where(x => x.Participant.QuestionPackage.ID == surveyID)
-                .ToListAsync();
-            var vwEngagementPerRows = await _db.VwEngagementPerRow
-                .Where(x => x.Participant.QuestionPackage.ID == surveyID)
-                .ToListAsync();
-
-            var answerCultures = new Dictionary<int, List<VwCulturePerRow>>();
-            foreach (VwCulturePerRow row in vwCulturePerRows)
+            if (tab == 1)
             {
-                var id = row.ParticipantID;
-                if (!answerCultures.ContainsKey(id))
+                var questions = await _db.QuestionPackageLines
+                    .Include(x => x.Question)
+                    .ThenInclude(x => x.QuestionAnswerMatrixs)
+                    .Include(x => x.Question.Section)
+                    .Where(x => x.QuestionPackage.ID == surveyID && x.Question.Section.Construct == Construct.CULTURE)
+                    .Select(x => x.Question)
+                    .ToListAsync();
+
+                var verticalDimentions = await _db.VerticalDimentions
+                    .Include(x => x.Section)
+                    .Include(x => x.SubVerticalDimentions)
+                    .Where(x => x.Section.Construct == Construct.CULTURE)
+                    .ToListAsync();
+
+                var vwCulturePerRows = await _db.VwCulturePerRow
+                    .Where(x => x.Participant.QuestionPackage.ID == surveyID)
+                    .ToListAsync();
+
+                var answerCultures = new Dictionary<int, List<VwCulturePerRow>>();
+                foreach (VwCulturePerRow row in vwCulturePerRows)
                 {
-                    answerCultures.Add(id, new List<VwCulturePerRow>());
+                    var id = row.ParticipantID;
+                    if (!answerCultures.ContainsKey(id))
+                    {
+                        answerCultures.Add(id, new List<VwCulturePerRow>());
+                    }
+                    answerCultures[id].Add(row);
                 }
-                answerCultures[id].Add(row);
-            }
 
-            var answerPerformances = new Dictionary<int, List<VwPerformancePerRow>>();
-            foreach (VwPerformancePerRow row in vwPerformancePerRows)
+                ViewData["VerticalDimentions"] = verticalDimentions;
+                ViewData["Questions"] = questions;
+                ViewData["AnswerCultures"] = answerCultures;
+            }
+            else if (tab == 2)
             {
-                var id = row.ParticipantID;
-                if (!answerPerformances.ContainsKey(id))
+                var questions = await _db.QuestionPackageLines
+                    .Include(x => x.Question)
+                    .ThenInclude(x => x.QuestionAnswerMatrixs)
+                    .Include(x => x.Question.Section)
+                    .Where(x => x.QuestionPackage.ID == surveyID && x.Question.Section.Construct == Construct.ENGAGEMENT)
+                    .Select(x => x.Question)
+                    .ToListAsync();
+
+                var horizontalDimentions = await _db.HorizontalDimentions
+                    .Include(x => x.Section)
+                    .Where(x => x.Section.Construct == Construct.ENGAGEMENT)
+                    .ToListAsync();
+
+                var verticalDimentions = await _db.VerticalDimentions
+                    .Include(x => x.Section)
+                    .Include(x => x.SubVerticalDimentions)
+                    .Where(x => x.Section.Construct == Construct.ENGAGEMENT)
+                    .ToListAsync();
+
+                var vwEngagementPerRows = await _db.VwEngagementPerRow
+                    .Where(x => x.Participant.QuestionPackage.ID == surveyID)
+                    .ToListAsync();
+
+                var answerEngagements = new Dictionary<int, List<VwEngagementPerRow>>();
+                foreach (VwEngagementPerRow row in vwEngagementPerRows)
                 {
-                    answerPerformances.Add(id, new List<VwPerformancePerRow>());
+                    var id = row.ParticipantID;
+                    if (!answerEngagements.ContainsKey(id))
+                    {
+                        answerEngagements.Add(id, new List<VwEngagementPerRow>());
+                    }
+                    answerEngagements[id].Add(row);
                 }
-                answerPerformances[id].Add(row);
-            }
 
-            var answerEngagements = new Dictionary<int, List<VwEngagementPerRow>>();
-            foreach (VwEngagementPerRow row in vwEngagementPerRows)
+                ViewData["Questions"] = questions;
+                ViewData["VerticalDimentions"] = verticalDimentions;
+                ViewData["HorizontalDimentions"] = horizontalDimentions;
+                ViewData["AnswerEngagements"] = answerEngagements;
+            }
+            else if (tab == 3)
             {
-                var id = row.ParticipantID;
-                if (!answerEngagements.ContainsKey(id))
+                var questions = await _db.QuestionPackageLines
+                    .Include(x => x.Question)
+                    .ThenInclude(x => x.QuestionAnswerMatrixs)
+                    .Include(x => x.Question.Section)
+                    .Where(x => x.QuestionPackage.ID == surveyID && x.Question.Section.Construct == Construct.PERFORMANCE)
+                    .Select(x => x.Question)
+                    .ToListAsync();
+
+                var verticalDimentions = await _db.VerticalDimentions
+                    .Include(x => x.Section)
+                    .Include(x => x.SubVerticalDimentions)
+                    .Where(x => x.Section.Construct == Construct.PERFORMANCE)
+                    .ToListAsync();
+
+                var vwPerformancePerRows = await _db.VwPerformancePerRow
+                    .Where(x => x.Participant.QuestionPackage.ID == surveyID)
+                    .ToListAsync();
+
+                var answerPerformances = new Dictionary<int, List<VwPerformancePerRow>>();
+                foreach (VwPerformancePerRow row in vwPerformancePerRows)
                 {
-                    answerEngagements.Add(id, new List<VwEngagementPerRow>());
+                    var id = row.ParticipantID;
+                    if (!answerPerformances.ContainsKey(id))
+                    {
+                        answerPerformances.Add(id, new List<VwPerformancePerRow>());
+                    }
+                    answerPerformances[id].Add(row);
                 }
-                answerEngagements[id].Add(row);
-            }
 
-            if (answerCultures.Count == 0 || answerPerformances.Count == 0 || answerEngagements.Count == 0)
-            {
-                return Redirect("/home/errors/404");
+                ViewData["Questions"] = questions;
+                ViewData["VerticalDimentions"] = verticalDimentions;
+                ViewData["AnswerPerformances"] = answerPerformances;
             }
-
 
             ViewData["Survey"] = questionPackage;
             ViewData["Participants"] = participants;
-            ViewData["VerticalDimentions"] = verticalDimentions;
-            ViewData["HorizontalDimentions"] = horizontalDimentions;
-            ViewData["Questions"] = questions;
-            ViewData["AnswerCultures"] = answerCultures;
-            ViewData["AnswerPerformances"] = answerPerformances;
-            ViewData["AnswerEngagements"] = answerEngagements;
             ViewData["Tab"] = tab;
 
             ViewData["SideBarCollapse"] = true;
@@ -350,7 +392,7 @@ namespace AdminLte.Controllers
                     });
 
                 var participantsPerSubEntities = participants
-                    .Where(x=>x.SubEntity != null)
+                    .Where(x=>x.SubEntity != null && (entity == 0 ? true : x.SubEntity.ParentEntity.ID == entity))
                     .GroupBy(x => x.SubEntity)
                     .ToDictionary(x => x.Key, y => new int[]
                     {
@@ -458,9 +500,9 @@ namespace AdminLte.Controllers
         }
 
         [HttpGet("survey/download")]
-        [Route("survey/download/{surveyID:int}/{construct:int}")]
+        [Route("survey/download/{surveyID:int}/{result:bool}")]
         [CustomAuthFilter("Access_MasterData_DaftarSurvei")]
-        public async Task<IActionResult> DownloadAysnc(int surveyID, Construct construct)
+        public async Task<IActionResult> DownloadAsync(int surveyID, int section, int entity = 0, bool result = false)
         {
             var questionPackage = await _db.QuestionPackages.FirstOrDefaultAsync(x => x.ID == surveyID);
 
@@ -469,9 +511,49 @@ namespace AdminLte.Controllers
                 return Redirect("/home/errors/404");
             }
 
+            var sections = await _db.Sections.OrderBy(x => x.Name).ToListAsync(); ;
+            Section sectionData = await _db.Sections.FirstOrDefaultAsync(x => x.ID == section);
+            if (sectionData == null)
+            {
+                sectionData = sections.First();
+            }
+            var construct = sectionData.Construct;
+
+            if (!result)
+            {
+
+                int entityID = 0;
+                byte[] bytes;
+                if (HttpContext.Session.TryGetValue("User_Entity", out bytes))
+                {
+                    string value = Encoding.ASCII.GetString(bytes);
+                    int.TryParse(value, out entityID);
+                }
+
+                var entityList = await _db.Entities
+                        .Where(x => x.Level <= 1 && (entityID == 0 ? true : x.ID == entityID))
+                        .OrderBy(x => x.Name)
+                        .ToListAsync();
+                var entities = Entity.getEntities(entityList, 0, 0);
+                var entityData = await _db.Entities.FirstOrDefaultAsync(x => x.ID == entity);
+
+                if (entityID != 0)
+                {
+                    entityData = await _db.Entities.FirstOrDefaultAsync(x => x.ID == entityID);
+                    entity = entityID;
+                }
+
+                ViewData["Survey"] = questionPackage;
+                ViewData["Sections"] = sections;
+                ViewData["Section"] = sectionData;
+                ViewData["Entities"] = entities;
+                ViewData["Entity"] = entityData;
+                return View();
+            }
+
             var participants = await _db.Participants
                 .Include(x => x.ParticipantUser)
-                .Where(x => x.FinishedAt != null && x.QuestionPackage.ID == surveyID)
+                .Where(x => x.FinishedAt != null && x.QuestionPackage.ID == surveyID && (entity == 0 ? true : x.ParticipantUser.Entity.ID == entity))
                 .OrderBy(x => x.ParticipantUser.Name)
                 .ToListAsync();
 
@@ -498,9 +580,11 @@ namespace AdminLte.Controllers
             if (construct == Construct.CULTURE)
             {
                 var vwCulturePerRows = await _db.VwCulturePerRow
+                    .Where(x => x.Participant.QuestionPackage.ID == surveyID)
                     .ToListAsync();
+
                 var answerCultures = new Dictionary<int, List<VwCulturePerRow>>();
-                foreach (VwCulturePerRow row in vwCulturePerRows)
+                foreach (var row in vwCulturePerRows)
                 {
                     var id = row.ParticipantID;
                     if (!answerCultures.ContainsKey(id))
@@ -688,6 +772,8 @@ namespace AdminLte.Controllers
                         no++;
                     }
 
+                    var totalRow = no - 1;
+
                     sheet2.Cells[row, 1, row, 2].Merge = true;
                     sheet2.Cells[row, 1, row, 2].Value = "Index Value";
                     subCol = 3;
@@ -698,26 +784,26 @@ namespace AdminLte.Controllers
                         subCol += 3;
                         foreach (SubVerticalDimention svd in vd.SubVerticalDimentions)
                         {
-                            sheet2.Cells[row, subCol].Formula = "=AVERAGE(" + sheet2.Cells[4, subCol].Address + ":" + sheet2.Cells[3+participants.Count, subCol].Address + ")";
+                            sheet2.Cells[row, subCol].Formula = "=AVERAGE(" + sheet2.Cells[4, subCol].Address + ":" + sheet2.Cells[3 + totalRow, subCol].Address + ")";
                             sheet2.Cells[row, subCol].Style.Numberformat.Format = "0.00";
                             subCol++;
                         }
 
-                        sheet2.Cells[row, col + 6].Formula = "=AVERAGE(" + sheet2.Cells[4, subCol].Address + ":" + sheet2.Cells[3 + participants.Count, subCol].Address + ")";
+                        sheet2.Cells[row, col + 6].Formula = "=AVERAGE(" + sheet2.Cells[4, subCol].Address + ":" + sheet2.Cells[3 + totalRow, subCol].Address + ")";
                         sheet2.Cells[row, col + 6].Style.Numberformat.Format = "0.00";
 
                         col += 7;
                         subCol++;
                     }
 
-                    sheet2.Cells[row, col].Formula = "=AVERAGE(" + sheet2.Cells[4, col].Address + ":" + sheet2.Cells[3 + participants.Count, col].Address + ")";
+                    sheet2.Cells[row, col].Formula = "=AVERAGE(" + sheet2.Cells[4, col].Address + ":" + sheet2.Cells[3 + totalRow, col].Address + ")";
                     sheet2.Cells[row, col].Style.Numberformat.Format = "0.00";
 
                     sheet2.Cells[row, 1, row, 45].Style.Font.Bold = true;
 
                     // Sheet 3
                     var sheet3 = package.Workbook.Worksheets.Add("Laporan");
-                    row = 4 + participants.Count;
+                    row = 4 + totalRow;
                     no = 1;
                     col = 6;
                     sheet3.Cells[no, 1].Value = no;
@@ -730,7 +816,7 @@ namespace AdminLte.Controllers
                         no++;
                         sheet3.Cells[no, 1].Value = no;
                         sheet3.Cells[no, 2].Value = "-- Indeks " + vd.Name;
-                        sheet3.Cells[no, 3].Formula = "='Ringkasan'!" + sheet2.Cells[row, col+3].Address;
+                        sheet3.Cells[no, 3].Formula = "='Ringkasan'!" + sheet2.Cells[row, col + 3].Address;
                         sheet3.Cells[no, 3].Style.Numberformat.Format = "0.00";
 
                         foreach (SubVerticalDimention svd in vd.SubVerticalDimentions)
@@ -755,6 +841,7 @@ namespace AdminLte.Controllers
             else if(construct == Construct.ENGAGEMENT)
             {
                 var vwEngagementPerRows = await _db.VwEngagementPerRow
+                    .Where(x => x.Participant.QuestionPackage.ID == surveyID)
                     .ToListAsync();
 
                 var answerEngagements = new Dictionary<int, List<VwEngagementPerRow>>();
@@ -787,6 +874,7 @@ namespace AdminLte.Controllers
                         {
                             sheet1.Cells[2, col + i].Value = i;
                         }
+                        col += 20;
                     }
 
                     sheet1.Cells[1, 1, 2, 82].Style.Font.Bold = true;
@@ -795,14 +883,14 @@ namespace AdminLte.Controllers
                     var row = 3;
                     foreach(Participant participant in participants)
                     {
-                        sheet1.Cells[row, 1].Value = no;
-                        sheet1.Cells[row, 2].Value = participant.ParticipantUser.Name;
-
                         if (!answerEngagements.ContainsKey(participant.ID))
                         {
                             continue;
                         }
                         var answer = answerEngagements[participant.ID];
+
+                        sheet1.Cells[row, 1].Value = no;
+                        sheet1.Cells[row, 2].Value = participant.ParticipantUser.Name;
 
                         col = 3;
                         foreach (Question question in questions)
@@ -822,6 +910,8 @@ namespace AdminLte.Controllers
                         row++;
                     }
 
+                    var totalRow = no - 1;
+
                     sheet1.Cells[row, 1, row, 2].Merge = true;
                     sheet1.Cells[row, 1, row, 2].Value = "Rata-rata";
                     sheet1.Cells[row, 1, row, 82].Style.Font.Bold = true;
@@ -831,7 +921,7 @@ namespace AdminLte.Controllers
                     {
                         foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs)
                         {
-                            sheet1.Cells[row, col].Formula = "=AVERAGE(" + sheet1.Cells[3,col].Address + ":" + sheet1.Cells[2+participants.Count,col].Address + ")";
+                            sheet1.Cells[row, col].Formula = "=AVERAGE(" + sheet1.Cells[3,col].Address + ":" + sheet1.Cells[2 + totalRow, col].Address + ")";
                             sheet1.Cells[row, col].Style.Numberformat.Format = "0.00";
                             col++; 
                         }
@@ -866,6 +956,11 @@ namespace AdminLte.Controllers
                     no = 1;
                     foreach(Participant participant in participants)
                     {
+                        if (!answerEngagements.ContainsKey(participant.ID))
+                        {
+                            continue;
+                        }
+
                         sheet2.Cells[row, 1].Value = no;
                         sheet2.Cells[row, 2].Value = participant.ParticipantUser.Name;
                         
@@ -904,18 +999,18 @@ namespace AdminLte.Controllers
                     col = 7;
                     foreach (HorizontalDimention hd in horizontalDimentions)
                     {
-                        sheet2.Cells[row, col].Formula = "=AVERAGE(" + sheet2.Cells[3, col].Address + ":" + sheet2.Cells[2 + participants.Count, col].Address + ")";
+                        sheet2.Cells[row, col].Formula = "=AVERAGE(" + sheet2.Cells[3, col].Address + ":" + sheet2.Cells[2 + totalRow, col].Address + ")";
                         sheet2.Cells[row, col].Style.Numberformat.Format = "0.00";
                         col++;
                     }
-                    sheet2.Cells[row, col].Formula = "=AVERAGE(" + sheet2.Cells[3, col].Address + ":" + sheet2.Cells[2 + participants.Count, col].Address + ")";
+                    sheet2.Cells[row, col].Formula = "=AVERAGE(" + sheet2.Cells[3, col].Address + ":" + sheet2.Cells[2 + totalRow, col].Address + ")";
                     sheet2.Cells[row, col].Style.Numberformat.Format = "0.00";
 
                     sheet2.Cells[row, 1, row, 11].Style.Font.Bold = true;
 
                     // Sheet 3
                     var sheet3 = package.Workbook.Worksheets.Add("Laporan 1");
-                    row = 3 + participants.Count;
+                    row = 3 + totalRow;
                     no = 1;
                     sheet3.Cells[no, 1].Value = no;
                     sheet3.Cells[no, 2].Value = "Indeks Engagement";
@@ -984,6 +1079,7 @@ namespace AdminLte.Controllers
             else if(construct == Construct.PERFORMANCE)
             {
                 var vwPerformancePerRows = await _db.VwPerformancePerRow
+                    .Where(x => x.Participant.QuestionPackage.ID == surveyID)
                     .ToListAsync();
                 var answerPerformances = new Dictionary<int, List<VwPerformancePerRow>>();
                 foreach (VwPerformancePerRow row in vwPerformancePerRows)
@@ -1039,13 +1135,14 @@ namespace AdminLte.Controllers
                     int no = 1;
                     foreach (Participant participant in participants)
                     {
-                        sheet1.Cells[row, 1].Value = no;
-                        sheet1.Cells[row, 2].Value = participant.ParticipantUser.Name;
-
                         if (!answerPerformances.ContainsKey(participant.ID))
                         {
                             continue;
                         }
+
+                        sheet1.Cells[row, 1].Value = no;
+                        sheet1.Cells[row, 2].Value = participant.ParticipantUser.Name;
+
                         var answer = answerPerformances[participant.ID];
 
                         col = 3;
@@ -1070,18 +1167,20 @@ namespace AdminLte.Controllers
                         row++;
                     }
 
+                    var totalRow = no - 1;
+
                     sheet1.Cells[row, 1, row+1, 2].Merge = true;
                     sheet1.Cells[row, 1, row+1, 2].Value = "Index Kinerja Organisasi";
 
                     sheet1.Cells[row, 3, row, 8].Merge = true;
-                    sheet1.Cells[row, 3, row, 8].Formula = "=AVERAGE(" + sheet1.Cells[5, 3, 4 + participants.Count, 8].Address + ")";
+                    sheet1.Cells[row, 3, row, 8].Formula = "=AVERAGE(" + sheet1.Cells[5, 3, 4 + totalRow, 8].Address + ")";
                     sheet1.Cells[row, 3, row, 8].Style.Numberformat.Format = "0.00";
 
                     sheet1.Cells[row, 9, row, 14].Merge = true;
-                    sheet1.Cells[row, 9, row, 14].Formula = "=AVERAGE(" + sheet1.Cells[5, 9, 4 + participants.Count, 14].Address + ")";
+                    sheet1.Cells[row, 9, row, 14].Formula = "=AVERAGE(" + sheet1.Cells[5, 9, 4 + totalRow, 14].Address + ")";
                     sheet1.Cells[row, 9, row, 14].Style.Numberformat.Format = "0.00";
 
-                    sheet1.Cells[row + 1, 3, row+1, 8].Merge = true;
+                    sheet1.Cells[row + 1, 3, row + 1, 8].Merge = true;
                     sheet1.Cells[row + 1, 3, row + 1, 8].Formula = "=(" + sheet1.Cells[row, 3].Address + "/6)*100";
                     sheet1.Cells[row + 1, 3, row + 1, 8].Style.Numberformat.Format = "0.00";
 
@@ -1089,14 +1188,14 @@ namespace AdminLte.Controllers
                     sheet1.Cells[row + 1, 9, row + 1, 14].Formula = "=(" + sheet1.Cells[row, 9].Address + "/6)*100";
                     sheet1.Cells[row + 1, 9, row + 1, 14].Style.Numberformat.Format = "0.00";
 
-                    sheet1.Cells[row + 1, 16].Formula = "=AVERAGE(" + sheet1.Cells[5, 16, 4 + participants.Count, 16].Address + ")";
+                    sheet1.Cells[row + 1, 16].Formula = "=AVERAGE(" + sheet1.Cells[5, 16, 4 + totalRow, 16].Address + ")";
                     sheet1.Cells[row + 1, 16].Style.Numberformat.Format = "0.00";
 
                     sheet1.Cells[row, 1, row + 1, 16].Style.Font.Bold = true;
 
                     // Sheet 2
                     var sheet2 = package.Workbook.Worksheets.Add("Laporan");
-                    row = 3 + participants.Count;
+                    row = 3 + totalRow;
                     no = 1;
                     sheet2.Cells[no, 1].Value = no;
                     sheet2.Cells[no, 2].Value = "Indeks Kinerja Organisasi	";

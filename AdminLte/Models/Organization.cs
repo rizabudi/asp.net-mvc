@@ -20,7 +20,7 @@ namespace AdminLte.Models
         public virtual ICollection<Entity> SubEntities { get; set; }
         public virtual ICollection<Schedule> Schedules { get; set; }
 
-        public static Dictionary<string, string> getEntities(List<Entity> entities, int parent, int level)
+        public static Dictionary<string, string> getEntities(List<Entity> entities, int parent, int level, bool isSkip = false)
         {
             string prefix = "";
             for (int i = 0; i < level; i++)
@@ -44,7 +44,7 @@ namespace AdminLte.Models
             var fixResult = new Dictionary<string, string>();
             foreach (string key in result.Keys)
             {
-                if(result[key].Trim() != "-")
+                if(result[key].Trim() != "-" || !isSkip)
                 {
                     fixResult.Add(key, result[key]);
                 }

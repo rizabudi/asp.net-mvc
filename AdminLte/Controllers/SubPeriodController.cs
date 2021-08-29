@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace AdminLte.Controllers
 {
     [Authorize(Roles = "Pengguna Khusus")]
-    [CustomAuthFilter("Access_MasterData_Period")]
+    [CustomAuthFilter("Access_MasterData_Periode")]
     public class SubPeriodController : Controller
     {
         private readonly PostgreDbContext _db;

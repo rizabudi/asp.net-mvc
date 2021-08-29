@@ -32,7 +32,7 @@
                             <tr>
                                 <th rowspan="2" width="25px">No</th>
                                 <th>Dimensi</th>
-                                @foreach (HorizontalDimention horizontalDimention in horizontalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                @foreach (HorizontalDimention horizontalDimention in horizontalDimentions)
                                 {
                                     <th colspan="20">
                                         @horizontalDimention.Name
@@ -41,7 +41,7 @@
                             </tr>
                             <tr>
                                 <th>Subjek / Item</th>
-                                @foreach (Question question in questions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                @foreach (Question question in questions)
                                 {
                                     var i = 1;
                                     foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs)
@@ -71,7 +71,7 @@
                                     @{
                                         var answer = answerEngagement[participant.ID];
                                     }
-                                    @foreach (Question question in questions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                    @foreach (Question question in questions)
                                     {
                                         foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs)
                                         {
@@ -92,7 +92,7 @@
                                 @{
                                     var answers = answerEngagement.SelectMany(x => x.Value);
                                 }
-                                @foreach (Question question in questions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                @foreach (Question question in questions)
                                 {
                                     foreach (QuestionAnswer qa in question.QuestionAnswerMatrixs)
                                     {
@@ -123,13 +123,13 @@
                                 <th rowspan="2" width="150px">Index Engagement Subjek</th>
                             </tr>
                             <tr>
-                                @foreach (HorizontalDimention hd in horizontalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                @foreach (HorizontalDimention hd in horizontalDimentions)
                                 {
                                     <th>
                                         @hd.Name
                                     </th>
                                 }
-                                @foreach (HorizontalDimention hd in horizontalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                @foreach (HorizontalDimention hd in horizontalDimentions)
                                 {
                                     <th>
                                         @hd.Name
@@ -154,16 +154,24 @@
                                     @{
                                         var answer = answerEngagement[participant.ID];
                                     }
-                                    @foreach (HorizontalDimention hd in horizontalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                    @foreach (HorizontalDimention hd in horizontalDimentions)
                                     {
                                         <td align="right">
                                             @{
-                                                var skore = answer.Where(x => x.HorizontalDimentionID == hd.ID).Average(x => x.nilai);
+                                                var skore = 0f;
+                                                try
+                                                {
+                                                    skore = answer.Where(x => x.HorizontalDimentionID == hd.ID).Average(x => x.nilai);
+                                                } 
+                                                catch(Exception ex)
+                                                {
+                                                    var a = ex;
+                                                }
                                             }
                                             @skore.ToString("0.00")
                                         </td>
                                     }
-                                    @foreach (HorizontalDimention hd in horizontalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                    @foreach (HorizontalDimention hd in horizontalDimentions)
                                     {
                                         <td align="right">
                                             @{
@@ -189,7 +197,7 @@
                                     var answers1 = answerEngagement.SelectMany(x => x.Value);
                                 }
                                 <th colspan="4"></th>
-                                @foreach (HorizontalDimention hd in horizontalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                                @foreach (HorizontalDimention hd in horizontalDimentions)
                                 {
                                     <th align="right">
                                         @{
@@ -237,7 +245,7 @@
                             </td>
                         </tr>
                         @{ no = 1; }
-                        @foreach (HorizontalDimention hd in horizontalDimentions.Where(x => x.Section.Construct == Construct.ENGAGEMENT))
+                        @foreach (HorizontalDimention hd in horizontalDimentions)
                         {
                             no++;
                             <tr>

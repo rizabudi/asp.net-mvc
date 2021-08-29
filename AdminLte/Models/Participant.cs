@@ -37,6 +37,7 @@ namespace AdminLte.Models
         public DateTime? StartedAt { get; set; }
         public DateTime? FinishedAt { get; set; }
         public virtual ICollection<ParticipantAnswerSheetSection> ParticipantAnswerSheetSections { get; set; }
+        public virtual ICollection<ParticipantAnswerSheetLine> ParticipantAnswerSheetLines { get; set; }
 
     }
 

@@ -383,7 +383,7 @@ namespace AdminLte.Controllers
                         {
                             if(participantAnswerSheet1.ID != participantAnswerSheet.ID)
                             {
-                                participantAnswerSheet1.IsFinish = false;
+                                participantAnswerSheet1.IsLast = false;
                                 _db.ParticipantAnswerSheets.Update(participantAnswerSheet1);
                             }
                         }
