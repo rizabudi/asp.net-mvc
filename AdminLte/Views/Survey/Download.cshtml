@@ -49,7 +49,7 @@
                     <br />
                     <br />
                     <div class="col-md-12">
-                        <label class="col-md-4 col-form-label">Jenis Dashboard : </label>
+                        <label class="col-md-4 col-form-label">Jenis Data : </label>
                         <div class="col-md-4">
                             <select name="section" class="form-control">
                                 @foreach (Section row in sections)
@@ -64,6 +64,7 @@
                                         <option value="@row.ID">@row.Name</option>
                                     }
                                 }
+                                <option value="-1">Demografi Peserta</option>
                             </select>
                         </div>
                     </div>
@@ -71,7 +72,7 @@
                     <br />
                     <div class="col-md-12">
                         <br />
-                        <button type="submit" class="btn btn-primary col-md-1">Download</button>
+                        <button type="submit" class="btn btn-primary">Download</button>
                     </div>
                 </div>
             </form>
