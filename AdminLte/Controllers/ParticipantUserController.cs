@@ -661,6 +661,37 @@ namespace AdminLte.Controllers
                 _db.SaveChanges();
             }
 
+            var brokenCultureData = await _db.VwBrokenCulture
+                .Include(x => x.ParticipantAnswerSheet)
+                .ThenInclude(x => x.ParticipantAnswerSheetLines)
+                .ToListAsync();
+
+            brokenDataLines = new List<ParticipantAnswerSheetLine>();
+            foreach (var row in brokenCultureData)
+            {
+                var emptyLines = row.ParticipantAnswerSheet.ParticipantAnswerSheetLines
+                    .Where(x=>x.Question.ID == row.QuestionID)
+                    .GroupBy(x => x.NumericalBoxValue).ToDictionary(x => x.Key, y => y.Count());
+                var lines = new List<int> { 1, 2, 3, 4, 5 };
+                var emptyKeys = lines.Where(x => !emptyLines.Select(x => x.Key).Contains(x)).ToList();
+                foreach (var subRow in row.ParticipantAnswerSheet.ParticipantAnswerSheetLines.Where(x => x.Question.ID == row.QuestionID))
+                {
+                    if(emptyLines[subRow.NumericalBoxValue] > 1)
+                    {
+                        emptyLines[subRow.NumericalBoxValue]--;
+                        subRow.NumericalBoxValue = emptyKeys.First();
+                        emptyKeys.Remove(0);
+                        brokenDataLines.Add(subRow);
+                    }
+                }
+            }
+
+            if (brokenDataLines.Count > 0)
+            {
+                _db.ParticipantAnswerSheetLines.UpdateRange(brokenDataLines);
+                _db.SaveChanges();
+            }
+
             return Json(new { success = false, message = "Berhasil" });
         }
     }

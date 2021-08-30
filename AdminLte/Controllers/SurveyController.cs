@@ -482,6 +482,7 @@ namespace AdminLte.Controllers
                         .ToListAsync();
 
                     var dashboardPerformance = performanceData
+                        .OrderBy(x => x.VerticalDimention.ID)
                         .GroupBy(x => x.VerticalDimention)
                         .ToDictionary(x => x.Key, y => y.Average(z => (z.indexvaluesubject * 100) / 6));
 

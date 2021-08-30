@@ -125,4 +125,15 @@ namespace AdminLte.Models
         public DateTime? StartedAt { get; set; }
         public DateTime? FinishedAt { get; set; }
     }
+
+    public class VwBrokenCulture
+    {
+        [Key]
+        public string id { get; set; }
+        public int ParticipantAnswerSheetID { get; set; }
+        public ParticipantAnswerSheet ParticipantAnswerSheet { get; set; }
+        public int QuestionID { get; set; }
+        public float NumericalBoxValue { get; set; }
+        public int total { get; set; }
+    }
 }

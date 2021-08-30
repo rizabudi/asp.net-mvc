@@ -72,5 +72,6 @@ namespace AdminLte.Data
         public DbSet<VwEngagementPerSubVerticalDimention> VwEngagementPerSubVerticalDimention { get; set; }
         public DbSet<VwPerformancePerVerticalDimention> VwPerformancePerVerticalDimention { get; set; }
         public DbSet<VwParticipant> VwParticipant { get; set; }
+        public DbSet<VwBrokenCulture> VwBrokenCulture { get; set; }
     }
 }

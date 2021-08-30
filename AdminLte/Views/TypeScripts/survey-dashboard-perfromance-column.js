@@ -18,6 +18,8 @@ categoryAxis.dataFields.category = "x";
 categoryAxis.renderer.minGridDistance = 60;
 
 var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis.min = 0;
+valueAxis.max = 100; 
 
 var series = chart.series.push(new am4charts.ColumnSeries());
 series.dataFields.categoryX = "x";
