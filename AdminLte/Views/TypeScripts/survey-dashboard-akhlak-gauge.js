@@ -7,11 +7,11 @@ var dataAkhlak1 = {
         {
             color: "#EC1F24",
             lowScore: 0,
-            highScore: 65
+            highScore: 70
         },
         {
             color: "#4DB749",
-            lowScore: 66,
+            lowScore: 71,
             highScore: 100
         }
     ]

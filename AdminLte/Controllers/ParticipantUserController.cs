@@ -648,7 +648,7 @@ namespace AdminLte.Controllers
             }
 
             var brokenDataLines = await _db.ParticipantAnswerSheetLines
-                .Where(x => x.Question == null && x.MatrixRowAnswerID >= 158 && x.MatrixRowAnswerID <= 261)
+                .Where(x => x.Question == null)
                 .ToListAsync();
             foreach(var row in brokenDataLines)
             {

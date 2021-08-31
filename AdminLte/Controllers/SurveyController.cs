@@ -612,7 +612,8 @@ namespace AdminLte.Controllers
                     sheet1.Cells["F1"].Value = "Usia";
                     sheet1.Cells["G1"].Value = "Masa Kerja";
                     sheet1.Cells["H1"].Value = "Level Jabatan";
-                    sheet1.Cells["A1:H1"].Style.Font.Bold = true;
+                    sheet1.Cells["I1"].Value = "Status Pengerjaan";
+                    sheet1.Cells["A1:I1"].Style.Font.Bold = true;
 
                     var row = 2;
                     foreach (var participant in participants)
@@ -621,10 +622,11 @@ namespace AdminLte.Controllers
                         sheet1.Cells[row, 2].Value = participant.ParticipantUser.Name;
                         sheet1.Cells[row, 3].Value = participant.ParticipantUser.Entity.Name;
                         sheet1.Cells[row, 4].Value = participant.ParticipantUser.SubEntity.Name;
-                        sheet1.Cells[row, 5].Value = participant.ParticipantUser.Sex == 1 ? "Laki-laki" : (participant.ParticipantUser.Age == 0 ? "Perempuan" : "-");
+                        sheet1.Cells[row, 5].Value = participant.ParticipantUser.Sex == 1 ? "L" : (participant.ParticipantUser.Sex == 0 ? "P" : "-");
                         sheet1.Cells[row, 6].Value = participant.ParticipantUser.Age;
                         sheet1.Cells[row, 7].Value = participant.ParticipantUser.WorkDuration;
                         sheet1.Cells[row, 8].Value = participant.ParticipantUser.JobLevel.Name;
+                        sheet1.Cells[row, 9].Value = (participant.FinishedAt - participant.StartedAt).Value.TotalMinutes < 10 ? 0 : 1;
 
                         row++;
                     }
