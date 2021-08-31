@@ -1,5 +1,5 @@
-commit 4f8608f2a1c6500297268db837a3222560ca96dc
+commit 9c2ac95769b00b61dc84202fa68c4106057e131e
 Author: Riza Budi Prasetya <rizabudi@live.com>
-Date:   Mon Aug 30 17:45:59 2021 +0700
+Date:   Mon Aug 30 20:05:51 2021 +0700
 
-    Update demografi
+    Fix Dashboard

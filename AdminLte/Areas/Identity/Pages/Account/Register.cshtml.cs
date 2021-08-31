@@ -17,7 +17,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AdminLte.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    //[AllowAnonymous]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
@@ -111,5 +111,6 @@ namespace AdminLte.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
     }
 }

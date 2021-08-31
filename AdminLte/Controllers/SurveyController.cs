@@ -804,13 +804,13 @@ namespace AdminLte.Controllers
                         {
                             foreach (SubVerticalDimention svd in vd.SubVerticalDimentions)
                             {
-                                sheet2.Cells[row, subCol].Formula = "=SUM('Hasil Jawaban'!" + sheet1.Cells[8 + (row - 4) * 5, 4 + colIndex * 5].Address + ":" + sheet1.Cells[8 + (row - 4) * 5, 8 + colIndex * 5].Address + ")";
+                                sheet2.Cells[row, subCol].Formula = "=SUM('Hasil Jawaban'!" + sheet1.Cells[8 + (row - 4) * 5, 5 + colIndex * 5].Address + ":" + sheet1.Cells[8 + (row - 4) * 5, 9 + colIndex * 5].Address + ")";
                                 subCol++;
                                 colIndex++;
                             }
                             foreach (SubVerticalDimention svd in vd.SubVerticalDimentions)
                             {
-                                sheet2.Cells[row, subCol].Formula = "=((" + sheet2.Cells[row, subCol - 3].Address + "-39)/76)*100";
+                                sheet2.Cells[row, subCol].Formula = "=((" + sheet2.Cells[row, subCol - 3].Address + "-35)/20)*100";
                                 sheet2.Cells[row, subCol].Style.Numberformat.Format = "0.00";
                                 subCol++;
                             }
@@ -873,7 +873,7 @@ namespace AdminLte.Controllers
                     col = 7;
                     sheet3.Cells[no, 1].Value = no;
                     sheet3.Cells[no, 2].Value = "Indeks Akhlak";
-                    sheet3.Cells[no, 3].Formula = "='Ringkasan'!" + sheet2.Cells[row, 45].Address;
+                    sheet3.Cells[no, 3].Formula = "='Ringkasan'!" + sheet2.Cells[row, 46].Address;
                     sheet3.Cells[no, 3].Style.Numberformat.Format = "0.00";
 
                     foreach (VerticalDimention vd in verticalDimentions)
