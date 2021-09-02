@@ -87,7 +87,7 @@ namespace AdminLte.Controllers
                 .Include(x => x.ParticipantAnswerSheets)
                 .ThenInclude(x => x.ParticipantAnswerSheetSections)
                 .ThenInclude(x => x.Section)
-                .Where(x => x.ParticipantUser.UserId == userId && x.ID == participantID)
+                .Where(x => x.ParticipantUser.UserId == userId && x.ID == participantID && x.Schedule.Start <= DateTime.Now && x.Schedule.End >= DateTime.Now)
                 .OrderBy(x => x.Schedule.Start)
                 .FirstOrDefaultAsync();
 

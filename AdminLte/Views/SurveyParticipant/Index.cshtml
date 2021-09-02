@@ -24,7 +24,16 @@
                                 Jadwal : @participant.Schedule.Name (@participant.Schedule.Start.ToString("yyyy-MM-dd") s/d @participant.Schedule.End.ToString("yyyy-MM-dd"))
                             </div>
                             <div class="card-footer">
-                                @if (participant.FinishedAt == null || participant.ParticipantAnswerSheets.Where(x => !x.IsFinish).Count() > 0)
+
+                                @if (participant.Schedule.Start > DateTime.Now)
+                                {
+                                    <a class="btn btn-default">Survei Belum Dimulai</a>
+                                }
+                                else if(participant.Schedule.End < DateTime.Now)
+                                {
+                                    <a class="btn btn-default">Survei Telah Selesai</a>
+                                } 
+                                else if (participant.FinishedAt == null || participant.ParticipantAnswerSheets.Where(x => !x.IsFinish).Count() > 0)
                                 {
                                     if (participant.StartedAt == null)
                                     {
