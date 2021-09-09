@@ -122,7 +122,7 @@ namespace AdminLte.Controllers
         [HttpGet("horizontal-dimention")]
         public IActionResult Index()
         {
-            ViewData["Title"] = "Dimensi Horizontal";
+            ViewData["Title"] = "Dimensi Horisontal";
             List<ColumnModel> ColumnModels = new List<ColumnModel>();
             ColumnModels.Add(new ColumnModel { Label = "Konstruk", Name = "Section", Style = "width: 10%; min-width: 150px" });
             ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name" });

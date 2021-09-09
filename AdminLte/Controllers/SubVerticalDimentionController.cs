@@ -130,7 +130,7 @@ namespace AdminLte.Controllers
                 return Redirect("/home/errors/404");
             }
 
-            ViewData["Title"] = "Sub Dimensi Vertical | " + verticalDimention.Name;
+            ViewData["Title"] = "Sub Dimensi Vertikal | " + verticalDimention.Name;
             List<ColumnModel> ColumnModels = new List<ColumnModel>();
             ColumnModels.Add(new ColumnModel { Label = "Nama", Name = "Name" });
             ColumnModels.Add(new ColumnModel { Label = "Keterangan", Name = "Description" });
@@ -141,7 +141,7 @@ namespace AdminLte.Controllers
             ViewData["Script"] = "sub-vertical-dimention.js";
             ViewData["BreadCrump"] = new Dictionary<string, string>()
             {
-                {"Vertical Dimention", "/vertical-dimention"}
+                {"Dimensi Vertikal", "/vertical-dimention"}
             }; 
             ViewData["Values"] = new Dictionary<string, string>()
             {

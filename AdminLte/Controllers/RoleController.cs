@@ -87,8 +87,8 @@ namespace AdminLte.Controllers
                 {
                     {"Access_MasterData_JenisSurvei", "Master Data - Jenis Survei"},
                     {"Access_MasterData_Konstruk", "Master Data - Konstruk"},
-                    {"Access_MasterData_DimensiVertical", "Master Data - Dimensi Vertical"},
-                    {"Access_MasterData_DimensiHorizontal", "Master Data - Dimensi Horizontal"},
+                    {"Access_MasterData_DimensiVertical", "Master Data - Dimensi Vertikal"},
+                    {"Access_MasterData_DimensiHorizontal", "Master Data - Dimensi Horisontal"},
                     {"Access_MasterData_StrukturOrganisasi_Entitas", "Master Data - Struktur Organisasi - Entias"},
                     {"Access_MasterData_StrukturOrganisasi_LevelJabatan", "Master Data - Struktur Organisasi - Level Jabatan"},
                     {"Access_MasterData_Periode", "Master Data - Periode"},

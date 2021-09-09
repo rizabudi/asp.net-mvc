@@ -52,9 +52,9 @@ namespace AdminLte.Controllers
                             row.Weight.ToString(),
                             row.AnswerScore.ToString(),
                             row.Question == null ?
-                                "HTML:Dimensi Vertical : " + (row.VerticalDimention != null ? row.VerticalDimention.Name : "-") + "<br/>" +
-                                "Sub Dimensi Vertical : " + (row.SubVerticalDimention != null ? row.SubVerticalDimention.Name : "-") + "<br/>" +
-                                "Dimensi Horizontal : " + (row.HorizontalDimention != null ? row.HorizontalDimention.Name : "-") + "<br/>" +
+                                "HTML:Dimensi Vertikal : " + (row.VerticalDimention != null ? row.VerticalDimention.Name : "-") + "<br/>" +
+                                "Sub Dimensi Vertikal : " + (row.SubVerticalDimention != null ? row.SubVerticalDimention.Name : "-") + "<br/>" +
+                                "Dimensi Horisontal : " + (row.HorizontalDimention != null ? row.HorizontalDimention.Name : "-") + "<br/>" +
                                 (question.Section.Construct == Construct.PERFORMANCE ?
                                     "Un-Favorable : " + (row.IsUnFavorable ? "Iya" : "Tidak")
                                     :
@@ -156,9 +156,9 @@ namespace AdminLte.Controllers
                 FormModels.Add(new FormModel { Label = "Tampilan Matrix", Name = "Type", InputType = InputType.DROPDOWN, Options = answerTypes, Value = questionAnswerFromDb == null ? "" : questionAnswerFromDb.Question != null ? "1" : "2", IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Bobot", Name = "Weight", InputType = InputType.NUMBER, Value = questionAnswerFromDb == null ? "0" : questionAnswerFromDb.Weight.ToString(), IsRequired = true });
                 FormModels.Add(new FormModel { Label = "Nilai", Name = "AnswerScore", InputType = InputType.NUMBER, Value = questionAnswerFromDb == null ? "0" : questionAnswerFromDb.AnswerScore.ToString(), IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Dimensi Vertical", Name = "VerticalDimention", InputType = InputType.DROPDOWN, Options = verticalDimentions, Value = questionAnswerFromDb == null || questionAnswerFromDb.VerticalDimention == null ? "" : ((int)questionAnswerFromDb.VerticalDimention.ID).ToString(), FormPosition = FormPosition.RIGHT });
-                FormModels.Add(new FormModel { Label = "Sub Dimensi Vertical", Name = "SubVerticalDimention", InputType = InputType.DROPDOWN, Options = subVerticalDimentions, Value = questionAnswerFromDb == null || questionAnswerFromDb.SubVerticalDimention == null ? "" : ((int)questionAnswerFromDb.SubVerticalDimention.ID).ToString(), FormPosition = FormPosition.RIGHT });
-                FormModels.Add(new FormModel { Label = "Dimensi Horizontal", Name = "HorizontalDimention", InputType = InputType.DROPDOWN, Options = horizontalDimentions, Value = questionAnswerFromDb == null || questionAnswerFromDb.HorizontalDimention == null ? "" : ((int)questionAnswerFromDb.HorizontalDimention.ID).ToString(), FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Dimensi Vertikal", Name = "VerticalDimention", InputType = InputType.DROPDOWN, Options = verticalDimentions, Value = questionAnswerFromDb == null || questionAnswerFromDb.VerticalDimention == null ? "" : ((int)questionAnswerFromDb.VerticalDimention.ID).ToString(), FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Sub Dimensi Vertikal", Name = "SubVerticalDimention", InputType = InputType.DROPDOWN, Options = subVerticalDimentions, Value = questionAnswerFromDb == null || questionAnswerFromDb.SubVerticalDimention == null ? "" : ((int)questionAnswerFromDb.SubVerticalDimention.ID).ToString(), FormPosition = FormPosition.RIGHT });
+                FormModels.Add(new FormModel { Label = "Dimensi Horisontal", Name = "HorizontalDimention", InputType = InputType.DROPDOWN, Options = horizontalDimentions, Value = questionAnswerFromDb == null || questionAnswerFromDb.HorizontalDimention == null ? "" : ((int)questionAnswerFromDb.HorizontalDimention.ID).ToString(), FormPosition = FormPosition.RIGHT });
 
                 if(question.Section.Construct == Construct.PERFORMANCE)
                 {

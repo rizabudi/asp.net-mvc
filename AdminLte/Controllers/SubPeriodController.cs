@@ -93,7 +93,7 @@ namespace AdminLte.Controllers
                
                 FormModels.Add(new FormModel { Label = "ID", Name = "ID", InputType = InputType.HIDDEN, Value = subPeriodFromDb == null ? "0" : subPeriodFromDb.ID.ToString() });
                 FormModels.Add(new FormModel { Label = "Nama", Name = "Name", InputType = InputType.TEXT, Value = subPeriodFromDb == null ? "" : subPeriodFromDb.Name, IsRequired = true });
-                FormModels.Add(new FormModel { Label = "Date", Name = "Date", InputType = InputType.TEXT, Value = subPeriodFromDb == null ? "" : subPeriodFromDb.Start.ToString("yyyy-MM-dd") + " s/d " + subPeriodFromDb.End.ToString("yyyy-MM-dd") });
+                FormModels.Add(new FormModel { Label = "Tanggal Mulai & Selesai", Name = "Date", InputType = InputType.TEXT, Value = subPeriodFromDb == null ? "" : subPeriodFromDb.Start.ToString("yyyy-MM-dd") + " s/d " + subPeriodFromDb.End.ToString("yyyy-MM-dd") });
 
                 ViewData["Forms"] = FormModels;
 

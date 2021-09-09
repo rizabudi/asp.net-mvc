@@ -47,7 +47,7 @@ namespace AdminLte.Controllers
                             row.Description, 
                             row.Sequence.ToString(), 
                             //row.ValueDriverDimention.ToString(),
-                            "HTML:<a href='/sub-vertical-dimention/" + row.ID + "'>" + subVerticalDimention + " Sub Dimensi Vertical</a>"
+                            "HTML:<a href='/sub-vertical-dimention/" + row.ID + "'>" + subVerticalDimention + " Sub Dimensi Vertikal</a>"
                         }
                     });
                 }
@@ -139,7 +139,7 @@ namespace AdminLte.Controllers
             ColumnModels.Add(new ColumnModel { Label = "Keterangan", Name = "Description" });
             ColumnModels.Add(new ColumnModel { Label = "Urutan", Name = "Sequence" });
             //ColumnModels.Add(new ColumnModel { Label = "Dimensi", Name = "SituationEvpDimention" });
-            ColumnModels.Add(new ColumnModel { Label = "Sub Dimensi Vertical", Name = "SubVerticalDimentions" });
+            ColumnModels.Add(new ColumnModel { Label = "Sub Dimensi Vertikal", Name = "SubVerticalDimentions" });
 
             ViewData["Columns"] = ColumnModels;
             ViewData["Script"] = "vertical-dimention.js";
