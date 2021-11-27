@@ -137,6 +137,6 @@ function createChartAkhlak(chartName, chartValue) {
 }
 
 createChartAkhlak("chart-akhlak1", "gauge-akhlak-value");
-createChartAkhlak("chart-akhlak-LEARNING", "gauge-akhlak-LEARNING");
-createChartAkhlak("chart-akhlak-GROWING", "gauge-akhlak-GROWING");
-createChartAkhlak("chart-akhlak-CONTRIBUTING", "gauge-akhlak-CONTRIBUTING");
+//createChartAkhlak("chart-akhlak-LEARNING", "gauge-akhlak-LEARNING");
+//createChartAkhlak("chart-akhlak-GROWING", "gauge-akhlak-GROWING");
+//createChartAkhlak("chart-akhlak-CONTRIBUTING", "gauge-akhlak-CONTRIBUTING");
