@@ -15,8 +15,8 @@ namespace AdminLte.Controllers
     [CustomAuthFilter("Access_MasterData_StrukturOrganisasi_LevelJabatan")]
     public class JobLevelController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public JobLevelController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public JobLevelController(ApplicationDbContext db)
         {
             _db = db;
         }
@@ -126,7 +126,8 @@ namespace AdminLte.Controllers
                 else
                 {
                     jobLevelFromDb.Name = jobLevel.Name;
-                    _db.JobLevels.Update(jobLevel);
+                    jobLevelFromDb.Level = jobLevel.Level;
+                    _db.JobLevels.Update(jobLevelFromDb);
                     _db.SaveChanges();
                     return Json(new { success = true, message = "Data berhasil diperbarui" });
                 }

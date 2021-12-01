@@ -125,7 +125,8 @@ var JobLevel = /** @class */ (function () {
         try {
             var data = {
                 ID: $('#ID').val(),
-                Name: $('#Name').val()
+                Name: $('#Name').val(),
+                Level: $('#Level').val()
             };
             return data;
         }

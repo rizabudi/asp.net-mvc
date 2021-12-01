@@ -16,8 +16,8 @@ namespace AdminLte.Controllers
     [CustomAuthFilter("Access_MasterData_Periode")]
     public class SubPeriodController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public SubPeriodController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public SubPeriodController(ApplicationDbContext db)
         {
             _db = db;
         }

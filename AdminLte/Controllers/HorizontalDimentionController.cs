@@ -15,8 +15,8 @@ namespace AdminLte.Controllers
     [CustomAuthFilter("Access_MasterData_DimensiHorizontal")]
     public class HorizontalDimentionController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public HorizontalDimentionController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public HorizontalDimentionController(ApplicationDbContext db)
         {
             _db = db;
         }

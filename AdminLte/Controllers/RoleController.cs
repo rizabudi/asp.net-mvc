@@ -15,8 +15,8 @@ namespace AdminLte.Controllers
     [CustomAuthFilter("Access_PengaturanPengguna_HakAkses")]
     public class RoleController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public RoleController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public RoleController(ApplicationDbContext db)
         {
             _db = db;
         }

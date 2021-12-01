@@ -13,8 +13,8 @@ namespace AdminLte.Controllers
     [Authorize(Roles = "Pengguna Khusus")]
     public class DepartmentController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public DepartmentController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public DepartmentController(ApplicationDbContext db)
         {
             _db = db;
         }

@@ -15,8 +15,8 @@ namespace AdminLte.Controllers
     [CustomAuthFilter("Access_MasterData_StrukturOrganisasi_Entitas")]
     public class EntityController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public EntityController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public EntityController(ApplicationDbContext db)
         {
             _db = db;
         }

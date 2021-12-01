@@ -16,8 +16,8 @@ namespace AdminLte.Controllers
     [CustomAuthFilter("Access_Penjadwalan_PenjadwalanPeserta")]
     public class ScheduleController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public ScheduleController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public ScheduleController(ApplicationDbContext db)
         {
             _db = db;
         }
@@ -40,20 +40,62 @@ namespace AdminLte.Controllers
                     .Include(x=>x.Assesment)
                     .Include(x=>x.Period)
                     .Include(x=>x.SubPeriod)
-                    .Include(x => x.Participants)
                     .Where(x => entityID == 0 ? true : x.Entity.ID == entityID)
                     .OrderBy(x=>x.Name)
                     .Skip((page-1)*10)
                     .Take(10)
                     .ToListAsync();
 
+                var participants = await _db.Participants
+                    .GroupBy(x=>x.Schedule.ID)
+                    .Select(g => new { Key = g.Key, Count = g.Count() })
+                    .ToDictionaryAsync(x=>x.Key, y=>y.Count);
+
+                var participantsFinish = await _db.Participants
+                    .Where(x => x.FinishedAt != null)
+                    .GroupBy(x => x.Schedule.ID)
+                    .Select(g => new { Key = g.Key, Count = g.Count() })
+                    .ToDictionaryAsync(x => x.Key, y => y.Count);
+
+                var participantsUnFinish = await _db.Participants
+                    .Where(x => x.StartedAt != null && x.FinishedAt == null)
+                    .GroupBy(x => x.Schedule.ID)
+                    .Select(g => new { Key = g.Key, Count = g.Count() })
+                    .ToDictionaryAsync(x => x.Key, y => y.Count);
+
+                var participantsNotFinish = await _db.Participants
+                    .Where(x => x.StartedAt == null && x.FinishedAt == null)
+                    .GroupBy(x => x.Schedule.ID)
+                    .Select(g => new { Key = g.Key, Count = g.Count() })
+                    .ToDictionaryAsync(x => x.Key, y => y.Count);
+
                 var rows = new List<RowModel>();
                 foreach(var row in data)
                 {
-                    var participants = row.Participants.Count();
-                    var participantsFinish = row.Participants.Where(x=>x.FinishedAt != null).Count();
-                    var participantsUnFinish = row.Participants.Where(x => x.StartedAt != null && x.FinishedAt == null).Count();
-                    var participantsNotFinish = row.Participants.Where(x => x.StartedAt == null && x.FinishedAt == null).Count();
+                    var participantsCount = 0;
+                    if(participants.ContainsKey(row.ID))
+                    {
+                        participantsCount = participants[row.ID];
+                    }
+                    var participantsFinishCount = 0;
+                    if (participantsFinish.ContainsKey(row.ID))
+                    {
+                        participantsFinishCount = participantsFinish[row.ID];
+                    }
+                    var participantsUnFinishCount = 0;
+                    if (participantsUnFinish.ContainsKey(row.ID))
+                    {
+                        participantsUnFinishCount = participantsUnFinish[row.ID];
+                    }
+                    var participantsNotFinishCount = 0;
+                    if (participantsNotFinish.ContainsKey(row.ID))
+                    {
+                        participantsNotFinishCount = participantsNotFinish[row.ID];
+                    }
+                    //var participants = row.Participants.Count();
+                    //var participantsFinish = row.Participants.Where(x=>x.FinishedAt != null).Count();
+                    //var participantsUnFinish = row.Participants.Where(x => x.StartedAt != null && x.FinishedAt == null).Count();
+                    //var participantsNotFinish = row.Participants.Where(x => x.StartedAt == null && x.FinishedAt == null).Count();
                     rows.Add(new RowModel { 
                         ID = row.ID, 
                         Value = new string[] { 
@@ -63,10 +105,10 @@ namespace AdminLte.Controllers
                             "HTML:Periode : " + row.Period.Name +  " (" + row.Period.Start.ToString("yyyy-MM-dd") + " s/d " + row.Period.End.ToString("yyyy-MM-dd") + ")" +
                             (row.SubPeriod != null ? "<br/>Sub Periode : " + row.SubPeriod.Name +  " (" + row.SubPeriod.Start.ToString("yyyy-MM-dd") + " s/d " + row.SubPeriod.End.ToString("yyyy-MM-dd") + ")" : ""),
                             row.Start.ToString("yyyy-MM-dd") + " s/d " + row.End.ToString("yyyy-MM-dd"),
-                            "HTML:<a href='/participant/" + row.ID + "'><b>" + participants + "</b> <i class='fa fa-sm fa-users'></i></a>",
-                            "HTML:Selesai : <a href='/participant/" + row.ID + "?finish=1'>" + participantsFinish + " <i class='fa fa-sm fa-users'></i></a><br/>" +
-                            "Mengerjakan : <a href='/participant/" + row.ID + "?finish=2'>" + participantsUnFinish + " <i class='fa fa-sm fa-users'></i></a><br/>" +
-                            "Belum Mengerjakan : <a href='/participant/" + row.ID + "?finish=3'>" + participantsNotFinish + " <i class='fa fa-sm fa-users'></i></a>"
+                            "HTML:<a href='/participant/" + row.ID + "'><b>" + participantsCount + "</b> <i class='fa fa-sm fa-users'></i></a>",
+                            "HTML:Selesai : <a href='/participant/" + row.ID + "?finish=1'>" + participantsFinishCount + " <i class='fa fa-sm fa-users'></i></a><br/>" +
+                            "Mengerjakan : <a href='/participant/" + row.ID + "?finish=2'>" + participantsUnFinishCount + " <i class='fa fa-sm fa-users'></i></a><br/>" +
+                            "Belum Mengerjakan : <a href='/participant/" + row.ID + "?finish=3'>" + participantsNotFinishCount + " <i class='fa fa-sm fa-users'></i></a>"
                         }
                     });
                 }

@@ -119,7 +119,8 @@
         try {
             const data = {
                 ID: $('#ID').val(),
-                Name: $('#Name').val()
+                Name: $('#Name').val(),
+                Level: $('#Level').val()
             };
             return data;
         } catch (e) {

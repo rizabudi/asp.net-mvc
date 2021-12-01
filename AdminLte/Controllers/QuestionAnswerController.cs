@@ -16,8 +16,8 @@ namespace AdminLte.Controllers
     [CustomAuthFilter("Access_MasterData_Pertanyaan")]
     public class QuestionAnswerController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public QuestionAnswerController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public QuestionAnswerController(ApplicationDbContext db)
         {
             _db = db;
         }

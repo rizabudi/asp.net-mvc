@@ -1,5 +1,5 @@
-commit b44e4e8a92314dd382207fc881505b13561654fe
+commit 70ceeec0b3bb3bdac206df9a077e78b598177e9a
 Author: Riza Budi Prasetya <rizabudi@live.com>
-Date:   Thu Sep 9 14:28:28 2021 +0700
+Date:   Sat Nov 27 07:32:52 2021 +0700
 
-    Update title
+    Remove gauge chart

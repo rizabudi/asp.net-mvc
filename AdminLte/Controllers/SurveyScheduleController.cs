@@ -15,8 +15,8 @@ namespace AdminLte.Controllers
     [CustomAuthFilter("Access_Penjadwalan_PenjadwalanSurvei")]
     public class SurveyScheduleController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public SurveyScheduleController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public SurveyScheduleController(ApplicationDbContext db)
         {
             _db = db;
         }

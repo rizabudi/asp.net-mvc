@@ -15,8 +15,8 @@ namespace AdminLte.Controllers
     [CustomAuthFilter("Access_MasterData_DimensiVertical")]
     public class VerticalDimentionController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public VerticalDimentionController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public VerticalDimentionController(ApplicationDbContext db)
         {
             _db = db;
         }

@@ -3,7 +3,7 @@
 @using AdminLte.Data;
 
 @inject UserManager<User> userManager
-@inject PostgreDbContext context;
+@inject ApplicationDbContext context;
 
 @{ 
     var user = await userManager.GetUserAsync(User);

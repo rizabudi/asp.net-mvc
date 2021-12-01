@@ -13,8 +13,8 @@ namespace AdminLte.Controllers
     [Authorize(Roles = "Pengguna Khusus")]
     public class PositionController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public PositionController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public PositionController(ApplicationDbContext db)
         {
             _db = db;
         }

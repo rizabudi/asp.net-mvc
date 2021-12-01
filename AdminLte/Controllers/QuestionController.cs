@@ -19,10 +19,10 @@ namespace AdminLte.Controllers
     [CustomAuthFilter("Access_MasterData_Pertanyaan")]
     public class QuestionController : Controller
     {
-        private readonly PostgreDbContext _db;
+        private readonly ApplicationDbContext _db;
         private IWebHostEnvironment _hostingEnvironment;
 
-        public QuestionController(PostgreDbContext db, IWebHostEnvironment environment)
+        public QuestionController(ApplicationDbContext db, IWebHostEnvironment environment)
         {
             _db = db;
             _hostingEnvironment = environment;
@@ -200,7 +200,7 @@ namespace AdminLte.Controllers
                 }
                 else
                 {
-                    question.Section = await _db.Sections.FirstOrDefaultAsync(e => e.ID == question.Section.ID);
+                    questionFromDb.Section = await _db.Sections.FirstOrDefaultAsync(e => e.ID == question.Section.ID);
 
                     questionFromDb.Sequence = question.Sequence;
                     questionFromDb.QuestionType = question.QuestionType;

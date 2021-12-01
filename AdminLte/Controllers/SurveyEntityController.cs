@@ -16,8 +16,8 @@ namespace AdminLte.Controllers
     [CustomAuthFilter("Access_MasterData_DaftarSurvei")]
     public class SurveyEntityController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public SurveyEntityController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public SurveyEntityController(ApplicationDbContext db)
         {
             _db = db;
         }
