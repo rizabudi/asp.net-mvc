@@ -15,8 +15,8 @@ namespace AdminLte.Controllers
     [CustomAuthFilter("Access_MasterData_Konstruk")]
     public class SectionController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public SectionController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public SectionController(ApplicationDbContext db)
         {
             _db = db;
         }

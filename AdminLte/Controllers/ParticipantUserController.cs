@@ -16,10 +16,10 @@ namespace AdminLte.Controllers
     [Authorize(Roles = "Pengguna Khusus")]
     public class ParticipantUserController : Controller
     {
-        private readonly PostgreDbContext _db;
+        private readonly ApplicationDbContext _db;
         private readonly UserManager<User> _userManager;
 
-        public ParticipantUserController(PostgreDbContext db, UserManager<User> userManager)
+        public ParticipantUserController(ApplicationDbContext db, UserManager<User> userManager)
         {
             _db = db;
             _userManager = userManager;
@@ -47,10 +47,12 @@ namespace AdminLte.Controllers
                     .Include(x => x.Position)
                     .Include(x => x.JobLevel)
                     .Include(x=> x.User)
-                    .Where(x=> (EF.Functions.ILike(x.EmployeeNumber, $"%{search}%") ||
-                            EF.Functions.ILike(x.Name, $"%{search}%") ||
-                            EF.Functions.ILike(x.Email, $"%{search}%") ||
-                            EF.Functions.ILike(x.Phone, $"%{search}%")) && (entityID == 0 ? true : x.Entity.ID == entityID)
+                    .Where(x=>
+                            (EF.Functions.Like(x.EmployeeNumber, $"%{search}%") ||
+                            EF.Functions.Like(x.Name, $"%{search}%") ||
+                            EF.Functions.Like(x.Email, $"%{search}%") ||
+                            EF.Functions.Like(x.Phone, $"%{search}%")) &&
+                            (entityID == 0 ? true : x.Entity.ID == entityID)
                      );
 
                 IOrderedQueryable<ParticipantUser> temps2 = null;
@@ -197,10 +199,10 @@ namespace AdminLte.Controllers
                 }
 
                 var total = _db.ParticipantUsers
-                    .Where(x => (EF.Functions.ILike(x.EmployeeNumber, $"%{search}%") ||
-                            EF.Functions.ILike(x.Name, $"%{search}%") ||
-                            EF.Functions.ILike(x.Email, $"%{search}%") ||
-                            EF.Functions.ILike(x.Phone, $"%{search}%")) && (entityID == 0 ? true : x.Entity.ID == entityID)
+                    .Where(x => (EF.Functions.Like(x.EmployeeNumber, $"%{search}%") ||
+                            EF.Functions.Like(x.Name, $"%{search}%") ||
+                            EF.Functions.Like(x.Email, $"%{search}%") ||
+                            EF.Functions.Like(x.Phone, $"%{search}%")) && (entityID == 0 ? true : x.Entity.ID == entityID)
                      ).Count();
                 ViewData["Total"] = total;
                 ViewData["Page"] = page;

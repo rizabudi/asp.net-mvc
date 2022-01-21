@@ -13,8 +13,8 @@ namespace AdminLte.Controllers
     [Authorize(Roles = "Pengguna Khusus")]
     public class EmployeeController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public EmployeeController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public EmployeeController(ApplicationDbContext db)
         {
             _db = db;
         }

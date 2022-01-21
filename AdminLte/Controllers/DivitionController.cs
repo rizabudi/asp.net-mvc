@@ -13,8 +13,8 @@ namespace AdminLte.Controllers
     [Authorize(Roles = "Pengguna Khusus")]
     public class DivitionController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public DivitionController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public DivitionController(ApplicationDbContext db)
         {
             _db = db;
         }

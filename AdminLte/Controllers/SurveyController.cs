@@ -17,8 +17,8 @@ namespace AdminLte.Controllers
     [Authorize(Roles = "Pengguna Khusus")]
     public class SurveyController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public SurveyController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public SurveyController(ApplicationDbContext db)
         {
             _db = db;
         }

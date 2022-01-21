@@ -17,10 +17,10 @@ namespace AdminLte.Controllers
     [CustomAuthFilter("Access_PengaturanPengguna_PenggunaKhusus")]
     public class BackendUserController : Controller
     {
-        private readonly PostgreDbContext _db;
+        private readonly ApplicationDbContext _db;
         private readonly UserManager<User> _userManager;
 
-        public BackendUserController(PostgreDbContext db, UserManager<User> userManager)
+        public BackendUserController(ApplicationDbContext db, UserManager<User> userManager)
         {
             _db = db;
             _userManager = userManager;

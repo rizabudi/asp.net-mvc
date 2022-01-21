@@ -18,9 +18,9 @@ namespace AdminLte.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly PostgreDbContext _db;
+        private readonly ApplicationDbContext _db;
         private readonly UserManager<User> _userManager;
-        public HomeController(ILogger<HomeController> logger, PostgreDbContext db, UserManager<User> user)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext db, UserManager<User> user)
         {
             _logger = logger;
             _db = db;

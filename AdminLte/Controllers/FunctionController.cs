@@ -13,8 +13,8 @@ namespace AdminLte.Controllers
     [Authorize(Roles = "Pengguna Khusus")]
     public class FunctionController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public FunctionController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public FunctionController(ApplicationDbContext db)
         {
             _db = db;
         }

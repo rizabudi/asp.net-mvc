@@ -26,12 +26,12 @@ namespace AdminLte.Areas.Identity.Pages.Account
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-        private readonly PostgreDbContext _db;
+        private readonly ApplicationDbContext _db;
 
         public LoginModel(SignInManager<User> signInManager, 
             ILogger<LoginModel> logger,
             UserManager<User> userManager,
-            PostgreDbContext db)
+            ApplicationDbContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;

@@ -17,8 +17,8 @@ namespace AdminLte.Controllers
     [CustomAuthFilter("Access_Penjadwalan_PenjadwalanPeserta")]
     public class ParticipantController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public ParticipantController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public ParticipantController(ApplicationDbContext db)
         {
             _db = db;
         }
@@ -28,9 +28,10 @@ namespace AdminLte.Controllers
         {
             try
             {
+
                 var data = await _db.Participants
-                    .Include(x=>x.Schedule)
-                    .Include(x=>x.ParticipantUser)
+                    .Include(x => x.Schedule)
+                    .Include(x => x.ParticipantUser)
                     .Include(x => x.ParticipantUser.User)
                     .Include(x => x.ParticipantUser.Entity)
                     .Include(x => x.ParticipantUser.SubEntity)
@@ -41,22 +42,22 @@ namespace AdminLte.Controllers
                     .Include(x => x.ParticipantUser.JobLevel)
                     .Include(x => x.QuestionPackage)
                     .Include(x => x.QuestionPackage.Assesment)
-                    .Where(x => 
-                        x.Schedule.ID == scheduleID && 
-                        (finish == 1 ? x.FinishedAt != null : (finish == 2 ? x.StartedAt != null && x.FinishedAt == null : (finish == 3 ? x.StartedAt == null && x.FinishedAt == null : true))) && 
+                    .Where(x =>
+                        x.Schedule.ID == scheduleID &&
+                        (finish == 1 ? x.FinishedAt != null : (finish == 2 ? x.StartedAt != null && x.FinishedAt == null : (finish == 3 ? x.StartedAt == null && x.FinishedAt == null : true))) &&
                         (
-                            EF.Functions.ILike(x.ParticipantUser.EmployeeNumber, $"%{search}%") ||
-                            EF.Functions.ILike(x.ParticipantUser.Name, $"%{search}%") ||
-                            EF.Functions.ILike(x.ParticipantUser.Entity.Name, $"%{search}%")
+                            EF.Functions.Like(x.ParticipantUser.EmployeeNumber, $"%{search}%") ||
+                            EF.Functions.Like(x.ParticipantUser.Name, $"%{search}%") ||
+                            EF.Functions.Like(x.ParticipantUser.Entity.Name, $"%{search}%")
                         )
                      )
-                    .OrderBy(x=>x.ParticipantUser.Name)
-                    .Skip((page-1)*10)
+                    .OrderBy(x => x.ParticipantUser.Name)
+                    .Skip((page - 1) * 10)
                     .Take(10)
                     .ToListAsync();
 
                 var rows = new List<RowModel>();
-                foreach(var row in data)
+                foreach (var row in data)
                 {
                     rows.Add(new RowModel
                     {
@@ -194,11 +195,12 @@ namespace AdminLte.Controllers
                 var total = _db.Participants
                     .Where(x =>
                         x.Schedule.ID == scheduleID &&
-                        (finish == 1 ? x.FinishedAt != null : (finish == 2 ? x.StartedAt != null && x.FinishedAt == null : (finish == 3 ? x.StartedAt == null && x.FinishedAt == null : true))) &&
+                        (finish == 1 ? x.FinishedAt != null : (finish == 2 ? x.StartedAt != null && x.FinishedAt == null : (finish == 3 ? x.StartedAt == null && x.FinishedAt == null : true)))
+                        &&
                         (
-                            EF.Functions.ILike(x.ParticipantUser.EmployeeNumber, $"%{search}%") ||
-                            EF.Functions.ILike(x.ParticipantUser.Name, $"%{search}%") ||
-                            EF.Functions.ILike(x.ParticipantUser.Entity.Name, $"%{search}%")
+                            EF.Functions.Like(x.ParticipantUser.EmployeeNumber, $"%{search}%") ||
+                            EF.Functions.Like(x.ParticipantUser.Name, $"%{search}%") ||
+                            EF.Functions.Like(x.ParticipantUser.Entity.Name, $"%{search}%")
                         )
                      ).Count();
                 ViewData["Total"] = total;

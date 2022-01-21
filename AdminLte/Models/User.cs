@@ -37,13 +37,13 @@ namespace AdminLte.Models
         public DateTime? BirthDate { get; set; }
         public int? WorkDuration { get; set; }
         public DateTime DeletedAt { get; set; }
-        public Entity Entity { get; set; }
-        public Entity SubEntity { get; set; }
-        public Position Position { get; set; }
-        public CompanyFunction CompanyFunction { get; set; }
-        public Divition Divition { get; set; }
-        public Department Department { get; set; }
-        public JobLevel JobLevel { get; set; }
+        public Entity? Entity { get; set; }
+        public Entity? SubEntity { get; set; }
+        public Position? Position { get; set; }
+        public CompanyFunction? CompanyFunction { get; set; }
+        public Divition? Divition { get; set; }
+        public Department? Department { get; set; }
+        public JobLevel? JobLevel { get; set; }
         public virtual User User { get; set; }
         public int? Age { get; set; }
     }

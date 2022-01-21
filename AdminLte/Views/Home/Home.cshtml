@@ -2,7 +2,7 @@
 @using AdminLte.Data;
 
 @inject UserManager<User> userManager
-@inject PostgreDbContext context;
+@inject ApplicationDbContext context;
 @{
     ViewData["Title"] = "Home";
     Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";

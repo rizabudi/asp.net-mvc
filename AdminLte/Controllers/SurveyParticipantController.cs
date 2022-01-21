@@ -14,9 +14,9 @@ namespace AdminLte.Controllers
     [Authorize(Roles = "Pengguna Umum")]
     public class SurveyParticipantController : Controller
     {
-        private readonly PostgreDbContext _db;
+        private readonly ApplicationDbContext _db;
         private readonly UserManager<User> _userManager;
-        public SurveyParticipantController(PostgreDbContext db, UserManager<User> user)
+        public SurveyParticipantController(ApplicationDbContext db, UserManager<User> user)
         {
             _db = db;
             _userManager = user;

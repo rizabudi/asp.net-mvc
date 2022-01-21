@@ -15,8 +15,8 @@ namespace AdminLte.Controllers
     [CustomAuthFilter("Access_MasterData_JenisSurvei")]
     public class AssesmentController : Controller
     {
-        private readonly PostgreDbContext _db;
-        public AssesmentController(PostgreDbContext db)
+        private readonly ApplicationDbContext _db;
+        public AssesmentController(ApplicationDbContext db)
         {
             _db = db;
         }
