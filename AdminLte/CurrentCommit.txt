@@ -1,5 +1,5 @@
-commit 70ceeec0b3bb3bdac206df9a077e78b598177e9a
+commit 7803ae1482e877819cc8baf14191ab94a996ec80
 Author: Riza Budi Prasetya <rizabudi@live.com>
-Date:   Sat Nov 27 07:32:52 2021 +0700
+Date:   Wed Dec 1 11:31:17 2021 +0700
 
-    Remove gauge chart
+    Change connection to SQL Server

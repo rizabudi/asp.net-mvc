@@ -56,6 +56,7 @@ namespace AdminLte
                 o.Filters.Add(new AuthorizeFilter(policy));
             });
             services.AddSession();
+            services.AddApplicationInsightsTelemetry();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
