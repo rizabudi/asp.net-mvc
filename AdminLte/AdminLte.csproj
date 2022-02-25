@@ -107,8 +107,4 @@
     <None Include="wwwroot\frontpage\webfonts\fa-solid-900.svg" />
     <None Include="wwwroot\frontpage\webfonts\fa-solid-900.woff2" />
   </ItemGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="git log -n 1 &gt; &quot;$(ProjectDir)\CurrentCommit.txt&quot;" />
-  </Target>
 </Project>
