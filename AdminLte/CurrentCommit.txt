@@ -1,5 +1,5 @@
-commit 7803ae1482e877819cc8baf14191ab94a996ec80
-Author: Riza Budi Prasetya <rizabudi@live.com>
-Date:   Wed Dec 1 11:31:17 2021 +0700
+commit d55edbde4ff20cce0106262b47d37f5194665114
+Author: Benediktus Anindito <bennybroz105@gmail.com>
+Date:   Mon Feb 28 13:19:51 2022 +0700
 
-    Change connection to SQL Server
+    set copy Views folder automatically

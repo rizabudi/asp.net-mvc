@@ -3,8 +3,17 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>aspnet-AdminLte-7C72E28D-CB1A-469E-AFC4-7D6AE24F54BA</UserSecretsId>
-    <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <RazorCompileOnPublish>false</RazorCompileOnPublish>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="bin\**" />
+    <Content Remove="bin\**" />
+    <EmbeddedResource Remove="bin\**" />
+    <None Remove="bin\**" />
+    <TypeScriptCompile Remove="bin\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Data\Migrations\PostgreMigrations\20210212090319_InitialCreate.cs" />
@@ -36,6 +45,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.23" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.11" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.1.4">
@@ -108,4 +118,12 @@
     <None Include="wwwroot\frontpage\webfonts\fa-solid-900.svg" />
     <None Include="wwwroot\frontpage\webfonts\fa-solid-900.woff2" />
   </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="git log -n 1 &gt; &quot;$(ProjectDir)\CurrentCommit.txt&quot;" />
+  </Target>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="rd /s /q &quot;$(TargetDir)Views&quot;&#xD;&#xA;mkdir &quot;$(TargetDir)Views&quot;&#xD;&#xA;xcopy /e /y /i /r &quot;$(ProjectDir)Views&quot; &quot;$(TargetDir)Views&quot;" />
+  </Target>
 </Project>
