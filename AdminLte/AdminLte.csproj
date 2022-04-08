@@ -122,4 +122,8 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="rd /s /q &quot;$(TargetDir)Views&quot;&#xD;&#xA;rd /s /q &quot;$(TargetDir)uploads&quot;&#xD;&#xA;mkdir &quot;$(TargetDir)Views&quot;&#xD;&#xA;mkdir &quot;$(TargetDir)uploads&quot;&#xD;&#xA;xcopy /e /y /i /r &quot;$(ProjectDir)Views&quot; &quot;$(TargetDir)Views&quot;&#xD;&#xA;xcopy /e /y /i /r &quot;$(ProjectDir)uploads &quot;$(TargetDir)uploads&quot;" />
   </Target>
+
+  <Target Name="PostPublish" AfterTargets="PostPublishEvent">
+    <Exec Command="rd /s /q &quot;$(TargetDir)Views&quot;&#xD;&#xA;mkdir &quot;$(TargetDir)Views&quot;&#xD;&#xA;xcopy /e /y /i /r &quot;$(ProjectDir)Views&quot; &quot;$(TargetDir)Views&quot;" />
+  </Target>
 </Project>
