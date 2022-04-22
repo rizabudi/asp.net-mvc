@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -120,10 +120,10 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="rd /s /q &quot;$(TargetDir)Views&quot;&#xD;&#xA;rd /s /q &quot;$(TargetDir)uploads&quot;&#xD;&#xA;mkdir &quot;$(TargetDir)Views&quot;&#xD;&#xA;mkdir &quot;$(TargetDir)uploads&quot;&#xD;&#xA;xcopy /e /y /i /r &quot;$(ProjectDir)Views&quot; &quot;$(TargetDir)Views&quot;&#xD;&#xA;xcopy /e /y /i /r &quot;$(ProjectDir)uploads &quot;$(TargetDir)uploads&quot;" />
+    <Exec Command="xcopy /e /y /i /r &quot;$(ProjectDir)Views&quot; &quot;$(TargetDir)Views&quot;&#xD;&#xA;xcopy /e /y /i /r &quot;$(ProjectDir)uploads&quot; &quot;$(TargetDir)uploads&quot;" />
   </Target>
 
   <Target Name="PostPublish" AfterTargets="PostPublishEvent">
-    <Exec Command="rd /s /q &quot;$(TargetDir)Views&quot;&#xD;&#xA;mkdir &quot;$(TargetDir)Views&quot;&#xD;&#xA;xcopy /e /y /i /r &quot;$(ProjectDir)Views&quot; &quot;$(TargetDir)Views&quot;" />
+    <Exec Command="xcopy /e /y /i /r &quot;$(ProjectDir)Views&quot; &quot;$(PublishDir)Views&quot;&#xD;&#xA;xcopy /e /y /i /r &quot;$(ProjectDir)uploads&quot; &quot;$(PublishDir)uploads&quot;" />
   </Target>
 </Project>
