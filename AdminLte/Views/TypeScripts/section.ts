@@ -1,9 +1,9 @@
 ﻿class Section {
-    private urlGetData = "/section/table-data-view";
-    private urlGetPaging = "/section/table-paging-view";
-    private urlGetForm = "/section/form-view";
-    private urlSave = '/section/save';
-    private urlDelete = '/section/delete';
+    private urlGetData = "section/table-data-view";
+    private urlGetPaging = "section/table-paging-view";
+    private urlGetForm = "section/form-view";
+    private urlSave = 'section/save';
+    private urlDelete = 'section/delete';
 
     private currentPage = 1;
 

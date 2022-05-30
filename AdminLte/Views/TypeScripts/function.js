@@ -1,10 +1,10 @@
 var CompanyFunction = /** @class */ (function () {
     function CompanyFunction() {
-        this.urlGetData = "/function/table-data-view";
-        this.urlGetPaging = "/function/table-paging-view";
-        this.urlGetForm = "/function/form-view";
-        this.urlSave = '/function/save';
-        this.urlDelete = '/function/delete';
+        this.urlGetData = "function/table-data-view";
+        this.urlGetPaging = "function/table-paging-view";
+        this.urlGetForm = "function/form-view";
+        this.urlSave = 'function/save';
+        this.urlDelete = 'function/delete';
         this.currentPage = 1;
         this.init();
     }

@@ -154,7 +154,7 @@ namespace AdminLte.Controllers
             ViewData["Script"] = "survey-question.js";
             ViewData["BreadCrump"] = new Dictionary<string, string>()
             {
-                {"Daftar Survey", "/survey"}
+                {"Daftar Survey", "survey"}
             }; 
             ViewData["Values"] = new Dictionary<string, string>()
             {

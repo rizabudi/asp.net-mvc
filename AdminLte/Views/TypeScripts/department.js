@@ -1,10 +1,10 @@
 var Department = /** @class */ (function () {
     function Department() {
-        this.urlGetData = "/department/table-data-view";
-        this.urlGetPaging = "/department/table-paging-view";
-        this.urlGetForm = "/department/form-view";
-        this.urlSave = '/department/save';
-        this.urlDelete = '/department/delete';
+        this.urlGetData = "department/table-data-view";
+        this.urlGetPaging = "department/table-paging-view";
+        this.urlGetForm = "department/form-view";
+        this.urlSave = 'department/save';
+        this.urlDelete = 'department/delete';
         this.currentPage = 1;
         this.init();
     }

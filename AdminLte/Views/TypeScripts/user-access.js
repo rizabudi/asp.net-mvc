@@ -1,10 +1,10 @@
 var UserAccess = /** @class */ (function () {
     function UserAccess() {
-        this.urlGetData = "/role/table-data-view";
-        this.urlGetPaging = "/role/table-paging-view";
-        this.urlGetForm = "/role/form-view";
-        this.urlSave = '/role/save';
-        this.urlDelete = '/role/delete';
+        this.urlGetData = "role/table-data-view";
+        this.urlGetPaging = "role/table-paging-view";
+        this.urlGetForm = "role/form-view";
+        this.urlSave = 'role/save';
+        this.urlDelete = 'role/delete';
         this.currentPage = 1;
         this.init();
     }

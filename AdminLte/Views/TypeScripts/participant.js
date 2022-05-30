@@ -1,11 +1,11 @@
 var Participant = /** @class */ (function () {
     function Participant() {
-        this.urlGetData = "/participant/table-data-view";
-        this.urlGetPaging = "/participant/table-paging-view";
-        this.urlGetForm = "/participant/form-view";
-        this.urlSave = '/participant/save';
-        this.urlDelete = '/participant/delete';
-        this.urlDownload = '/participant/download';
+        this.urlGetData = "participant/table-data-view";
+        this.urlGetPaging = "participant/table-paging-view";
+        this.urlGetForm = "participant/form-view";
+        this.urlSave = 'participant/save';
+        this.urlDelete = 'participant/delete';
+        this.urlDownload = 'participant/download';
         this.currentPage = 1;
         this.search = "";
         this.init();

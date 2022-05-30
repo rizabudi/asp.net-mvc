@@ -9,7 +9,7 @@
                 dataType: dataType, //html or json
                 processData: true,
                 data: data,
-                url: url,
+                url: BASE_URL + url,
                 statusCode: processResponse(successCallback, failureCallback),
                 complete: function () {
                 }
@@ -33,7 +33,7 @@
                     'Content-Type': 'application/json'
                 },
                 data: data,
-                url: url,
+                url: BASE_URL + url,
                 statusCode: processResponse(successCallback, failureCallback),
                 complete: function () {
                 }

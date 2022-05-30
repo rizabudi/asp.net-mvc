@@ -1,9 +1,9 @@
 ﻿class SurveyEntity {
-    private urlGetData = "/survey-entity/table-data-view";
-    private urlGetPaging = "/survey-entity/table-paging-view";
-    private urlGetForm = "/survey-entity/form-view";
-    private urlSave = '/survey-entity/save';
-    private urlDelete = '/survey-entity/delete';
+    private urlGetData = "survey-entity/table-data-view";
+    private urlGetPaging = "survey-entity/table-paging-view";
+    private urlGetForm = "survey-entity/form-view";
+    private urlSave = 'survey-entity/save';
+    private urlDelete = 'survey-entity/delete';
 
     private currentPage = 1;
 

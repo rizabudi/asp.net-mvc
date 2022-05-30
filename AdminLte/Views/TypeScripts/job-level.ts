@@ -1,9 +1,9 @@
 ﻿class JobLevel {
-    private urlGetData = "/job-level/table-data-view";
-    private urlGetPaging = "/job-level/table-paging-view";
-    private urlGetForm = "/job-level/form-view";
-    private urlSave = '/job-level/save';
-    private urlDelete = '/job-level/delete';
+    private urlGetData = "job-level/table-data-view";
+    private urlGetPaging = "job-level/table-paging-view";
+    private urlGetForm = "job-level/form-view";
+    private urlSave = 'job-level/save';
+    private urlDelete = 'job-level/delete';
 
     private currentPage = 1;
 

@@ -1,10 +1,10 @@
 var SurveyEntity = /** @class */ (function () {
     function SurveyEntity() {
-        this.urlGetData = "/survey-entity/table-data-view";
-        this.urlGetPaging = "/survey-entity/table-paging-view";
-        this.urlGetForm = "/survey-entity/form-view";
-        this.urlSave = '/survey-entity/save';
-        this.urlDelete = '/survey-entity/delete';
+        this.urlGetData = "survey-entity/table-data-view";
+        this.urlGetPaging = "survey-entity/table-paging-view";
+        this.urlGetForm = "survey-entity/form-view";
+        this.urlSave = 'survey-entity/save';
+        this.urlDelete = 'survey-entity/delete';
         this.currentPage = 1;
         this.init();
     }

@@ -1,10 +1,10 @@
 var Position = /** @class */ (function () {
     function Position() {
-        this.urlGetData = "/position/table-data-view";
-        this.urlGetPaging = "/position/table-paging-view";
-        this.urlGetForm = "/position/form-view";
-        this.urlSave = '/position/save';
-        this.urlDelete = '/position/delete';
+        this.urlGetData = "position/table-data-view";
+        this.urlGetPaging = "position/table-paging-view";
+        this.urlGetForm = "position/form-view";
+        this.urlSave = 'position/save';
+        this.urlDelete = 'position/delete';
         this.currentPage = 1;
         this.init();
     }

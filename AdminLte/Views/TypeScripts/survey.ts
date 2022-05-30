@@ -1,9 +1,9 @@
 ﻿class Survey {
-    private urlGetData = "/survey/table-data-view";
-    private urlGetPaging = "/survey/table-paging-view";
-    private urlGetForm = "/survey/form-view";
-    private urlSave = '/survey/save';
-    private urlDelete = '/survey/delete';
+    private urlGetData = "survey/table-data-view";
+    private urlGetPaging = "survey/table-paging-view";
+    private urlGetForm = "survey/form-view";
+    private urlSave = 'survey/save';
+    private urlDelete = 'survey/delete';
 
     private currentPage = 1;
 

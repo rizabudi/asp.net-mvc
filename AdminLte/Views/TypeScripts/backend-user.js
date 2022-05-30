@@ -1,10 +1,10 @@
 var BackendUser = /** @class */ (function () {
     function BackendUser() {
-        this.urlGetData = "/backend-user/table-data-view";
-        this.urlGetPaging = "/backend-user/table-paging-view";
-        this.urlGetForm = "/backend-user/form-view";
-        this.urlSave = '/backend-user/save';
-        this.urlDelete = '/backend-user/delete';
+        this.urlGetData = "backend-user/table-data-view";
+        this.urlGetPaging = "backend-user/table-paging-view";
+        this.urlGetForm = "backend-user/form-view";
+        this.urlSave = 'backend-user/save';
+        this.urlDelete = 'backend-user/delete';
         this.currentPage = 1;
         this.init();
     }

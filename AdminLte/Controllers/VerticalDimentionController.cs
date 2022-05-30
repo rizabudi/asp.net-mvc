@@ -47,7 +47,7 @@ namespace AdminLte.Controllers
                             row.Description, 
                             row.Sequence.ToString(), 
                             //row.ValueDriverDimention.ToString(),
-                            "HTML:<a href='/sub-vertical-dimention/" + row.ID + "'>" + subVerticalDimention + " Sub Dimensi Vertikal</a>"
+                            "HTML:<a href='sub-vertical-dimention/" + row.ID + "'>" + subVerticalDimention + " Sub Dimensi Vertikal</a>"
                         }
                     });
                 }

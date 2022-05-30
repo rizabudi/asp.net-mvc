@@ -1,13 +1,13 @@
 var Schedule = /** @class */ (function () {
     function Schedule() {
-        this.urlGetData = "/schedule/table-data-view";
-        this.urlGetPaging = "/schedule/table-paging-view";
-        this.urlGetForm = "/schedule/form-view";
-        this.urlSave = '/schedule/save';
-        this.urlDelete = '/schedule/delete';
-        this.urlSubPeriode = '/sub-period/select-option';
-        this.urlPeriodeDetail = '/period/detail';
-        this.urlSubPeriodeDetail = '/sub-period/detail';
+        this.urlGetData = "schedule/table-data-view";
+        this.urlGetPaging = "schedule/table-paging-view";
+        this.urlGetForm = "schedule/form-view";
+        this.urlSave = 'schedule/save';
+        this.urlDelete = 'schedule/delete';
+        this.urlSubPeriode = 'sub-period/select-option';
+        this.urlPeriodeDetail = 'period/detail';
+        this.urlSubPeriodeDetail = 'sub-period/detail';
         this.currentPage = 1;
         this.init();
     }

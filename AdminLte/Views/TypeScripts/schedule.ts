@@ -1,12 +1,12 @@
 ﻿class Schedule {
-    private urlGetData = "/schedule/table-data-view";
-    private urlGetPaging = "/schedule/table-paging-view";
-    private urlGetForm = "/schedule/form-view";
-    private urlSave = '/schedule/save';
-    private urlDelete = '/schedule/delete';
-    private urlSubPeriode = '/sub-period/select-option';
-    private urlPeriodeDetail = '/period/detail';
-    private urlSubPeriodeDetail = '/sub-period/detail';
+    private urlGetData = "schedule/table-data-view";
+    private urlGetPaging = "schedule/table-paging-view";
+    private urlGetForm = "schedule/form-view";
+    private urlSave = 'schedule/save';
+    private urlDelete = 'schedule/delete';
+    private urlSubPeriode = 'sub-period/select-option';
+    private urlPeriodeDetail = 'period/detail';
+    private urlSubPeriodeDetail = 'sub-period/detail';
 
     private currentPage = 1;
 

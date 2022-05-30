@@ -1,10 +1,10 @@
 ﻿class Participant {
-    private urlGetData = "/participant/table-data-view";
-    private urlGetPaging = "/participant/table-paging-view";
-    private urlGetForm = "/participant/form-view";
-    private urlSave = '/participant/save';
-    private urlDelete = '/participant/delete';
-    private urlDownload = '/participant/download';
+    private urlGetData = "participant/table-data-view";
+    private urlGetPaging = "participant/table-paging-view";
+    private urlGetForm = "participant/form-view";
+    private urlSave = 'participant/save';
+    private urlDelete = 'participant/delete';
+    private urlDownload = 'participant/download';
 
     private currentPage = 1;
     private search = "";

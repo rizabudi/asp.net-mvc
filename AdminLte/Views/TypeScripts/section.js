@@ -1,10 +1,10 @@
 var Section = /** @class */ (function () {
     function Section() {
-        this.urlGetData = "/section/table-data-view";
-        this.urlGetPaging = "/section/table-paging-view";
-        this.urlGetForm = "/section/form-view";
-        this.urlSave = '/section/save';
-        this.urlDelete = '/section/delete';
+        this.urlGetData = "section/table-data-view";
+        this.urlGetPaging = "section/table-paging-view";
+        this.urlGetForm = "section/form-view";
+        this.urlSave = 'section/save';
+        this.urlDelete = 'section/delete';
         this.currentPage = 1;
         this.init();
     }

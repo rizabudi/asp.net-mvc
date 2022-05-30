@@ -1,10 +1,10 @@
 var SubPeriod = /** @class */ (function () {
     function SubPeriod() {
-        this.urlGetData = "/sub-period/table-data-view";
-        this.urlGetPaging = "/sub-period/table-paging-view";
-        this.urlGetForm = "/sub-period/form-view";
-        this.urlSave = '/sub-period/save';
-        this.urlDelete = '/sub-period/delete';
+        this.urlGetData = "sub-period/table-data-view";
+        this.urlGetPaging = "sub-period/table-paging-view";
+        this.urlGetForm = "sub-period/form-view";
+        this.urlSave = 'sub-period/save';
+        this.urlDelete = 'sub-period/delete';
         this.currentPage = 1;
         this.init();
     }

@@ -1,9 +1,9 @@
 ﻿class Period {
-    private urlGetData = "/period/table-data-view";
-    private urlGetPaging = "/period/table-paging-view";
-    private urlGetForm = "/period/form-view";
-    private urlSave = '/period/save';
-    private urlDelete = '/period/delete';
+    private urlGetData = "period/table-data-view";
+    private urlGetPaging = "period/table-paging-view";
+    private urlGetForm = "period/form-view";
+    private urlSave = 'period/save';
+    private urlDelete = 'period/delete';
 
     private currentPage = 1;
 

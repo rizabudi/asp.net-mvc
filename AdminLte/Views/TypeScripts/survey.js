@@ -1,10 +1,10 @@
 var Survey = /** @class */ (function () {
     function Survey() {
-        this.urlGetData = "/survey/table-data-view";
-        this.urlGetPaging = "/survey/table-paging-view";
-        this.urlGetForm = "/survey/form-view";
-        this.urlSave = '/survey/save';
-        this.urlDelete = '/survey/delete';
+        this.urlGetData = "survey/table-data-view";
+        this.urlGetPaging = "survey/table-paging-view";
+        this.urlGetForm = "survey/form-view";
+        this.urlSave = 'survey/save';
+        this.urlDelete = 'survey/delete';
         this.currentPage = 1;
         this.init();
     }

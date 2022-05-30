@@ -1,9 +1,9 @@
 ﻿class BackendUser {
-    private urlGetData = "/backend-user/table-data-view";
-    private urlGetPaging = "/backend-user/table-paging-view";
-    private urlGetForm = "/backend-user/form-view";
-    private urlSave = '/backend-user/save';
-    private urlDelete = '/backend-user/delete';
+    private urlGetData = "backend-user/table-data-view";
+    private urlGetPaging = "backend-user/table-paging-view";
+    private urlGetForm = "backend-user/form-view";
+    private urlSave = 'backend-user/save';
+    private urlDelete = 'backend-user/delete';
 
     private currentPage = 1;
 

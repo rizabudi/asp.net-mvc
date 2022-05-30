@@ -1,11 +1,11 @@
 var QuestionAnswer = /** @class */ (function () {
     function QuestionAnswer() {
-        this.urlGetData = "/question-answer/table-data-view";
-        this.urlGetPaging = "/question-answer/table-paging-view";
-        this.urlGetForm = "/question-answer/form-view";
-        this.urlSave = '/question-answer/save';
-        this.urlDelete = '/question-answer/delete';
-        this.urlSubVerticalDimention = '/sub-vertical-dimention/select-option';
+        this.urlGetData = "question-answer/table-data-view";
+        this.urlGetPaging = "question-answer/table-paging-view";
+        this.urlGetForm = "question-answer/form-view";
+        this.urlSave = 'question-answer/save';
+        this.urlDelete = 'question-answer/delete';
+        this.urlSubVerticalDimention = 'sub-vertical-dimention/select-option';
         this.currentPage = 1;
         this.init();
     }

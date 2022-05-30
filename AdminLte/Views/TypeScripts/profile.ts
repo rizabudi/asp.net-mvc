@@ -1,6 +1,6 @@
 ﻿class Profile {
-    private urlGetForm = "/profile/form-view";
-    private urlSave = '/profile/save';
+    private urlGetForm = "profile/form-view";
+    private urlSave = 'profile/save';
 
     constructor() {
         this.init();
@@ -35,7 +35,7 @@
             });
             $(document).on("change", "#Entity", (e) => {
                 var entityID = $(e.currentTarget).val();
-                Util.request("/profile/entity-select-view?entity=" + entityID, 'GET', 'html', (response) => {
+                Util.request("profile/entity-select-view?entity=" + entityID, 'GET', 'html', (response) => {
                     $('#SubEntity').html(response);
                 }, function () {
                     Util.error('Failed to get data. Please try again');
@@ -68,7 +68,7 @@
                         Util.success(response.message);
                         (<any>$("#modal-default")).modal("hide")
                         setTimeout(function () {
-                            window.location.href = "/profile";
+                            window.location.href = "profile";
                         }, 2000);
                     } else {
                         Util.error(response.message);

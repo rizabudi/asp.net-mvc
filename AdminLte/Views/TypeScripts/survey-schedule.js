@@ -1,10 +1,10 @@
 var SurveySchedule = /** @class */ (function () {
     function SurveySchedule() {
-        this.urlGetData = "/survey-schedule/table-data-view";
-        this.urlGetPaging = "/survey-schedule/table-paging-view";
-        this.urlGetForm = "/survey-schedule/form-view";
-        this.urlSave = '/survey-schedule/save';
-        this.urlDelete = '/survey-schedule/delete';
+        this.urlGetData = "survey-schedule/table-data-view";
+        this.urlGetPaging = "survey-schedule/table-paging-view";
+        this.urlGetForm = "survey-schedule/form-view";
+        this.urlSave = 'survey-schedule/save';
+        this.urlDelete = 'survey-schedule/delete';
         this.currentPage = 1;
         this.init();
     }

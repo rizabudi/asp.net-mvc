@@ -1,9 +1,9 @@
 ﻿class CompanyFunction {
-    private urlGetData = "/function/table-data-view";
-    private urlGetPaging = "/function/table-paging-view";
-    private urlGetForm = "/function/form-view";
-    private urlSave = '/function/save';
-    private urlDelete = '/function/delete';
+    private urlGetData = "function/table-data-view";
+    private urlGetPaging = "function/table-paging-view";
+    private urlGetForm = "function/form-view";
+    private urlSave = 'function/save';
+    private urlDelete = 'function/delete';
 
     private currentPage = 1;
 

@@ -1,10 +1,10 @@
 ﻿class Question {
-    private urlGetData = "/question/table-data-view";
-    private urlGetPaging = "/question/table-paging-view";
-    private urlGetForm = "/question/form-view";
-    private urlSave = '/question/save';
-    private urlDelete = '/question/delete';
-    private urlUploadImage = '/question/upload-image';
+    private urlGetData = "question/table-data-view";
+    private urlGetPaging = "question/table-paging-view";
+    private urlGetForm = "question/form-view";
+    private urlSave = 'question/save';
+    private urlDelete = 'question/delete';
+    private urlUploadImage = 'question/upload-image';
 
     private currentPage = 1;
 

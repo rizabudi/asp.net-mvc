@@ -59,7 +59,7 @@ namespace AdminLte.Controllers
                             row.QuestionType.ToString() + " - " + row.MatrixSubType.ToString(),
                             row.IsMandatory ? "Iya" : "Tidak",
                             row.IsRandomAnswer ? "Iya" : "Tidak",
-                            "HTML:<a href='/question-answer/" + row.ID + "'>" + answer + " Jawaban</a>"
+                            "HTML:<a href='question-answer/" + row.ID + "'>" + answer + " Jawaban</a>"
                         } 
                     });
                 }

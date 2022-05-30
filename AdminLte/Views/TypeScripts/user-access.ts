@@ -1,9 +1,9 @@
 ﻿class UserAccess {
-    private urlGetData = "/role/table-data-view";
-    private urlGetPaging = "/role/table-paging-view";
-    private urlGetForm = "/role/form-view";
-    private urlSave = '/role/save';
-    private urlDelete = '/role/delete';
+    private urlGetData = "role/table-data-view";
+    private urlGetPaging = "role/table-paging-view";
+    private urlGetForm = "role/form-view";
+    private urlSave = 'role/save';
+    private urlDelete = 'role/delete';
 
     private currentPage = 1;
 

@@ -1,10 +1,10 @@
 ﻿class QuestionAnswer {
-    private urlGetData = "/question-answer/table-data-view";
-    private urlGetPaging = "/question-answer/table-paging-view";
-    private urlGetForm = "/question-answer/form-view";
-    private urlSave = '/question-answer/save';
-    private urlDelete = '/question-answer/delete';
-    private urlSubVerticalDimention = '/sub-vertical-dimention/select-option';
+    private urlGetData = "question-answer/table-data-view";
+    private urlGetPaging = "question-answer/table-paging-view";
+    private urlGetForm = "question-answer/form-view";
+    private urlSave = 'question-answer/save';
+    private urlDelete = 'question-answer/delete';
+    private urlSubVerticalDimention = 'sub-vertical-dimention/select-option';
 
     private currentPage = 1;
 

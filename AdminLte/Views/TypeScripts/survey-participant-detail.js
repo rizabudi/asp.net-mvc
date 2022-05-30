@@ -1,7 +1,7 @@
 var SurveyParticipantDetail = /** @class */ (function () {
     function SurveyParticipantDetail() {
-        this.urlSave = '/survey-participant/save';
-        this.urlFinish = '/survey-participant/finish';
+        this.urlSave = 'survey-participant/save';
+        this.urlFinish = 'survey-participant/finish';
         this.init();
     }
     SurveyParticipantDetail.prototype.init = function () {
@@ -143,9 +143,9 @@ var SurveyParticipantDetail = /** @class */ (function () {
                             var participantID = $("#ParticipantID").val();
                             if (next != undefined && next != "") {
                                 if (next != "0") {
-                                    window.location.href = "/survey-participant/detail/" + participantID + "?mode=1&id=" + next;
+                                    window.location.href = "survey-participant/detail/" + participantID + "?mode=1&id=" + next;
                                 } else {
-                                    window.location.href = "/survey-participant/detail/" + participantID + "?mode=3";
+                                    window.location.href = "survey-participant/detail/" + participantID + "?mode=3";
                                 }
                             }
 
@@ -182,7 +182,7 @@ var SurveyParticipantDetail = /** @class */ (function () {
                     if (response.success) {
                         Util.success(response.message);
                         setTimeout(function () {
-                            window.location.href = "/survey-participant/detail/" + $('#ParticipantID').val() + "?mode=0";
+                            window.location.href = "survey-participant/detail/" + $('#ParticipantID').val() + "?mode=0";
                         }, 1000)
                     }
                     else {

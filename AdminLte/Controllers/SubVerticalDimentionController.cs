@@ -141,7 +141,7 @@ namespace AdminLte.Controllers
             ViewData["Script"] = "sub-vertical-dimention.js";
             ViewData["BreadCrump"] = new Dictionary<string, string>()
             {
-                {"Dimensi Vertikal", "/vertical-dimention"}
+                {"Dimensi Vertikal", "vertical-dimention"}
             }; 
             ViewData["Values"] = new Dictionary<string, string>()
             {

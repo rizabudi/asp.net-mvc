@@ -1,5 +1,5 @@
 ﻿class MainNavigation {
-    private urlLogout = "/Identity/Account/Logout?returnUrl=%2Fhome";
+    private urlLogout = "Identity/Account/Logout?returnUrl=%2Fhome";
 
     constructor() {
         this.init();
@@ -26,7 +26,7 @@
                         Util.success(response.message);
                         (<any>$("#modal-default")).modal("hide")
                         setTimeout(function () {
-                            window.location.href = "/profile";
+                            window.location.href = "profile";
                         }, 2000);
                     } else {
                         Util.error(response.message);
