@@ -144,7 +144,7 @@ namespace AdminLte.Controllers
             ViewData["Title"] = participant.QuestionPackage.Assesment.Name + " - " + participant.QuestionPackage.Name;
             ViewData["BreadCrump"] = new Dictionary<string, string>()
             {
-                {"Daftar Survey Tersedia", "/survey-participant"}
+                {"Daftar Survey Tersedia", "survey-participant"}
             };
 
             var questions = await _db.QuestionPackageLines

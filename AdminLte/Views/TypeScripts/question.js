@@ -1,11 +1,11 @@
 var Question = /** @class */ (function () {
     function Question() {
-        this.urlGetData = "/question/table-data-view";
-        this.urlGetPaging = "/question/table-paging-view";
-        this.urlGetForm = "/question/form-view";
-        this.urlSave = '/question/save';
-        this.urlDelete = '/question/delete';
-        this.urlUploadImage = '/question/upload-image';
+        this.urlGetData = "question/table-data-view";
+        this.urlGetPaging = "question/table-paging-view";
+        this.urlGetForm = "question/form-view";
+        this.urlSave = 'question/save';
+        this.urlDelete = 'question/delete';
+        this.urlUploadImage = 'question/upload-image';
         this.currentPage = 1;
         this.init();
     }

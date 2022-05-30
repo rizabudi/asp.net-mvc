@@ -316,7 +316,7 @@ namespace AdminLte.Controllers
             };
             ViewData["BreadCrump"] = new Dictionary<string, string>()
             {
-                {"Penjadwalan Peserta", "/schedule"}
+                {"Penjadwalan Peserta", "schedule"}
             };
 
             return View("~/Views/Shared/_Index.cshtml");

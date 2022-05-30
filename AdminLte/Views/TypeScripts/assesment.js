@@ -1,10 +1,10 @@
 var Assesment = /** @class */ (function () {
     function Assesment() {
-        this.urlGetData = "/assesment/table-data-view";
-        this.urlGetPaging = "/assesment/table-paging-view";
-        this.urlGetForm = "/assesment/form-view";
-        this.urlSave = '/assesment/save';
-        this.urlDelete = '/assesment/delete';
+        this.urlGetData = "assesment/table-data-view";
+        this.urlGetPaging = "assesment/table-paging-view";
+        this.urlGetForm = "assesment/form-view";
+        this.urlSave = 'assesment/save';
+        this.urlDelete = 'assesment/delete';
         this.currentPage = 1;
         this.init();
     }

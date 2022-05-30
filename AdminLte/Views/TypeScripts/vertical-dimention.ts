@@ -1,9 +1,9 @@
 ﻿class VerticalDimention {
-    private urlGetData = "/vertical-dimention/table-data-view";
-    private urlGetPaging = "/vertical-dimention/table-paging-view";
-    private urlGetForm = "/vertical-dimention/form-view";
-    private urlSave = '/vertical-dimention/save';
-    private urlDelete = '/vertical-dimention/delete';
+    private urlGetData = "vertical-dimention/table-data-view";
+    private urlGetPaging = "vertical-dimention/table-paging-view";
+    private urlGetForm = "vertical-dimention/form-view";
+    private urlSave = 'vertical-dimention/save';
+    private urlDelete = 'vertical-dimention/delete';
 
     private currentPage = 1;
 

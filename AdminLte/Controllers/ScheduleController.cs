@@ -105,10 +105,10 @@ namespace AdminLte.Controllers
                             "HTML:Periode : " + row.Period.Name +  " (" + row.Period.Start.ToString("yyyy-MM-dd") + " s/d " + row.Period.End.ToString("yyyy-MM-dd") + ")" +
                             (row.SubPeriod != null ? "<br/>Sub Periode : " + row.SubPeriod.Name +  " (" + row.SubPeriod.Start.ToString("yyyy-MM-dd") + " s/d " + row.SubPeriod.End.ToString("yyyy-MM-dd") + ")" : ""),
                             row.Start.ToString("yyyy-MM-dd") + " s/d " + row.End.ToString("yyyy-MM-dd"),
-                            "HTML:<a href='/participant/" + row.ID + "'><b>" + participantsCount + "</b> <i class='fa fa-sm fa-users'></i></a>",
-                            "HTML:Selesai : <a href='/participant/" + row.ID + "?finish=1'>" + participantsFinishCount + " <i class='fa fa-sm fa-users'></i></a><br/>" +
-                            "Mengerjakan : <a href='/participant/" + row.ID + "?finish=2'>" + participantsUnFinishCount + " <i class='fa fa-sm fa-users'></i></a><br/>" +
-                            "Belum Mengerjakan : <a href='/participant/" + row.ID + "?finish=3'>" + participantsNotFinishCount + " <i class='fa fa-sm fa-users'></i></a>"
+                            "HTML:<a href='participant/" + row.ID + "'><b>" + participantsCount + "</b> <i class='fa fa-sm fa-users'></i></a>",
+                            "HTML:Selesai : <a href='participant/" + row.ID + "?finish=1'>" + participantsFinishCount + " <i class='fa fa-sm fa-users'></i></a><br/>" +
+                            "Mengerjakan : <a href='participant/" + row.ID + "?finish=2'>" + participantsUnFinishCount + " <i class='fa fa-sm fa-users'></i></a><br/>" +
+                            "Belum Mengerjakan : <a href='participant/" + row.ID + "?finish=3'>" + participantsNotFinishCount + " <i class='fa fa-sm fa-users'></i></a>"
                         }
                     });
                 }

@@ -1,10 +1,10 @@
 var HorizontalDimention = /** @class */ (function () {
     function HorizontalDimention() {
-        this.urlGetData = "/horizontal-dimention/table-data-view";
-        this.urlGetPaging = "/horizontal-dimention/table-paging-view";
-        this.urlGetForm = "/horizontal-dimention/form-view";
-        this.urlSave = '/horizontal-dimention/save';
-        this.urlDelete = '/horizontal-dimention/delete';
+        this.urlGetData = "horizontal-dimention/table-data-view";
+        this.urlGetPaging = "horizontal-dimention/table-paging-view";
+        this.urlGetForm = "horizontal-dimention/form-view";
+        this.urlSave = 'horizontal-dimention/save';
+        this.urlDelete = 'horizontal-dimention/delete';
         this.currentPage = 1;
         this.init();
     }

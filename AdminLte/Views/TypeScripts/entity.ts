@@ -1,9 +1,9 @@
 ﻿class Entity {
-    private urlGetData = "/entity/table-data-view";
-    private urlGetPaging = "/entity/table-paging-view";
-    private urlGetForm = "/entity/form-view";
-    private urlSave = '/entity/save';
-    private urlDelete = '/entity/delete';
+    private urlGetData = "entity/table-data-view";
+    private urlGetPaging = "entity/table-paging-view";
+    private urlGetForm = "entity/form-view";
+    private urlSave = 'entity/save';
+    private urlDelete = 'entity/delete';
 
     private currentPage = 1;
 

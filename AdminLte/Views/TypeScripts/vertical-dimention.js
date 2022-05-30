@@ -1,10 +1,10 @@
 var VerticalDimention = /** @class */ (function () {
     function VerticalDimention() {
-        this.urlGetData = "/vertical-dimention/table-data-view";
-        this.urlGetPaging = "/vertical-dimention/table-paging-view";
-        this.urlGetForm = "/vertical-dimention/form-view";
-        this.urlSave = '/vertical-dimention/save';
-        this.urlDelete = '/vertical-dimention/delete';
+        this.urlGetData = "vertical-dimention/table-data-view";
+        this.urlGetPaging = "vertical-dimention/table-paging-view";
+        this.urlGetForm = "vertical-dimention/form-view";
+        this.urlSave = 'vertical-dimention/save';
+        this.urlDelete = 'vertical-dimention/delete';
         this.currentPage = 1;
         this.init();
     }

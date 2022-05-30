@@ -48,9 +48,9 @@ namespace AdminLte.Controllers
                         Value = new string[] { 
                             row.Assesment.Name,
                             row.Name,
-                            "HTML:<a href='/survey-question/" + row.ID + "'><i class='fa fa-question'></i> " + questions + " Soal</a>",
-                            "HTML:<a href='/survey-entity/" + row.ID + "'><i class='fa fa-building'></i> " + entities + " Soal</a>",
-                            "HTML:<a href='/survey/download/" + row.ID + "/false'><i class='fa fa-file'></i> Hasil Survei</a><br/><a href='/survey/dashboard/" + row.ID + "'><i class='fa fa-chart-area'></i> Dashboard</a>"
+                            "HTML:<a href='survey-question/" + row.ID + "'><i class='fa fa-question'></i> " + questions + " Soal</a>",
+                            "HTML:<a href='survey-entity/" + row.ID + "'><i class='fa fa-building'></i> " + entities + " Soal</a>",
+                            "HTML:<a href='survey/download/" + row.ID + "/false'><i class='fa fa-file'></i> Hasil Survei</a><br/><a href='survey/dashboard/" + row.ID + "'><i class='fa fa-chart-area'></i> Dashboard</a>"
                         }
                     });
                 }

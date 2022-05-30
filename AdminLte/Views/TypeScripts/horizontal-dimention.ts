@@ -1,9 +1,9 @@
 ﻿class HorizontalDimention {
-    private urlGetData = "/horizontal-dimention/table-data-view";
-    private urlGetPaging = "/horizontal-dimention/table-paging-view";
-    private urlGetForm = "/horizontal-dimention/form-view";
-    private urlSave = '/horizontal-dimention/save';
-    private urlDelete = '/horizontal-dimention/delete';
+    private urlGetData = "horizontal-dimention/table-data-view";
+    private urlGetPaging = "horizontal-dimention/table-paging-view";
+    private urlGetForm = "horizontal-dimention/form-view";
+    private urlSave = 'horizontal-dimention/save';
+    private urlDelete = 'horizontal-dimention/delete';
 
     private currentPage = 1;
 

@@ -1,9 +1,9 @@
 ﻿class Department {
-    private urlGetData = "/department/table-data-view";
-    private urlGetPaging = "/department/table-paging-view";
-    private urlGetForm = "/department/form-view";
-    private urlSave = '/department/save';
-    private urlDelete = '/department/delete';
+    private urlGetData = "department/table-data-view";
+    private urlGetPaging = "department/table-paging-view";
+    private urlGetForm = "department/form-view";
+    private urlSave = 'department/save';
+    private urlDelete = 'department/delete';
 
     private currentPage = 1;
 

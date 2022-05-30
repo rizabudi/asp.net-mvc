@@ -1,6 +1,6 @@
 var MainNavigation = /** @class */ (function () {
     function MainNavigation() {
-        this.urlLogout = "/Identity/Account/Logout?returnUrl=%2Fhome";
+        this.urlLogout = "Identity/Account/Logout?returnUrl=%2Fhome";
         this.init();
     }
     MainNavigation.prototype.init = function () {
@@ -25,7 +25,7 @@ var MainNavigation = /** @class */ (function () {
                         Util.success(response.message);
                         $("#modal-default").modal("hide");
                         setTimeout(function () {
-                            window.location.href = "/profile";
+                            window.location.href = "profile";
                         }, 2000);
                     }
                     else {

@@ -1,9 +1,9 @@
 ﻿class Divition {
-    private urlGetData = "/divition/table-data-view";
-    private urlGetPaging = "/divition/table-paging-view";
-    private urlGetForm = "/divition/form-view";
-    private urlSave = '/divition/save';
-    private urlDelete = '/divition/delete';
+    private urlGetData = "divition/table-data-view";
+    private urlGetPaging = "divition/table-paging-view";
+    private urlGetForm = "divition/form-view";
+    private urlSave = 'divition/save';
+    private urlDelete = 'divition/delete';
 
     private currentPage = 1;
 

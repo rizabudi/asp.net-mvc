@@ -1,9 +1,9 @@
 ﻿class Assesment {
-    private urlGetData = "/assesment/table-data-view";
-    private urlGetPaging = "/assesment/table-paging-view";
-    private urlGetForm = "/assesment/form-view";
-    private urlSave = '/assesment/save';
-    private urlDelete = '/assesment/delete';
+    private urlGetData = "assesment/table-data-view";
+    private urlGetPaging = "assesment/table-paging-view";
+    private urlGetForm = "assesment/form-view";
+    private urlSave = 'assesment/save';
+    private urlDelete = 'assesment/delete';
 
     private currentPage = 1;
 

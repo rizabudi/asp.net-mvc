@@ -1,7 +1,7 @@
 var Profile = /** @class */ (function () {
     function Profile() {
-        this.urlGetForm = "/profile/form-view";
-        this.urlSave = '/profile/save';
+        this.urlGetForm = "profile/form-view";
+        this.urlSave = 'profile/save';
         this.init();
     }
     Profile.prototype.init = function () {
@@ -34,7 +34,7 @@ var Profile = /** @class */ (function () {
             });
             $(document).on("change", "#Entity", function (e) {
                 var entityID = $(e.currentTarget).val();
-                Util.request("/profile/entity-select-view?entity=" + entityID, 'GET', 'html', function (response) {
+                Util.request("profile/entity-select-view?entity=" + entityID, 'GET', 'html', function (response) {
                     $('#SubEntity').html(response);
                 }, function () {
                     Util.error('Failed to get data. Please try again');
@@ -67,7 +67,7 @@ var Profile = /** @class */ (function () {
                         Util.success(response.message);
                         $("#modal-default").modal("hide");
                         setTimeout(function () {
-                            window.location.href = "/profile";
+                            window.location.href = "profile";
                         }, 2000);
                     }
                     else {

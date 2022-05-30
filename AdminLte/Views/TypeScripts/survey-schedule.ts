@@ -1,9 +1,9 @@
 ﻿class SurveySchedule {
-    private urlGetData = "/survey-schedule/table-data-view";
-    private urlGetPaging = "/survey-schedule/table-paging-view";
-    private urlGetForm = "/survey-schedule/form-view";
-    private urlSave = '/survey-schedule/save';
-    private urlDelete = '/survey-schedule/delete';
+    private urlGetData = "survey-schedule/table-data-view";
+    private urlGetPaging = "survey-schedule/table-paging-view";
+    private urlGetForm = "survey-schedule/form-view";
+    private urlSave = 'survey-schedule/save';
+    private urlDelete = 'survey-schedule/delete';
 
     private currentPage = 1;
 

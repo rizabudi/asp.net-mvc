@@ -11,7 +11,7 @@
     ViewData["Title"] = "Hasil Survei - " + survey.Name;
     ViewData["BreadCrump"] = new Dictionary<string, string>()
     {
-        {"Daftar Survey", "/survey"}
+        {"Daftar Survey", "survey"}
     };
 }
 
@@ -24,7 +24,7 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <form target="_blank" method="get" action="/survey/download/@survey.ID/true">
+            <form target="_blank" method="get" action="~/survey/download/@survey.ID/true">
                 <div class="row">
                     <div class="col-md-12">
                         <label class="col-md-4 col-form-label">Holding/ Sub-Holding : </label>

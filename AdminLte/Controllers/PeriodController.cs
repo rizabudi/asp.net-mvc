@@ -43,7 +43,7 @@ namespace AdminLte.Controllers
                         Value = new string[] { 
                             row.Name, 
                             row.Start.ToString("yyyy-MM-dd") + " s/d " + row.End.ToString("yyyy-MM-dd"),
-                            "HTML:<a href='/sub-period/" + row.ID + "'>" + subPeriods + " Sub Periode</a>"
+                            "HTML:<a href='sub-period/" + row.ID + "'>" + subPeriods + " Sub Periode</a>"
                         } 
                     });
                 }

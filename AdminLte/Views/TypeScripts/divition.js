@@ -1,10 +1,10 @@
 var Divition = /** @class */ (function () {
     function Divition() {
-        this.urlGetData = "/divition/table-data-view";
-        this.urlGetPaging = "/divition/table-paging-view";
-        this.urlGetForm = "/divition/form-view";
-        this.urlSave = '/divition/save';
-        this.urlDelete = '/divition/delete';
+        this.urlGetData = "divition/table-data-view";
+        this.urlGetPaging = "divition/table-paging-view";
+        this.urlGetForm = "divition/form-view";
+        this.urlSave = 'divition/save';
+        this.urlDelete = 'divition/delete';
         this.currentPage = 1;
         this.init();
     }

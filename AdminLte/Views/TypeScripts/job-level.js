@@ -1,10 +1,10 @@
 var JobLevel = /** @class */ (function () {
     function JobLevel() {
-        this.urlGetData = "/job-level/table-data-view";
-        this.urlGetPaging = "/job-level/table-paging-view";
-        this.urlGetForm = "/job-level/form-view";
-        this.urlSave = '/job-level/save';
-        this.urlDelete = '/job-level/delete';
+        this.urlGetData = "job-level/table-data-view";
+        this.urlGetPaging = "job-level/table-paging-view";
+        this.urlGetForm = "job-level/form-view";
+        this.urlSave = 'job-level/save';
+        this.urlDelete = 'job-level/delete';
         this.currentPage = 1;
         this.init();
     }

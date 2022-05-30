@@ -1,10 +1,10 @@
 var ParticipantUser = /** @class */ (function () {
     function ParticipantUser() {
-        this.urlGetData = "/participant-user/table-data-view";
-        this.urlGetPaging = "/participant-user/table-paging-view";
-        this.urlGetForm = "/participant-user/form-view";
-        this.urlSave = '/participant-user/save';
-        this.urlDelete = '/participant-user/delete';
+        this.urlGetData = "participant-user/table-data-view";
+        this.urlGetPaging = "participant-user/table-paging-view";
+        this.urlGetForm = "participant-user/form-view";
+        this.urlSave = 'participant-user/save';
+        this.urlDelete = 'participant-user/delete';
         this.currentPage = 1;
         this.search = "";
         this.order = "";

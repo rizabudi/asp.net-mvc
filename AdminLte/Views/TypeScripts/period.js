@@ -1,10 +1,10 @@
 var Period = /** @class */ (function () {
     function Period() {
-        this.urlGetData = "/period/table-data-view";
-        this.urlGetPaging = "/period/table-paging-view";
-        this.urlGetForm = "/period/form-view";
-        this.urlSave = '/period/save';
-        this.urlDelete = '/period/delete';
+        this.urlGetData = "period/table-data-view";
+        this.urlGetPaging = "period/table-paging-view";
+        this.urlGetForm = "period/form-view";
+        this.urlSave = 'period/save';
+        this.urlDelete = 'period/delete';
         this.currentPage = 1;
         this.init();
     }

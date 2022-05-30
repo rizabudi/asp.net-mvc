@@ -1,10 +1,10 @@
 var Entity = /** @class */ (function () {
     function Entity() {
-        this.urlGetData = "/entity/table-data-view";
-        this.urlGetPaging = "/entity/table-paging-view";
-        this.urlGetForm = "/entity/form-view";
-        this.urlSave = '/entity/save';
-        this.urlDelete = '/entity/delete';
+        this.urlGetData = "entity/table-data-view";
+        this.urlGetPaging = "entity/table-paging-view";
+        this.urlGetForm = "entity/form-view";
+        this.urlSave = 'entity/save';
+        this.urlDelete = 'entity/delete';
         this.currentPage = 1;
         this.init();
     }

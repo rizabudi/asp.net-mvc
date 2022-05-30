@@ -1,9 +1,9 @@
 ﻿class SubVerticalDimention {
-    private urlGetData = "/sub-vertical-dimention/table-data-view";
-    private urlGetPaging = "/sub-vertical-dimention/table-paging-view";
-    private urlGetForm = "/sub-vertical-dimention/form-view";
-    private urlSave = '/sub-vertical-dimention/save';
-    private urlDelete = '/sub-vertical-dimention/delete';
+    private urlGetData = "sub-vertical-dimention/table-data-view";
+    private urlGetPaging = "sub-vertical-dimention/table-paging-view";
+    private urlGetForm = "sub-vertical-dimention/form-view";
+    private urlSave = 'sub-vertical-dimention/save';
+    private urlDelete = 'sub-vertical-dimention/delete';
 
     private currentPage = 1;
 

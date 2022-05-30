@@ -1,9 +1,9 @@
 ﻿class Position {
-    private urlGetData = "/position/table-data-view";
-    private urlGetPaging = "/position/table-paging-view";
-    private urlGetForm = "/position/form-view";
-    private urlSave = '/position/save';
-    private urlDelete = '/position/delete';
+    private urlGetData = "position/table-data-view";
+    private urlGetPaging = "position/table-paging-view";
+    private urlGetForm = "position/form-view";
+    private urlSave = 'position/save';
+    private urlDelete = 'position/delete';
 
     private currentPage = 1;
 

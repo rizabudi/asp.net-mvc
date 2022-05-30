@@ -1,5 +1,5 @@
-commit d55edbde4ff20cce0106262b47d37f5194665114
-Author: Benediktus Anindito <bennybroz105@gmail.com>
-Date:   Mon Feb 28 13:19:51 2022 +0700
+commit f05f82606adee5f9da4a450badee2397505e8304
+Author: Riza Budi Prasetya <rizabudi@live.com>
+Date:   Tue Mar 22 20:18:28 2022 +0700
 
-    set copy Views folder automatically
+    Add postbuild cp Views folder

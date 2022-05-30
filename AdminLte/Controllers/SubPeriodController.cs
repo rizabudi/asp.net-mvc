@@ -126,7 +126,7 @@ namespace AdminLte.Controllers
             ViewData["Script"] = "sub-period.js";
             ViewData["BreadCrump"] = new Dictionary<string, string>()
             {
-                {"Periode", "/period"}
+                {"Periode", "period"}
             }; 
             ViewData["Values"] = new Dictionary<string, string>()
             {

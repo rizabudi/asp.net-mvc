@@ -1,9 +1,9 @@
 ﻿class SubPeriod {
-    private urlGetData = "/sub-period/table-data-view";
-    private urlGetPaging = "/sub-period/table-paging-view";
-    private urlGetForm = "/sub-period/form-view";
-    private urlSave = '/sub-period/save';
-    private urlDelete = '/sub-period/delete';
+    private urlGetData = "sub-period/table-data-view";
+    private urlGetPaging = "sub-period/table-paging-view";
+    private urlGetForm = "sub-period/form-view";
+    private urlSave = 'sub-period/save';
+    private urlDelete = 'sub-period/delete';
 
     private currentPage = 1;
 
