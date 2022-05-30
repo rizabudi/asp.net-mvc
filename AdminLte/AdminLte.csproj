@@ -55,10 +55,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="Views\Employee\employee.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="uploads\00 PEMBUKA.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -279,12 +275,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="uploads\STRIVE_CONTRIBUTE_rev.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Views\Employee\employee.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Views\Employee\employee.js.map">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Views\Shared\declaration.js">
