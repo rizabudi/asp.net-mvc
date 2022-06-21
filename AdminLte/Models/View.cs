@@ -14,10 +14,10 @@ namespace AdminLte.Models
         public Participant Participant { get; set; }
         public int VerticalDimentionID { get; set; }
         public int SubVerticalDimentionID { get; set; }
-        public double urutan { get; set; }
-        public double bobot { get; set; }
-        public double nilai { get; set; }
-        public double bobotxnilai { get; set; }
+        public Single urutan { get; set; }
+        public Single bobot { get; set; }
+        public Single nilai { get; set; }
+        public Single bobotxnilai { get; set; }
     }
 
     public class VwCulturePerSubVerticalDimention
