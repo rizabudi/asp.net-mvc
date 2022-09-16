@@ -142,7 +142,7 @@
             });
             $(document).on("change", "#Entity", (e) => {
                 var entityID = $(e.currentTarget).val();
-                Util.request("/entity/select-view?entity=" + entityID, 'GET', 'html', (response) => {
+                Util.request("entity/select-view?entity=" + entityID, 'GET', 'html', (response) => {
                     $('#SubEntity').html(response);
                 }, function () {
                     Util.error('Failed to get data. Please try again');

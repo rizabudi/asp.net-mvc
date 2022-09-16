@@ -139,7 +139,7 @@ var ParticipantUser = /** @class */ (function () {
             });
             $(document).on("change", "#Entity", function (e) {
                 var entityID = $(e.currentTarget).val();
-                Util.request("/entity/select-view?entity=" + entityID, 'GET', 'html', function (response) {
+                Util.request("entity/select-view?entity=" + entityID, 'GET', 'html', function (response) {
                     $('#SubEntity').html(response);
                 }, function () {
                     Util.error('Failed to get data. Please try again');
