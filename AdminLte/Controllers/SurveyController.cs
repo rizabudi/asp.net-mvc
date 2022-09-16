@@ -196,7 +196,7 @@ namespace AdminLte.Controllers
 
             if(questionPackage == null)
             {
-                return Redirect("/home/errors/404");
+                return Redirect("~/home/errors/404");
             }
 
             var participants = await _db.Participants
@@ -363,7 +363,7 @@ namespace AdminLte.Controllers
                 .FirstOrDefaultAsync(x => x.ID == surveyID);
             if (questionPackage == null)
             {
-                return Redirect("/home/errors/404");
+                return Redirect("~/home/errors/404");
             }
 
             if (section == 0)
@@ -509,7 +509,7 @@ namespace AdminLte.Controllers
 
             if (questionPackage == null)
             {
-                return Redirect("/home/errors/404");
+                return Redirect("~/home/errors/404");
             }
 
             var sections = await _db.Sections.OrderBy(x => x.Name).ToListAsync(); ;

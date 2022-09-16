@@ -114,7 +114,7 @@ namespace AdminLte.Controllers
 
             if (periode == null)
             {
-                return Redirect("/home/errors/404");
+                return Redirect("~/home/errors/404");
             }
 
             ViewData["Title"] = "Sub Periode | " + periode.Name;

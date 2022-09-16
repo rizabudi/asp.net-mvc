@@ -26,7 +26,8 @@
                         Util.success(response.message);
                         (<any>$("#modal-default")).modal("hide")
                         setTimeout(function () {
-                            window.location.href = "profile";
+                            var BASE_URL = $('#BASE_URL').attr("href");
+                            window.location.href = BASE_URL + "profile";
                         }, 2000);
                     } else {
                         Util.error(response.message);

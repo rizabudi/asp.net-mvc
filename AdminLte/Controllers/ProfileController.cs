@@ -38,7 +38,7 @@ namespace AdminLte.Controllers
 
             if(participantUser == null)
             {
-                return Redirect("/home/errors/404");
+                return Redirect("~/home/errors/404");
             }
 
             ViewData["IsEdit"] = isEdit;

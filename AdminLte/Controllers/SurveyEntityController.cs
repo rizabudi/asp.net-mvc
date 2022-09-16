@@ -151,7 +151,7 @@ namespace AdminLte.Controllers
 
             if (questionPackage == null)
             {
-                return Redirect("/home/errors/404");
+                return Redirect("~/home/errors/404");
             }
 
             ViewData["Title"] = "Daftar Entitas | " + questionPackage.Assesment.Name + " - " + questionPackage.Name;

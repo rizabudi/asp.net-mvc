@@ -191,7 +191,7 @@ namespace AdminLte.Controllers
 
             if (question == null)
             {
-                return Redirect("/home/errors/404");
+                return Redirect("~/home/errors/404");
             }
 
             ViewData["Title"] = "Daftar Jawaban | " + question.Title;

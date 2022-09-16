@@ -59,7 +59,7 @@ namespace AdminLte.Controllers
 
             if (participantUser == null)
             {
-                return Redirect("/home/errors/404");
+                return Redirect("~/home/errors/404");
             }
 
             if (participantUser.Age == null || 
@@ -67,7 +67,7 @@ namespace AdminLte.Controllers
                 participantUser.JobLevel == null || 
                 participantUser.WorkDuration == null)
             {
-                return Redirect("/profile?isEdit=true");
+                return Redirect("~/profile?isEdit=true");
             }
 
             ViewData["take"] = take;
@@ -93,7 +93,7 @@ namespace AdminLte.Controllers
 
             if(participant == null)
             {
-                return Redirect("/home/errors/404");
+                return Redirect("~/home/errors/404");
             }
 
             ParticipantAnswerSheet participantAnswerSheet = participant.ParticipantAnswerSheets.FirstOrDefault(x => !x.IsFinish);

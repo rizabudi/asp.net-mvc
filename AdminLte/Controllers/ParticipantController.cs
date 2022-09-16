@@ -283,7 +283,7 @@ namespace AdminLte.Controllers
 
             if (schedule == null)
             {
-                return Redirect("/home/errors/404");
+                return Redirect("~/home/errors/404");
             }
             ViewData["Title"] = "Daftar Peserta | " + schedule.Name;
             if (finish == 1)

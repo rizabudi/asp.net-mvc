@@ -127,7 +127,7 @@ namespace AdminLte.Controllers
 
             if (verticalDimention == null)
             {
-                return Redirect("/home/errors/404");
+                return Redirect("~/home/errors/404");
             }
 
             ViewData["Title"] = "Sub Dimensi Vertikal | " + verticalDimention.Name;
