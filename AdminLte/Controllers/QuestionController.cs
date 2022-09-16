@@ -113,7 +113,7 @@ namespace AdminLte.Controllers
                 var questionTypes = new Dictionary<string, string>()
                 {
                     {((int)QuestionType.MATRIX).ToString(), QuestionType.MATRIX.ToString()},
-                    {((int)QuestionType.SIMPLE_CHOICE).ToString(), QuestionType.SIMPLE_CHOICE.ToString()}
+                    //{((int)QuestionType.SIMPLE_CHOICE).ToString(), QuestionType.SIMPLE_CHOICE.ToString()}
                 };
                 var matrixSubTypes = new Dictionary<string, string>()
                 {

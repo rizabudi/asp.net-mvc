@@ -254,7 +254,8 @@ namespace AdminLte.Controllers
                     .Select(x => x.ParticipantUser.UserId).ToList();
                 var participantUsers = await _db.ParticipantUsers
                     .Where(x => !participantExists.Contains(x.UserId))
-                    .ToDictionaryAsync(x => x.UserId.ToString(), y => y.EmployeeNumber + " - " + y.Name); ;
+                    .OrderBy(x=>x.Name)
+                    .ToDictionaryAsync(x => x.UserId.ToString(), y => y.Name + " (" + y.EmployeeNumber + ")");
 
                 List<FormModel> FormModels = new List<FormModel>();
                
